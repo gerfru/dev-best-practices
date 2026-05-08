@@ -238,6 +238,43 @@ Client → API Gateway → Schema-Validierung → Business Logic → Data Access
 
 **Frameworks machen das meiste automatisch** – React escaped HTML by default, Django Templates ebenso. Aber: `dangerouslySetInnerHTML` (React) oder `| safe` (Django) umgehen den Schutz.
 
+### DOM XSS – Moderne Schutzschicht
+
+Klassisches Output-Encoding reicht für DOM-basiertes XSS nicht aus, wenn JavaScript-Code direkt in DOM-Sinks (`innerHTML`, `document.write`, `src`) schreibt. Moderne Abwehr in zwei Schichten:
+
+**Schicht 1: Trusted Types (Browser-Enforcement)**
+
+```
+Content-Security-Policy: require-trusted-types-for 'script'
+```
+
+Erzwingt, dass alle Zuweisungen an DOM-Sinks durch eine deklarierte Policy laufen. Rohe Strings werden vom Browser blockiert. Google nennt dies die einzige Maßnahme die DOM XSS strukturell eliminiert.
+
+**Schicht 2: DOMPurify (Sanitizer)**
+
+Wenn HTML-Injektion unvermeidbar ist (z.B. Rich Text), `DOMPurify.sanitize()` vor jeder `innerHTML`-Zuweisung:
+
+```javascript
+// Unsicher:
+element.innerHTML = userContent;
+
+// Sicher:
+element.innerHTML = DOMPurify.sanitize(userContent);
+
+// Mit Trusted Types kombiniert:
+const policy = trustedTypes.createPolicy('default', {
+    createHTML: input => DOMPurify.sanitize(input)
+});
+element.innerHTML = policy.createHTML(userContent);
+```
+
+**Alternatives natives API (Browser-Support ab 2024/2025):** `element.setHTML()` — sanitiert automatisch, kein externes Library nötig. Noch nicht universal verfügbar.
+
+**Faustregel:**
+- `.textContent` statt `.innerHTML` wo kein HTML nötig ist
+- `DOMPurify` für jeden Fall wo HTML-Injection nötig ist
+- Trusted Types als CSP-Directive für strukturelle Durchsetzung
+
 ---
 
 ## 4. API Design
@@ -363,6 +400,25 @@ Migrationen = versionierte, wiederholbare Schema-Änderungen. **Nie manuell SQL 
 | **Verschlüsselte Verbindung** | TLS/SSL zum DB-Server |
 | **Keine DB-Credentials im Code** | Immer Environment Variables |
 | **Backups testen** | Ein Backup das nicht restorebar ist, ist kein Backup |
+
+### PostgreSQL Hardening (Checkliste)
+
+| Maßnahme | Wo konfigurieren | Warum |
+|----------|-----------------|-------|
+| `password_encryption = scram-sha-256` | `postgresql.conf` | MD5 ist kryptographisch gebrochen — SCRAM-SHA-256 ist der aktuelle Standard |
+| `hostssl` statt `host` in allen Zeilen | `pg_hba.conf` | Erzwingt TLS für alle Verbindungen |
+| Kein `trust` in `pg_hba.conf` | `pg_hba.conf` | `trust` = kein Passwort = jeder mit Netzwerkzugang ist drin |
+| `listen_addresses = 'localhost'` oder konkrete IP | `postgresql.conf` | Nicht auf `*` binden |
+| App-User ohne DDL-Rechte | `GRANT` Statements | `CREATE`, `DROP`, `ALTER` nur für Migrations-User |
+| pgAudit aktivieren | Extension + `postgresql.conf` | Loggt DDL/Privilege-Änderungen (`CREATE`, `DROP`, `GRANT`) |
+| `log_connections = on` | `postgresql.conf` | Erkennt ungewöhnliche Verbindungsversuche |
+
+**Minimal pg_hba.conf (Produktion):**
+```
+# TYPE  DATABASE  USER       ADDRESS         METHOD
+local   all       postgres                   peer
+hostssl garmin    garmin_app 172.20.0.0/16   scram-sha-256
+```
 
 ---
 
@@ -792,7 +848,112 @@ Total: 237ms
 
 ---
 
-## 16. OWASP Top 10 (2021) – Schnellreferenz
+## 16. Security Assessment & ASVS
+
+### OWASP ASVS 5.0 — Das richtige Framework
+
+OWASP ASVS (Application Security Verification Standard) 5.0 (Mai 2025) ist das verbreiteste verifiable Checklist-Format für Web-App-Security. Drei Levels:
+
+| Level | Für | Anforderungen |
+|-------|-----|---------------|
+| **L1** | Alle Software — absolutes Minimum | ~70 Anforderungen |
+| **L2** | Die meisten Production-Apps | ~200 Anforderungen |
+| **L3** | Kritische Systeme (Banking, Healthcare) | ~350 Anforderungen |
+
+**Empfehlung für Solo/Small Teams: L1 phasenweise.** Nicht alles auf einmal — Start mit den drei Kapiteln die die meisten Breaches verursachen:
+
+1. Kapitel 2 — Authentication & Session
+2. Kapitel 4 — Access Control (besonders Data Access Layer)
+3. Kapitel 5 — Input Validation
+
+Danach: Kapitel 7 (Error Handling), Kapitel 9 (Communication/TLS).
+
+**ASVS vs. OWASP Top 10:** Top 10 ist eine Risiko-Awareness-Liste, kein Prozess. ASVS ist ein verifizierbares Checklist-Format — jede Anforderung kann mit Ja/Nein bewertet werden.
+
+[ASVS Project](https://owasp.org/www-project-application-security-verification-standard/) · [ASVS × Cheat Sheet Index](https://cheatsheetseries.owasp.org/IndexASVS.html)
+
+### Security Tooling Stack (Python/Docker/Postgres)
+
+**Drei Ebenen, alle notwendig:**
+
+| Ebene | Tool | Zweck | Wann |
+|-------|------|-------|------|
+| **SAST schnell** | `bandit` | Python-spezifische Checks (pickle, shell injection, hardcoded secrets) | pre-commit |
+| **SAST tief** | `semgrep` (community rules) | Cross-File Taint-Tracking — findet SQL-Injection durch Call-Chains | CI |
+| **SCA** | `pip-audit` | Abhängigkeiten gegen OSV/PyPI Advisory DB prüfen | pre-commit + CI |
+| **Image-Scan** | `trivy` | OS-Pakete + Dependencies + Misconfigs + Secrets im Docker Image | CI |
+| **Host-Audit** | `docker-bench-security` | CIS Benchmark gegen Docker-Host | einmalig + pro Release |
+
+**Bandit vs. Semgrep:** Bandit ist schnell und konfigurationslos — ideal als pre-commit Gate. Semgrep mit `p/python` + `p/owasp-top-ten` Regeln geht tiefer (Cross-File Dataflow). Beide zusammen nutzen.
+
+**Safety vs. pip-audit:** Safety hat den Free-Tier 2023/2024 stark eingeschränkt. pip-audit wird von PyPA selbst gepflegt, nutzt die Google OSV Datenbank, benötigt keinen Account. pip-audit ist der Community-Standard.
+
+**Ruff als Bandit-Ersatz:** Ab Ruff 0.4+ sind Bandit-Regeln als Prefix `S` in Ruff integriert (`ruff --select S`). [Schlussfolgerung] Kann mittelfristig Bandit ersetzen für Teams die Ruff bereits nutzen.
+
+### CI/CD Pipeline Integration
+
+```
+pre-commit (Sekunden, blockiert Commit):
+  gitleaks → ruff --select S → bandit → pip-audit
+
+CI: jeder PR (< 5 Min):
+  pip-audit  --fail-on CRITICAL,HIGH
+  semgrep    --config=p/python --config=p/owasp-top-ten
+  trivy image --exit-code 1 --severity CRITICAL,HIGH
+  docker build --check
+
+Ergebnis-Routing:
+  CRITICAL/HIGH → Merge blockiert
+  MEDIUM/LOW    → GitHub Security Tab via --sarif (asynchrone Triage)
+```
+
+Semgrep und pip-audit unterstützen `--sarif` — der Output lädt direkt in den GitHub Security Tab hoch.
+
+### Docker Security Hardening
+
+**5 nicht verhandelbare Kontrollen (CIS Benchmark):**
+
+| Kontrolle | Warum | Wie |
+|-----------|-------|-----|
+| **Non-root User** | Root-Escape → Host-Kompromittierung | `USER appuser` in jedem Dockerfile |
+| **Base Image mit Digest pinnen** | Tags sind mutable — ein Tag kann morgen ein anderes Image sein | `FROM python:3.12-slim@sha256:...` |
+| **Multi-stage Build** | Build-Tools nicht im Runner-Image | `FROM python:3.12-slim AS builder` → `FROM python:3.12-slim AS runner` |
+| **`docker build --check`** | Dockerfile-Linting (non-root, HEALTHCHECK, etc.) | Seit Docker 24 eingebaut |
+| **docker-bench-security** | CIS-Benchmark gegen Docker-Host | `docker run --rm docker/docker-bench-security` |
+
+### Threat Modeling für Solo/Small Teams
+
+**STRIDE** ist die richtige Wahl — niedrigste Einstiegshürde, gut dokumentiert, LLM-kompatibel.
+
+**Alternativen:**
+- PASTA: Benötigt formellen Business-Risk-Prozess → nicht für Solo
+- LINDDUN: Privacy-spezifisch → nur wenn DSGVO-kritisch
+
+**Leichtgewichtiger STRIDE-Prozess (1-2 Stunden, einmalig pro Projekt):**
+
+1. Einfaches Datenfluss-Diagramm: Boxes = Prozesse, Pfeile = Datenflüsse, Zylinder = Stores
+2. Für jede Trust-Boundary: 6 STRIDE-Fragen (Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Elevation)
+3. Findings als GitHub Issues — kein separates Dokument
+4. **[STRIDE-GPT](https://github.com/mrwadams/stride-gpt)** (Open Source) generiert ein STRIDE-Modell aus einer Textbeschreibung — für Solo-Dev der pragmatischste Einstieg
+
+**OWASP 4-Fragen-Format** (noch schlanker):
+> Was bauen wir? Was kann schiefgehen? Was tun wir dagegen? War es genug?
+
+### OWASP Cheat Sheets — Die wichtigsten für diesen Stack
+
+| Priorität | Cheat Sheet | Warum |
+|-----------|-------------|-------|
+| 1 | [SQL Injection Prevention](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html) | Prepared Statements korrekt |
+| 1 | [Authentication](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) | Login, Rate Limiting, Lockout |
+| 1 | [Session Management](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html) | Cookie-Flags, Invalidierung |
+| 2 | [Content Security Policy](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html) | Nonce-basierte CSP |
+| 2 | [Docker Security](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html) | Non-root, Capabilities, Read-only |
+| 3 | [Logging](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) | Was loggen, was nie loggen |
+| 3 | [Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) | .env-Handling, Vault-Optionen |
+
+---
+
+## 17. OWASP Top 10 (2021) – Schnellreferenz
 
 Die häufigsten Sicherheitsrisiken in Web-Apps:
 
@@ -813,52 +974,75 @@ Die häufigsten Sicherheitsrisiken in Web-Apps:
 
 ## Checkliste: Neue App absichern
 
+### Setup (einmalig, vor erstem Commit)
+
+- [ ] `gitleaks` + `bandit` + `pip-audit` in pre-commit
+- [ ] `semgrep` + `trivy image` in CI-Pipeline
+- [ ] `.env.example` committed, `.env` in `.gitignore`
+- [ ] STRIDE-Threat-Model erstellt (oder OWASP 4-Fragen-Format)
+- [ ] ASVS L1 Kapitel 2, 4, 5 durchgearbeitet
+
 ### Vor dem ersten Deploy
 
 - [ ] Security Headers konfigurieren (CSP, HSTS, X-Frame-Options, etc.)
 - [ ] Input-Validierung an allen API-Eingängen (Zod / Pydantic)
-- [ ] Output-Encoding (Framework-Defaults nutzen, kein `dangerouslySetInnerHTML`)
+- [ ] Output-Encoding — Framework-Defaults, kein `dangerouslySetInnerHTML` / kein `innerHTML` mit unkontrollierten Daten
 - [ ] Auth am Data Access Layer, nicht nur Middleware
 - [ ] Secrets in Environment Variables, `.env` in `.gitignore`
 - [ ] Env-Validierung beim App-Start (Zod / Pydantic)
 - [ ] HTTPS erzwingen (HSTS Header)
 - [ ] Error Responses ohne interne Details (Stack Traces, Pfade, Queries)
+- [ ] Docker: `USER appuser` in Dockerfile, Base Image mit `@sha256` gepinnt, Multi-stage Build
+- [ ] `docker build --check` grün
 
 ### Vor Production
 
-- [ ] Rate Limiting auf API-Endpoints
+- [ ] Rate Limiting auf Login + Register + alle schreibenden Endpoints
 - [ ] CORS korrekt konfiguriert (keine Wildcards mit Credentials)
-- [ ] Cookie-Flags (httpOnly, secure, sameSite)
+- [ ] Cookie-Flags (httpOnly, secure, sameSite=Lax)
 - [ ] Health Check Endpoint (`/health`)
 - [ ] Error Monitoring (Sentry)
 - [ ] Uptime Monitoring (Better Stack / UptimeRobot)
 - [ ] Structured Logging (Pino / structlog)
-- [ ] Datenbank: Prepared Statements, Least Privilege User, Backups
+- [ ] PostgreSQL: SCRAM-SHA-256 aktiv, App-User ohne DDL-Rechte, kein `trust` in pg_hba.conf
+- [ ] Datenbank: Prepared Statements, Backups konfiguriert und getestet
 - [ ] File Uploads: Größenlimit, Typ-Validierung, separater Storage
 - [ ] Accessibility: Semantisches HTML, Tastatur-Navigation, Kontrast
 
 ### Regelmäßig
 
 - [ ] Dependencies updaten (Renovate)
+- [ ] `pip-audit` / `npm audit` im CI grün halten
 - [ ] Security Headers testen (securityheaders.com)
 - [ ] Lighthouse Audit (Performance + Accessibility)
-- [ ] Dependency Audit (`npm audit` / `pip-audit`)
 - [ ] Backup-Restore testen
 - [ ] Secrets rotieren
+- [ ] `docker-bench-security` pro Release
 
 ---
 
 ## Referenzen
 
+- [OWASP ASVS 5.0](https://owasp.org/www-project-application-security-verification-standard/) – Verifizierbarer Security-Standard (Mai 2025)
+- [ASVS × Cheat Sheet Index](https://cheatsheetseries.owasp.org/IndexASVS.html) – ASVS-Anforderungen cross-referenziert mit Cheat Sheets
 - [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [OWASP Threat Modeling Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html)
+- [STRIDE-GPT (GitHub)](https://github.com/mrwadams/stride-gpt) – STRIDE-Modell aus Textbeschreibung generieren
+- [Semgrep Community Rules](https://semgrep.dev/r) – Python/FastAPI/OWASP Regelsets
+- [pip-audit (PyPA)](https://github.com/pypa/pip-audit) – SCA für Python
+- [Trivy (Aqua Security)](https://trivy.dev/) – Image + Dependency + Misconfiguration Scanner
+- [docker-bench-security](https://github.com/docker/docker-bench-security) – CIS Benchmark für Docker
+- [Trusted Types (web.dev)](https://web.dev/articles/trusted-types) – DOM XSS strukturell eliminieren
+- [DOMPurify](https://github.com/cure53/DOMPurify) – HTML-Sanitizer Library
 - [Mozilla Observatory](https://observatory.mozilla.org)
 - [SecurityHeaders.com](https://securityheaders.com)
+- [CSP Evaluator (Google)](https://csp-evaluator.withgoogle.com/)
 - [Web Content Accessibility Guidelines (WCAG 2.2)](https://www.w3.org/TR/WCAG22/)
 - [web.dev Core Web Vitals](https://web.dev/vitals/)
 - [Sentry Docs](https://docs.sentry.io/)
 - [12-Factor App](https://12factor.net/)
-- [OpenTelemetry Docs](https://opentelemetry.io/docs/) – Herstellerunabhängiger Observability-Standard
-- [Google SRE Book – Monitoring](https://sre.google/sre-book/monitoring-distributed-systems/) – Die vier goldenen Signale
-- [Grafana Cloud](https://grafana.com/products/cloud/) – Logs, Metrics, Traces Free Tier
-- [Axiom](https://axiom.co/) – Log-Aggregation mit großzügigem Free Tier
+- [OpenTelemetry Docs](https://opentelemetry.io/docs/)
+- [Google SRE Book – Monitoring](https://sre.google/sre-book/monitoring-distributed-systems/)
+- [Grafana Cloud](https://grafana.com/products/cloud/)
+- [Axiom](https://axiom.co/)

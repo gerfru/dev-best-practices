@@ -38,6 +38,7 @@ Jede App MUSS diese Response-Headers setzen:
 - **Output-Encoding:** Framework-Defaults nutzen. Kein `dangerouslySetInnerHTML` (React), kein `| safe` (Django)
 - **SQL:** Immer Prepared Statements / Parameterized Queries
 - **Shell:** Nie User-Input in Shell-Commands
+- **DOM XSS:** Kein `innerHTML`/`outerHTML` mit User-Daten. Trusted Types + DOMPurify bei dynamischem HTML-Rendering
 
 ---
 
@@ -59,6 +60,7 @@ Jede App MUSS diese Response-Headers setzen:
 - **ORM-Wahl:** Query Builder (Drizzle, SQLAlchemy Core) als Sweet Spot. ORM fuer Prototypen. Raw SQL nur fuer komplexe Queries
 - **Connection Pooling:** Pflicht. Serverless → externer Pooler (PgBouncer, Neon Pooler)
 - **Sicherheit:** Prepared Statements, Least Privilege DB User, TLS zum DB-Server, Credentials in Env Vars, Backups testen
+- **PostgreSQL:** `SCRAM-SHA-256` in `pg_hba.conf` (kein `md5`). pgAudit fuer Audit-Trails
 
 ---
 
@@ -152,14 +154,27 @@ Jede App MUSS diese Response-Headers setzen:
 
 ---
 
+## Security Assessment
+
+- **Pruefrahmen:** OWASP ASVS 5.0 (Mai 2025). Level 1 fuer Solo/kleine Teams (~70 Requirements)
+- **SAST:** `bandit` (pre-commit, schnell) + `semgrep` (CI, cross-file Taint-Analyse)
+- **SCA:** `pip-audit` (Python). `pnpm audit` (Node). Nicht Safety (veraltet)
+- **Image-Scan:** `trivy` in CI — CRITICAL+HIGH → exit 1
+- **Threat Modeling:** STRIDE-GPT fuer neue Systeme/Features (einmalig, nicht pro PR)
+- **Rhythmus:** SAST+SCA pro PR → Image-Scan pro Build → STRIDE einmalig pro System
+
+---
+
 ## OWASP Top 10 Kurzreferenz
+
+> Vollstaendiger Pruefrahmen: ASVS 5.0 (s.o.)
 
 1. Broken Access Control → Auth am Data Access Layer, Deny by Default
 2. Cryptographic Failures → TLS everywhere, Secrets in Env Vars
 3. Injection → Prepared Statements, kein Shell-Exec mit User-Input
 4. Insecure Design → Threat Modeling, Defense in Depth
 5. Security Misconfiguration → Security Headers, keine Default-Credentials
-6. Vulnerable Components → Renovate/Dependabot, npm audit / pip-audit
+6. Vulnerable Components → Renovate, pip-audit / pnpm audit
 7. Auth Failures → MFA, Rate Limiting
 8. Data Integrity → CI/CD Security, signierte Artifacts
 9. Logging Failures → Structured Logging, Audit Trails
