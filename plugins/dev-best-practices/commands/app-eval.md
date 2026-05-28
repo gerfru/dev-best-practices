@@ -1,4 +1,4 @@
-﻿---
+---
 description: Vollstaendiges App-Audit gegen die Dev-Best-Practices-Regeln (6 Achsen, parallele Subagenten).
 argument-hint: "[optionaler Pfad zum Eingrenzen]"
 ---

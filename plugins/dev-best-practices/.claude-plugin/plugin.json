@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "dev-best-practices",
   "version": "0.1.0",
   "description": "App-Design (Idee -> Architektur/Stack) und App-Evaluierung (Audit gegen die eigenen Regeln). Bundelt die Regel-Files als Pruefmassstab.",

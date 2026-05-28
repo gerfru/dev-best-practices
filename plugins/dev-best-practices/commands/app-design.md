@@ -1,4 +1,4 @@
-﻿---
+---
 description: Von der App-Idee zu fundierten Architektur-/Stack-Entscheidungen (auf Basis der eigenen Regeln).
 argument-hint: "<kurze Beschreibung der App-Idee>"
 ---

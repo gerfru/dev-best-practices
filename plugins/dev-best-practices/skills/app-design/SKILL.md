@@ -1,4 +1,4 @@
-﻿---
+---
 name: app-design
 description: Von einer App-Idee zu fundierten Architektur- und Stack-Entscheidungen auf Basis der Dev-Best-Practices-Regeln. Use this skill whenever the user describes a new app idea and wants help choosing architecture, stack, structure, or a scaffolding plan; triggert bei "neue App", "App-Idee", "wie strukturiere ich", "welcher Stack", "Architektur fuer ...".
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 name: app-eval
 description: Vollständige End-to-End-Evaluierung einer App/Codebase - misst die Codebase gegen die Dev-Best-Practices-Regeln dieses Repos (essential/app/github/architecture). Achsen: Architektur (12-Factor), Security (OWASP ASVS 5.0/Top 10), CI-CD-Delivery (DORA), Code-Qualität, Tests, Observability. Use this skill whenever the user wants to audit, evaluate, review or assess an entire app or codebase, check production-/release-readiness, find technical debt, or do a security/architecture review. Trigger auch bei "evaluiere/auditiere/reviewe meine App", "ist meine App release-fertig", "Security-Review", "Architektur-Check" - selbst wenn nur eine einzelne Achse genannt wird.
 ---
