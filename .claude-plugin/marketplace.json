@@ -1,0 +1,13 @@
+﻿{
+  "name": "gerald-dev-best-practices",
+  "owner": { "name": "Gerald" },
+  "plugins": [
+    {
+      "name": "dev-best-practices",
+      "source": "./plugins/dev-best-practices",
+      "description": "App-Design und App-Evaluierung auf Basis der Dev-Best-Practices-Regeln (12-Factor, OWASP ASVS 5.0, DORA, Testing, Observability).",
+      "category": "development",
+      "tags": ["audit", "architecture", "security", "ci-cd", "best-practices"]
+    }
+  ]
+}
