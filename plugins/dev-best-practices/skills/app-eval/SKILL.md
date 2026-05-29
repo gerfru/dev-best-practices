@@ -9,6 +9,28 @@ Bewertet eine Ziel-Codebase gegen die Regeln dieses Dev-Best-Practices-Repos.
 SOLL = die Regel-Files. IST = die Codebase. Befunde zitieren die verletzte Regel.
 
 ## Schritt 0 - Maßstab & Kontext laden
+
+**Auto-Discovery (nie raten — lesen):**
+
+| Was lesen | Ableitung |
+|---|---|
+| `package.json` | Sprache (TS/JS), Framework (Next.js/Express/NestJS/…), Test-Tool |
+| `pyproject.toml` / `requirements.txt` | Python, Framework (FastAPI/Django/Flask), Package-Manager (uv/pip) |
+| `go.mod` / `Cargo.toml` | Go / Rust |
+| `Dockerfile` / `docker-compose.yml` | Container-Kontext, Services, Netzwerk |
+| `.github/workflows/*.yml` | CI-Pipeline vorhanden, welche Steps |
+| `CLAUDE.md` des Projekts | Dokumentierte Ausnahmen, bekannte Einschränkungen |
+| Lock-Files (`pnpm-lock.yaml`, `uv.lock`, `package-lock.json`) | Tatsächlich verwendete Versionen |
+
+**Aus Discovery ableiten (nicht nachfragen):**
+- **Team-Größe:** Solo wenn kein Team-Kontext in `CLAUDE.md` → ASVS L1 Default
+- **ASVS-Level:** L1 für Solo/Prototyp, L2 wenn Auth/Payment/sensible Daten erkennbar, L3 nur wenn explizit
+- **Compliance:** DSGVO wenn EU-Nutzer in Beschreibung oder Datenschutz-Konzept vorhanden
+- **Deployment-Ziel:** aus Dockerfile/CI ableiten (Container, Serverless, klassisch)
+
+Nur nachfragen wenn Discovery keine eindeutige Antwort liefert (z.B. kein einziges Config-File vorhanden).
+Nenne dem Nutzer die erkannten Werte kompakt: `Stack: Next.js 14 + TypeScript | DB: Postgres | CI: GitHub Actions | ASVS: L2`.
+
 1. Bestimme die **Regelquelle** in dieser Reihenfolge:
    a) Regel-Files dieses Repos, falls erreichbar (`claude/essential-rules.md`,
       `claude/app-rules.md`, `claude/github-rules.md`, `claude/architecture-rules.md`;
@@ -16,13 +38,8 @@ SOLL = die Regel-Files. IST = die Codebase. Befunde zitieren die verletzte Regel
    b) sonst die `CLAUDE.md` des Ziel-Projekts (enthält oft die kopierten Essential-Rules).
    c) sonst Default-Standards (12-Factor, ASVS L2, DORA).
    Nenne dem Nutzer, welche Quelle aktiv ist.
-2. Ziel-Projekt erfassen: Sprache, Framework, Build, Deployment-Ziel
-   (package.json / pyproject.toml / Dockerfile / `.github/workflows/*`).
-3. Lies eine vorhandene `CLAUDE.md`/`REVIEW.md` des Ziel-Projekts und übernimm dort
-   dokumentierte **Ausnahmen** (z.B. absichtlich öffentliche Routes), damit Re-Runs
-   konsistent bleiben.
-4. Falls ZIEL-ASVS-LEVEL (L1/L2/L3) oder COMPLIANCE (DSGVO, MDR) unklar: einmal
-   nachfragen, nicht raten. Default ASVS L1 für Solo/klein (gemäß app-rules.md), sonst L2.
+2. Dokumentierte **Ausnahmen** aus `CLAUDE.md`/`REVIEW.md` übernehmen (z.B. absichtlich
+   öffentliche Routes), damit Re-Runs konsistent bleiben.
 
 ## Schritt 1 - Plan zuerst
 Skizziere kurz, welche sechs Subagenten mit welchem Scope laufen, welche Regelquelle
