@@ -2,7 +2,7 @@
 
 Persoenliche Best-Practice-Sammlung fuer Software-Projekte -- typischerweise groessere Applikationen (RAG-Systeme, AI Agents, Data Pipelines, etc.) mit Web-Frontend. Drei Detailstufen: ausfuehrliche Referenz-Docs, thematische Regel-Files und ein kompaktes Essential-File fuer CLAUDE.md.
 
-Das Repo ist ausserdem ein **Claude-Code-Plugin-Marketplace**: einmal installiert, stehen die Befehle `/dev-best-practices:app-design` und `/dev-best-practices:app-eval` in jedem Projekt zur Verfuegung (siehe [Als Claude Code Plugin](#als-claude-code-plugin-app-design--app-eval)).
+Das Repo ist ausserdem ein **Claude-Code-Plugin-Marketplace**: einmal installiert, stehen alle Befehle in jedem Projekt zur Verfuegung (siehe [Als Claude Code Plugin](#als-claude-code-plugin)).
 
 ## Repo-Struktur
 
@@ -12,8 +12,8 @@ Das Repo ist ausserdem ein **Claude-Code-Plugin-Marketplace**: einmal installier
 plugins/
   dev-best-practices/
     .claude-plugin/plugin.json      Plugin-Metadaten
-    commands/                       Slash-Commands (app-design, app-eval)
-    skills/                         Skills (app-design, app-eval) -- auto-trigger
+    commands/                       Slash-Commands (alle unten gelisteten Befehle)
+    skills/                         Skills mit Workflow-Definitionen -- auto-trigger
     rules/                          Kopie der claude/*.md (Pruefmassstab fuer die Skills)
 
 reference/                          Detaillierte Dokumentation (fuer Menschen)
@@ -22,7 +22,7 @@ reference/                          Detaillierte Dokumentation (fuer Menschen)
   architecture-best-practices.md    Schichten, Patterns, Infra, 12-Factor
 
 claude/                             Kondensierte Regeln (fuer Claude Code)
-  essential-rules.md                Alles Wichtige in ~80 Zeilen → in CLAUDE.md einfuegen
+  essential-rules.md                Alles Wichtige in ~80 Zeilen
   app-rules.md                      App-Regeln ausfuehrlicher (~170 Zeilen)
   github-rules.md                   GitHub/CI-Regeln ausfuehrlicher (~210 Zeilen)
   architecture-rules.md             Architektur-Regeln ausfuehrlicher (~190 Zeilen)
@@ -36,25 +36,62 @@ claude/                             Kondensierte Regeln (fuer Claude Code)
 | **Thematisch** | `claude/app-rules.md` etc. | ~570 | Vertiefte Regeln pro Thema. Selektiv nachschlagen oder einfuegen |
 | **Reference** | `reference/*.md` | ~2800 | Ausfuehrliche Docs mit Theorie, Vergleichen, Links. Fuer Menschen |
 
-## Benutzung
+## Als Claude Code Plugin
 
-### 1. Neues Projekt: Essential Rules in CLAUDE.md
+Das Repo stellt als Plugin acht Befehle bereit -- aufgeteilt in drei Gruppen:
 
-Das `essential-rules.md` in die Projekt-CLAUDE.md kopieren -- passt immer, egal welcher Projekttyp:
+### Analyse & Planung
 
-```markdown
-# CLAUDE.md (im neuen Projekt)
+| Befehl | Was er tut |
+| --- | --- |
+| `/dev-best-practices:app-design` | App-Idee → Architektur-/Stack-Entscheidungen auf Basis der Regeln |
+| `/dev-best-practices:app-eval` | Vollstaendiges App-Audit (6 Achsen, parallele Subagenten); erkennt Stack automatisch |
 
-## Projekt
-...projektspezifische Infos...
+### Entwicklungs-Assistenten (stack-aware)
 
-## Best Practices
-<!-- Inhalt aus claude/essential-rules.md hier einfuegen -->
+Alle drei erkennen automatisch Sprache, Framework und vorhandenes Setup -- keine manuelle Konfiguration noetig.
+
+| Befehl | Was er tut |
+| --- | --- |
+| `/dev-best-practices:debug [Fehlermeldung]` | Root-Cause-Analyse: klassifiziert den Fehler-Typ, prueft stack-spezifische Ursachen (Next.js, FastAPI, Docker, DB …), liefert konkreten Fix |
+| `/dev-best-practices:test [Fokus]` | Erkennt Test-Framework + Coverage-Stand, schreibt fehlende Tests oder entwirft Test-Strategie gemaess Testpyramide |
+| `/dev-best-practices:styling [Aufgabe]` | Erkennt CSS-System (Tailwind, CSS Modules, SCSS, CSS-in-JS) + Komponenten-Library, liefert Loesung im Stil des vorhandenen Systems |
+
+### Regel-Management
+
+| Befehl | Was er tut |
+| --- | --- |
+| `/dev-best-practices:install-rules [--essential\|--full\|--section X]` | Fuegt `essential-rules.md` automatisch in die `CLAUDE.md` des aktuellen Projekts ein. Erkennt ob Erstinstallation oder Update noetig ist. Projekt-Ausnahmen bleiben erhalten. |
+| `/dev-best-practices:check-drift` | Vergleicht den installierten Rules-Block mit dem aktuellen Stand -- zeigt fehlende Sections, veraltete Regeln, empfiehlt Update |
+| `/dev-best-practices:doc-sync` | Repo-intern: prueft ob `claude/*.md` noch die Essenz von `reference/*.md` widerspiegelt |
+
+### Typischer Workflow
+
+**Neues Projekt einrichten:**
+```
+/dev-best-practices:install-rules
+```
+Fuegt `essential-rules.md` mit Versions-Markern in `CLAUDE.md` ein. Einmalig, kein Copy-Paste.
+
+**Bestehende Installation aktualisieren:**
+```
+/dev-best-practices:check-drift     # Was hat sich geaendert?
+/dev-best-practices:install-rules   # Update durchfuehren (Marker erkannt → in-place Update)
 ```
 
-### 2. Mehr Detail noetig? Thematische Files selektiv ergaenzen
+**Laufende Entwicklung:**
+```
+/dev-best-practices:debug [Fehler]     # Fehler analysieren
+/dev-best-practices:test               # Fehlende Tests schreiben
+/dev-best-practices:styling [Problem]  # CSS-Frage klaeren
+/dev-best-practices:app-eval           # Gesamtaudit vor Release
+```
 
-Wenn ein Thema mehr Tiefe braucht (z.B. ausfuehrlichere Security-Regeln), einzelne Sections aus den thematischen Files ergaenzen:
+## Benutzung ohne Plugin (manuell)
+
+### Neues Projekt: Essential Rules in CLAUDE.md
+
+Das `essential-rules.md` manuell in die Projekt-CLAUDE.md kopieren -- oder `/dev-best-practices:install-rules` verwenden (automatisch, empfohlen).
 
 | Projekttyp | Essential + ergaenzen mit |
 | --- | --- |
@@ -64,30 +101,20 @@ Wenn ein Thema mehr Tiefe braucht (z.B. ausfuehrlichere Security-Regeln), einzel
 | API-only Service | app-rules |
 | Quick Prototype | Essential reicht |
 
-### 3. Globale Regeln (optional)
+### Globale Regeln (optional)
 
-Regeln die fuer ALLE Projekte gelten sollen in `~/.claude/CLAUDE.md` ablegen. Gute Kandidaten:
+Regeln die fuer ALLE Projekte gelten sollen in `~/.claude/CLAUDE.md` ablegen:
 
 - Linting/Formatting-Standards (Ruff, ESLint, Prettier)
 - Pre-commit Hook Setup
 - Git-Workflow (Branch Protection, PR-Template)
 - Security-Grundregeln (Secrets, Input-Validierung)
 
-### 4. Nachschlagen
+### Nachschlagen
 
-Die `reference/`-Files enthalten die ausfuehrlichen Erklaerungen mit Theorie, Hintergruenden, Vergleichstabellen und Links. Gut fuer:
+Die `reference/`-Files enthalten ausfuehrliche Erklaerungen mit Theorie, Hintergruenden, Vergleichstabellen und Links. Gut fuer Tool-Vergleiche, Onboarding und Pre-Deploy-Checklisten.
 
-- Warum eine bestimmte Entscheidung getroffen wurde
-- Tool-Vergleiche wenn Alternativen evaluiert werden
-- Onboarding / Wissen auffrischen
-- Checklisten vor einem Deploy
-
-## Als Claude Code Plugin (app-design / app-eval)
-
-Das Repo stellt als Plugin zwei Befehle bereit:
-
-- `/dev-best-practices:app-design` -- von der App-Idee zu Architektur-/Stack-Entscheidungen, auf Basis der Regeln in diesem Repo
-- `/dev-best-practices:app-eval` -- vollstaendiges App-Audit gegen dieselben Regeln (6 Achsen, parallele Subagenten)
+## Plugin installieren
 
 Voraussetzung: Claude Code ist installiert. Einmal pro Rechner einrichten, danach in jedem Projekt verfuegbar.
 
@@ -105,26 +132,19 @@ Voraussetzung: Claude Code ist installiert. Einmal pro Rechner einrichten, danac
 # Marketplace hinzufuegen (GitHub-Pfad)
 claude plugin marketplace add gerfru/dev-best-practices
 
-# Plugin installieren  (Schema: <plugin>@<marketplace-name>)
+# Plugin installieren (Schema: <plugin>@<marketplace-name>)
 claude plugin install dev-best-practices@gerald-dev-best-practices
 
 # pruefen
 claude plugin marketplace list
 ```
 
-Danach `claude` starten und z.B. aufrufen:
-
-```
-/dev-best-practices:app-eval
-```
-
 > Hinweis: Hinter dem `@` steht der **Marketplace-Name** aus `marketplace.json`
-> (`gerald-dev-best-practices`), nicht der GitHub-Pfad. Der GitHub-Pfad
-> (`gerfru/dev-best-practices`) wird nur beim `add` verwendet.
+> (`gerald-dev-best-practices`), nicht der GitHub-Pfad.
 
-### Aktualisieren
+### Plugin aktualisieren
 
-Regeln/Skills geaendert? Aenderungen pushen, dann auf dem jeweiligen Rechner die aktuelle Version ziehen:
+Regeln/Skills geaendert? Aenderungen pushen, dann auf dem jeweiligen Rechner:
 
 ```bash
 # Mac/Linux
@@ -154,12 +174,10 @@ In einer laufenden Session danach `/reload-plugins`, damit Aenderungen ohne Neus
 ## Pflege
 
 - **reference/** aktualisieren wenn sich Best Practices aendern (neue Tools, neue Standards)
-- **claude/** synchron halten -- nur Regeln und Entscheidungen, keine Erklaerungen
+- **claude/** synchron halten -- nur Regeln, keine Erklaerungen; `/dev-best-practices:doc-sync` zeigt Drift
 - **essential-rules.md** ist die Single Source of Truth fuer das Kompaktformat
-- Stand-Datum in den Files aktuell halten
-- **Nach Regel-Aenderungen** die Regeln ins Plugin spiegeln, damit die Skills den aktuellen Stand pruefen:
+- **Nach Regel-Aenderungen** die Regeln ins Plugin spiegeln:
   ```bash
   cp claude/*.md plugins/dev-best-practices/rules/
   ```
-  (z.B. als `make sync`, damit `claude/` Single Source of Truth bleibt)
 - **JSON-Dateien ohne BOM** speichern (`marketplace.json`, `plugin.json`), sonst schlaegt das Hinzufuegen des Marketplace fehl
