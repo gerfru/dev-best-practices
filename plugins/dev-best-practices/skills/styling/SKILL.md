@@ -1,9 +1,9 @@
 ---
-name: styling-agent
+name: styling
 description: Stack-aware Frontend-Styling-Assistent. Erkennt automatisch das CSS-Framework, Design-System und Komponenten-Library, dann liefert konsistente, wartbare Styling-Entscheidungen und -Korrekturen. Use this skill whenever the user has a frontend styling question, wants to fix visual inconsistencies, improve CSS architecture, or work with a component library; triggert bei "Styling", "CSS", "Design System", "Komponente sieht falsch aus", "Theme", "responsive", "Tailwind", "SCSS", UI-Fragen.
 ---
 
-# Styling Agent (stack-aware)
+# Styling (stack-aware)
 
 Analysiert zuerst welches CSS-System im Einsatz ist — dann liefert er Lösungen
 die in dieses System passen. Kein generisches CSS wenn Tailwind benutzt wird.

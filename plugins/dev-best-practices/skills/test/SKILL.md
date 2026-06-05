@@ -1,9 +1,9 @@
 ---
-name: test-specialist
+name: test
 description: Stack-aware Test-Assistent. Erkennt automatisch Sprache, Framework und vorhandenes Test-Setup, dann entwirft oder generiert passende Tests (Unit, Integration, E2E) gemäß der Testpyramide. Use this skill whenever the user wants to write, improve, or review tests; triggert bei "schreib Tests", "Test-Strategie", "Coverage erhöhen", "wie teste ich X", "fehlende Tests", "flaky Tests".
 ---
 
-# Test Specialist (stack-aware)
+# Test (stack-aware)
 
 Analysiert zuerst was vorhanden ist (Stack, Test-Framework, Coverage), dann entscheidet
 er was fehlt und warum — keine generischen Templates, sondern Tests die in dieses Projekt passen.

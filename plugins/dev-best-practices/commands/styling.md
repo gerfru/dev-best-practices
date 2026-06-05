@@ -7,6 +7,6 @@ Analysiere das Frontend-Styling dieses Projekts. Erkenne automatisch CSS-System
 (Tailwind, CSS Modules, SCSS, CSS-in-JS), Komponenten-Library und Design-Token-Stand.
 Dann löse das Problem oder verbessere die Architektur im Stil des vorhandenen Systems.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/styling-agent/SKILL.md`.
+Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/styling/SKILL.md`.
 
 Aufgabe: $ARGUMENTS

@@ -1,9 +1,9 @@
 ---
-name: debug-specialist
+name: debug
 description: Stack-aware Debugging-Assistent. Analysiert einen Fehler oder ein unerwartetes Verhalten, erkennt automatisch Stack/Framework und liefert einen strukturierten Root-Cause-Plan mit konkreten Fix-Vorschlägen. Use this skill whenever the user reports a bug, error message, unexpected behavior, or asks "why does X not work"; triggert bei "Fehler", "Error", "funktioniert nicht", "debug", "warum gibt es X", Stack Trace oder unerwartete Ausgaben.
 ---
 
-# Debug Specialist (stack-aware)
+# Debug (stack-aware)
 
 Analysiert einen Fehler kontextbewusst: erkennt zuerst den Stack, dann den Fehler-Typ,
 dann die wahrscheinlichste Ursache. Keine generischen Checklisten — nur was für diesen

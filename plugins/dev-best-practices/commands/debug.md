@@ -7,6 +7,6 @@ Analysiere den folgenden Fehler oder das beschriebene Problem. Erkenne zuerst au
 den Stack (package.json, pyproject.toml, Dockerfile …), klassifiziere den Fehler-Typ und
 liefere einen strukturierten Root-Cause-Report.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/debug-specialist/SKILL.md`.
+Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/debug/SKILL.md`.
 
 Problem: $ARGUMENTS

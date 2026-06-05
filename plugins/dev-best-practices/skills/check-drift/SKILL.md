@@ -1,9 +1,9 @@
 ---
-name: check-rules-drift
+name: check-drift
 description: Vergleicht den Dev-Best-Practices-Block in einer Projekt-CLAUDE.md mit dem aktuellen Stand der Rule-Files und zeigt was fehlt, veraltet oder neu hinzugekommen ist. Use this skill whenever the user wants to update their project rules, check if rules are still current, or sync a CLAUDE.md with the latest best practices; triggert bei "Regeln aktualisieren", "sind meine Rules noch aktuell", "drift", "sync CLAUDE.md", "update rules".
 ---
 
-# Check Rules Drift
+# Check Drift
 
 Vergleicht was im Zielprojekt steht mit dem was unsere Rule-Files aktuell definieren.
 Zeigt den Delta — ohne automatisch zu überschreiben.
