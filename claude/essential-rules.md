@@ -10,7 +10,7 @@ Ausfuehrlichere Regeln: `app-rules.md`, `github-rules.md`, `architecture-rules.m
 - Security Headers setzen: CSP (`default-src 'self'`), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
 - CSP-Strategie: Nonce-basiert mit `'strict-dynamic'`. `'unsafe-inline'` nur fuer `style-src`
 - Auth an 3 Schichten: Middleware → Route → **Data Access Layer** (wichtigste!)
-- Passwort: bcrypt/Argon2, nie Plaintext. Rate Limiting auf Login
+- Passwort: bcrypt (cost ≥ 12) / Argon2id, nie Plaintext. Rate Limiting auf Login
 - Sessions: httpOnly, secure, sameSite=Lax
 - Input validieren an System-Grenze: TS → Zod, Python → Pydantic
 - SQL: Immer Prepared Statements. Shell: Nie User-Input in Commands

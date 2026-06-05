@@ -9,14 +9,19 @@ Detaillierte Erklaerungen: `../reference/app-best-practices.md`
 
 Jede App MUSS diese Response-Headers setzen:
 
-- `Content-Security-Policy`: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`
 - `Strict-Transport-Security`: `max-age=31536000; includeSubDomains`
 - `X-Content-Type-Options`: `nosniff`
 - `X-Frame-Options`: `DENY`
 - `Referrer-Policy`: `strict-origin-when-cross-origin`
 - `Permissions-Policy`: `camera=(), microphone=(), geolocation=(), payment=()`
 
-**CSP-Strategie:** Nonce-basiert mit `'strict-dynamic'` (Gold-Standard). `'unsafe-inline'` nur fuer `style-src` akzeptabel. CSP zuerst im `Report-Only` Modus testen.
+**CSP-Strategie:** Nonce-basiert mit `'strict-dynamic'` (Gold-Standard):
+`Content-Security-Policy: default-src 'self'; script-src 'nonce-{RANDOM}' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`
+
+> Einfachere Variante (ohne Nonce, nur fuer Apps ohne dynamisch geladene Scripts):
+> `script-src 'self'`
+
+CSP zuerst im `Report-Only` Modus testen.
 
 ---
 
@@ -24,7 +29,7 @@ Jede App MUSS diese Response-Headers setzen:
 
 - **Defense in Depth:** Auth an 3 Schichten: Middleware → Route/Controller → Data Access Layer (wichtigste!)
 - **Fail Closed:** Bei Fehler Zugang verweigern
-- **Passwort:** bcrypt/scrypt/Argon2, nie Plaintext, Timing-safe Vergleiche, Rate Limiting auf Login
+- **Passwort:** bcrypt (cost ≥ 12) / scrypt / Argon2id, nie Plaintext, Timing-safe Vergleiche, Rate Limiting auf Login
 - **Sessions:** Session Cookies mit `httpOnly=true`, `secure=true`, `sameSite=Lax` (Standard-Empfehlung)
 - **JWT:** Nur wenn Statelessness wirklich noetig. Bei JWT immer mit Refresh Token
 - **Kein eigenes Crypto** -- immer etablierte Libraries

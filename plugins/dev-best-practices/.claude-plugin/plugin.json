@@ -1,6 +1,6 @@
 {
   "name": "dev-best-practices",
-  "version": "0.1.0",
-  "description": "App-Design (Idee -> Architektur/Stack) und App-Evaluierung (Audit gegen die eigenen Regeln). Bundelt die Regel-Files als Pruefmassstab.",
+  "version": "1.0.0",
+  "description": "15 Skills für Design, Security-Review (ISEC/Stanford/MIT), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test und Styling.",
   "author": { "name": "Gerald" }
 }

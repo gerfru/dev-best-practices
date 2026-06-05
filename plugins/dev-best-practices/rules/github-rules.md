@@ -54,6 +54,8 @@ steps:
   - uv run ruff format --check .
   - uv run mypy .
   - uv run pytest
+  - uv run semgrep scan --config=auto --error
+  # semgrep ergaenzt ruff-S um cross-file Taint-Analyse
 ```
 
 ### Beide: Separater Secrets-Job
