@@ -1,6 +1,6 @@
 {
   "name": "dev-best-practices",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "15 Skills für Design, Security-Review (ISEC/Stanford/MIT), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test und Styling.",
   "author": { "name": "Gerald" }
 }

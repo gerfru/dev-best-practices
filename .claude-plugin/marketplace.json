@@ -1,6 +1,7 @@
 {
   "name": "gerald-dev-best-practices",
   "owner": { "name": "Gerald" },
+  "autoUpdate": true,
   "plugins": [
     {
       "name": "dev-best-practices",
