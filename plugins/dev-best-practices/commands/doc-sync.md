@@ -1,5 +1,5 @@
 ---
-description: Repo-Wartung — prüft ob claude/*.md noch die Essenz von reference/*.md widerspiegelt und findet Drift zwischen Master- und Derived-Files.
+description: Repo-Wartung - prueft ob claude/*.md noch die Essenz von reference/*.md widerspiegelt und findet Drift zwischen Master- und Derived-Files.
 argument-hint: "[optional: app | github | architecture | essential]"
 ---
 

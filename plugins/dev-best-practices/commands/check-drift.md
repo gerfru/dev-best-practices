@@ -1,5 +1,5 @@
 ---
-description: Prüft ob der Best-Practices-Block in der CLAUDE.md noch aktuell ist — zeigt fehlende, veraltete und neue Regeln seit dem letzten Install.
+description: Prueft ob der Best-Practices-Block in der CLAUDE.md noch aktuell ist - zeigt fehlende, veraltete und neue Regeln seit dem letzten Install.
 argument-hint: "[optionaler Pfad zur CLAUDE.md]"
 ---
 

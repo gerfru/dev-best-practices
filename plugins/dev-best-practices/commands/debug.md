@@ -1,6 +1,6 @@
 ---
-description: Stack-aware Debugging — erkennt automatisch Framework/Stack und liefert einen strukturierten Root-Cause-Plan mit konkreten Fix-Vorschlägen.
-argument-hint: "[Fehlermeldung, Stack Trace oder kurze Problembeschreibung]"
+description: Stack-aware debugging - erkennt automatisch Framework/Stack und liefert einen Root-Cause-Plan mit konkreten Fix-Vorschlaegen.
+argument-hint: "[Fehlermeldung, Stack Trace oder Problembeschreibung]"
 ---
 
 Analysiere den folgenden Fehler oder das beschriebene Problem. Erkenne zuerst automatisch

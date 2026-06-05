@@ -1,5 +1,5 @@
 ---
-description: Stack-aware Styling-Assistent — erkennt CSS-Framework und Design-System, liefert konsistente Styling-Lösungen die ins vorhandene System passen.
+description: Stack-aware Styling-Assistent - erkennt CSS-Framework und Design-System, liefert konsistente Styling-Loesungen die ins vorhandene System passen.
 argument-hint: "[Styling-Problem oder Komponente beschreiben]"
 ---
 
