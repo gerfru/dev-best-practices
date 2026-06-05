@@ -6,7 +6,7 @@ Das Repo ist ausserdem ein **Claude-Code-Plugin-Marketplace**: einmal installier
 
 ## Repo-Struktur
 
-```
+```text
 .claude-plugin/
   marketplace.json                  Marketplace-Katalog (macht das Repo installierbar)
 plugins/
@@ -38,60 +38,102 @@ claude/                             Kondensierte Regeln (fuer Claude Code)
 
 ## Als Claude Code Plugin
 
-Das Repo stellt als Plugin acht Befehle bereit -- aufgeteilt in drei Gruppen:
+Das Repo stellt als Plugin 15 Skills in vier Kategorien bereit. Einstieg ueber `/dev-best-practices:meta-help` -- zeigt das Navigationsmenue und startet den gewaehlten Skill direkt.
 
-### Analyse & Planung
+### 🏗️ Design
+
+Skills fuer Entwurf und Planung -- liefern jeweils eine Design-Datei mit Entscheidungstabelle und Setup-Todo.
+
+| Befehl | Was er tut | Output |
+| --- | --- | --- |
+| `/dev-best-practices:design-app` | App-Idee → Architektur-/Stack-Entscheidungen auf Basis der Regeln | `./design-app.md` |
+| `/dev-best-practices:design-secure` | Security Design: Threat Model, Krypto-Auswahl, Auth, Compliance | `./design-secure.md` |
+| `/dev-best-practices:design-api` | REST / GraphQL / gRPC Contract entwerfen oder reviewen | `./design-api.md` |
+| `/dev-best-practices:design-data` | Schema, Normalisierung, Indexe, CQRS / Event Sourcing | `./design-data.md` |
+| `/dev-best-practices:design-migration` | Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga | `./design-migration.md` |
+
+### 🔍 Review
+
+Skills fuer Audits bestehender Systeme -- liefern jeweils einen Report mit Findings nach Severity.
+
+| Befehl | Was er tut | Output |
+| --- | --- | --- |
+| `/dev-best-practices:review-app` | Vollstaendiger App-Audit (6 Achsen, parallele Subagenten); erkennt Stack automatisch | `./review-app-report.md` |
+| `/dev-best-practices:review-arch` | Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR-Empfehlungen | `./review-arch-report.md` |
+| `/dev-best-practices:review-secure` | Security Code Review: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act | `./review-secure-report.md` |
+
+### 🛠️ Tools
+
+Stack-aware Entwicklungs-Assistenten -- erkennen automatisch Sprache, Framework und Setup.
 
 | Befehl | Was er tut |
 | --- | --- |
-| `/dev-best-practices:app-design` | App-Idee → Architektur-/Stack-Entscheidungen auf Basis der Regeln |
-| `/dev-best-practices:app-eval` | Vollstaendiges App-Audit (6 Achsen, parallele Subagenten); erkennt Stack automatisch |
+| `/dev-best-practices:tool-debug [Fehlermeldung]` | Root-Cause-Analyse: klassifiziert den Fehler-Typ, prueft stack-spezifische Ursachen (Next.js, FastAPI, Docker, DB …), liefert konkreten Fix |
+| `/dev-best-practices:tool-test [Fokus]` | Erkennt Test-Framework + Coverage-Stand, schreibt fehlende Tests oder entwirft Test-Strategie gemaess Testpyramide |
+| `/dev-best-practices:tool-style [Aufgabe]` | Erkennt CSS-System (Tailwind, CSS Modules, SCSS, CSS-in-JS) + Komponenten-Library, liefert Loesung im Stil des vorhandenen Systems |
 
-### Entwicklungs-Assistenten (stack-aware)
+### 📁 Meta
 
-Alle drei erkennen automatisch Sprache, Framework und vorhandenes Setup -- keine manuelle Konfiguration noetig.
-
-| Befehl | Was er tut |
-| --- | --- |
-| `/dev-best-practices:debug [Fehlermeldung]` | Root-Cause-Analyse: klassifiziert den Fehler-Typ, prueft stack-spezifische Ursachen (Next.js, FastAPI, Docker, DB …), liefert konkreten Fix |
-| `/dev-best-practices:test [Fokus]` | Erkennt Test-Framework + Coverage-Stand, schreibt fehlende Tests oder entwirft Test-Strategie gemaess Testpyramide |
-| `/dev-best-practices:styling [Aufgabe]` | Erkennt CSS-System (Tailwind, CSS Modules, SCSS, CSS-in-JS) + Komponenten-Library, liefert Loesung im Stil des vorhandenen Systems |
-
-### Regel-Management
+Regel-Management fuer dieses Repo und Zielprojekte.
 
 | Befehl | Was er tut |
 | --- | --- |
-| `/dev-best-practices:install-rules [--essential\|--full\|--section X]` | Fuegt `essential-rules.md` automatisch in die `CLAUDE.md` des aktuellen Projekts ein. Erkennt ob Erstinstallation oder Update noetig ist. Projekt-Ausnahmen bleiben erhalten. |
-| `/dev-best-practices:check-drift` | Vergleicht den installierten Rules-Block mit dem aktuellen Stand -- zeigt fehlende Sections, veraltete Regeln, empfiehlt Update |
-| `/dev-best-practices:doc-sync` | Repo-intern: prueft ob `claude/*.md` noch die Essenz von `reference/*.md` widerspiegelt |
+| `/dev-best-practices:meta-help` | Navigationsmenue -- zeigt alle 15 Skills gruppiert, startet den gewaehlten direkt |
+| `/dev-best-practices:meta-install [--essential\|--full\|--section X]` | Fuegt `essential-rules.md` automatisch in die `CLAUDE.md` des aktuellen Projekts ein. Erkennt ob Erstinstallation oder Update noetig ist. Projekt-Ausnahmen bleiben erhalten. |
+| `/dev-best-practices:meta-drift` | Vergleicht den installierten Rules-Block mit dem aktuellen Stand -- zeigt fehlende Sections, veraltete Regeln, empfiehlt Update |
+| `/dev-best-practices:meta-sync` | Repo-intern: prueft ob `claude/*.md` noch die Essenz von `reference/*.md` widerspiegelt |
 
 ### Typischer Workflow
 
 **Neues Projekt einrichten:**
+
+```text
+/dev-best-practices:meta-install
 ```
-/dev-best-practices:install-rules
-```
+
 Fuegt `essential-rules.md` mit Versions-Markern in `CLAUDE.md` ein. Einmalig, kein Copy-Paste.
 
 **Bestehende Installation aktualisieren:**
+
+```text
+/dev-best-practices:meta-drift      # Was hat sich geaendert?
+/dev-best-practices:meta-install    # Update durchfuehren (Marker erkannt -> in-place Update)
 ```
-/dev-best-practices:check-drift     # Was hat sich geaendert?
-/dev-best-practices:install-rules   # Update durchfuehren (Marker erkannt → in-place Update)
+
+**Neue App designen:**
+
+```text
+/dev-best-practices:design-app eine kleine Habit-Tracker-App
+/dev-best-practices:design-secure   # Security Design dazu
+/dev-best-practices:design-api      # API Contract entwerfen
+```
+
+**Vor dem Release:**
+
+```text
+/dev-best-practices:review-app      # App-Audit
+/dev-best-practices:review-secure   # Security Code Review
 ```
 
 **Laufende Entwicklung:**
+
+```text
+/dev-best-practices:tool-debug [Fehler]    # Fehler analysieren
+/dev-best-practices:tool-test              # Fehlende Tests schreiben
+/dev-best-practices:tool-style [Problem]   # CSS-Frage klaeren
 ```
-/dev-best-practices:debug [Fehler]     # Fehler analysieren
-/dev-best-practices:test               # Fehlende Tests schreiben
-/dev-best-practices:styling [Problem]  # CSS-Frage klaeren
-/dev-best-practices:app-eval           # Gesamtaudit vor Release
+
+**Nicht sicher welcher Skill?**
+
+```text
+/dev-best-practices:meta-help   # Menue anzeigen, Skill waehlen
 ```
 
 ## Benutzung ohne Plugin (manuell)
 
 ### Neues Projekt: Essential Rules in CLAUDE.md
 
-Das `essential-rules.md` manuell in die Projekt-CLAUDE.md kopieren -- oder `/dev-best-practices:install-rules` verwenden (automatisch, empfohlen).
+Das `essential-rules.md` manuell in die Projekt-CLAUDE.md kopieren -- oder `/dev-best-practices:meta-install` verwenden (automatisch, empfohlen).
 
 | Projekttyp | Essential + ergaenzen mit |
 | --- | --- |
@@ -124,7 +166,7 @@ Voraussetzung: Claude Code ist installiert. Einmal pro Rechner einrichten, danac
 2. Ins Eingabefeld tippen: `/plugin` → der Dialog **Manage Plugins** oeffnet sich.
 3. Tab **Marketplaces** → Feld ausfuellen mit `gerfru/dev-best-practices` → **Add**.
 4. Tab **Plugins** → `dev-best-practices` auswaehlen → **Install**.
-5. Testen: `/dev-best-practices:app-design eine kleine Habit-Tracker-App`
+5. Testen: `/dev-best-practices:meta-help`
 
 ### Mac / Linux -- ueber bash (CLI)
 
@@ -159,13 +201,16 @@ In einer laufenden Session danach `/reload-plugins`, damit Aenderungen ohne Neus
 
 - **„Failed to parse marketplace file ... Unrecognized token"**: Eine JSON-Datei
   (`marketplace.json` / `plugin.json`) hat ein BOM. Unter Windows entfernen:
+
   ```powershell
   Get-ChildItem -Recurse -File -Path .claude-plugin,plugins | ForEach-Object {
     $c = Get-Content -Raw -LiteralPath $_.FullName
     [System.IO.File]::WriteAllText($_.FullName, $c, (New-Object System.Text.UTF8Encoding($false)))
   }
   ```
+
   Dann pushen und den Marketplace auf den Clients neu holen (entfernen + neu hinzufuegen).
+
 - **Befehle erscheinen nicht** nach der Installation: `/reload-plugins` ausfuehren.
 - **`claude plugin marketplace ...` „unknown command"** (aeltere Version): stattdessen
   `claude` starten und dieselben Befehle als Slash-Kommandos nutzen
@@ -174,10 +219,12 @@ In einer laufenden Session danach `/reload-plugins`, damit Aenderungen ohne Neus
 ## Pflege
 
 - **reference/** aktualisieren wenn sich Best Practices aendern (neue Tools, neue Standards)
-- **claude/** synchron halten -- nur Regeln, keine Erklaerungen; `/dev-best-practices:doc-sync` zeigt Drift
+- **claude/** synchron halten -- nur Regeln, keine Erklaerungen; `/dev-best-practices:meta-sync` zeigt Drift
 - **essential-rules.md** ist die Single Source of Truth fuer das Kompaktformat
 - **Nach Regel-Aenderungen** die Regeln ins Plugin spiegeln:
+
   ```bash
   cp claude/*.md plugins/dev-best-practices/rules/
   ```
+
 - **JSON-Dateien ohne BOM** speichern (`marketplace.json`, `plugin.json`), sonst schlaegt das Hinzufuegen des Marketplace fehl
