@@ -180,6 +180,10 @@ Stack: ... | Scope: ... | Datum: YYYY-MM-DD
 
 ## ADR-Empfehlungen
 [Welche Entscheidungen dokumentiert werden sollten]
+
+---
+*Erstellt mit KI-Unterstützung (Claude Code + dev-best-practices Plugin).
+Findings sind zu verifizieren — kein Ersatz für manuelle Architektur-Reviews.*
 ```
 
 ## Reference Files

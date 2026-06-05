@@ -188,6 +188,18 @@ Sprache: ... | Framework: ... | Datum: YYYY-MM-DD
 3. ...
 ```
 
+## Report Footer
+
+Jeder generierte Report endet mit:
+
+```markdown
+---
+*Erstellt mit KI-Unterstützung (Claude Code + dev-best-practices Plugin).
+Findings sind zu verifizieren — kein Ersatz für manuelle Penetrationstests.*
+```
+
+---
+
 ## Reference Files
 
 Load these on demand — do not load all at once:

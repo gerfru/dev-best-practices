@@ -5,7 +5,7 @@
     {
       "name": "dev-best-practices",
       "source": "./plugins/dev-best-practices",
-      "description": "App-Design und App-Evaluierung auf Basis der Dev-Best-Practices-Regeln (12-Factor, OWASP ASVS 5.0, DORA, Testing, Observability).",
+      "description": "15 Skills: App-Design, Security Code Review (ISEC/Stanford/MIT-basiert), App-Audit (6 Achsen, ASVS 5.0), Architektur-Review, Debug-Assistent, Test-Strategie, CSS-Styling.",
       "category": "development",
       "tags": ["audit", "architecture", "security", "ci-cd", "best-practices"]
     }

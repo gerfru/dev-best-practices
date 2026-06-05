@@ -1,1 +1,24 @@
+# Claude Code local settings
 .claude/
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Future-proofing
+node_modules/
+__pycache__/
+*.pyc
+dist/

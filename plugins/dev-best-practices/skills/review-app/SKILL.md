@@ -68,8 +68,10 @@ DOM-XSS, Secrets-Handling, Cookie-Flags, CORS, File-Uploads, PostgreSQL-Hardenin
 Tooling-Soll: gitleaks, bandit/ruff-S, semgrep, pip-audit, trivy.
 Falls die offizielle `/security-review`-Komponente installiert ist, darf dieser Agent
 sie nutzen statt zu duplizieren.
-**False-Positive-Filter:** nur Confidence >= 7. Fehlende Audit-Logs, UUID-Validierung,
+**False-Positive-Filter:** nur Confidence >= 7. Fehlende UUID-Validierung,
 Resource-Leaks und Env-Var-abhängige Angriffe gelten NICHT als Schwachstelle.
+Fehlende Audit-Logs → als ⚪ COMPLIANCE melden (ISO 27001 A.8.15 / GDPR Art. 32),
+nicht als Security HIGH/CRITICAL.
 
 ### Agent 3 - Code-Qualität
 Default-Schwellwerte (anpassbar, gehören perspektivisch in ein eigenes Regel-File):
@@ -111,3 +113,13 @@ Container-Hygiene falls Dockerfile (non-root, Digest-Pin, Multi-Stage, `--check`
 - **Nichts automatisch fixen.** Erst Report, dann auf Nachfrage gezielt umsetzen.
 - Verifikation vor "fertig": Würde ein Staff-Engineer diesen Report freigeben?
 - Neue bewusste Ausnahmen, die im Lauf auftauchen, der `CLAUDE.md` des Ziel-Projekts vorschlagen.
+
+## Report Footer
+
+Jeder generierte Report endet mit:
+
+```markdown
+---
+*Erstellt mit KI-Unterstützung (Claude Code + dev-best-practices Plugin).
+Findings sind zu verifizieren — kein Ersatz für manuelle Penetrationstests.*
+```
