@@ -17,31 +17,34 @@ Zeige das Menü sofort. Kein langer Einleitungstext.
 Welcher Skill soll starten?
 
 🏗️  DESIGN
-  1  design-app        Stack & Architektur aus den Best-Practice-Regeln
-  2  design-secure     Security Design: Threat Model, Krypto, Auth, Compliance
-  3  design-api        REST / GraphQL / gRPC Contract entwerfen oder reviewen
-  4  design-data       Schema, Normalisierung, Indexe, CQRS / Event Sourcing
-  5  design-migration  Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga
-  6  design-ux         UX/UI Design: Interaktion, Vertrauen, AI-Features, Anti-Patterns
-  7  design-llm        LLM-System: RAG, Fine-tune, Agent, Eval-Strategie, Guardrails
+  1  design-app              Stack & Architektur aus den Best-Practice-Regeln
+  2  design-secure           Security Design: Threat Model, Krypto, Auth, Compliance
+  3  design-api              REST / GraphQL / gRPC Contract entwerfen oder reviewen
+  4  design-data             Schema, Normalisierung, Indexe, CQRS / Event Sourcing
+  5  design-migration        Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga
+  6  design-ux               UX/UI Design: Interaktion, Vertrauen, AI-Features, Anti-Patterns
+  7  design-llm              LLM-System: RAG, Fine-tune, Agent, Eval-Strategie, Guardrails
+  8  design-observability    Observability: SLO/SLI, Golden Signals, Tracing, Alerting, Incident Response
+  9  design-cicd             CI/CD Pipeline: Deployment-Strategien, DORA-Metriken, Trunk-Based Dev
 
 🔍  REVIEW
-  8  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
-  9  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
- 10  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
- 11  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
- 12  review-llm        LLM-Audit: Architektur, Evals, Prompt Injection, OWASP LLM Top 10
+ 10  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
+ 11  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
+ 12  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
+ 13  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
+ 14  review-llm        LLM-Audit: Architektur, Evals, Prompt Injection, OWASP LLM Top 10
 
 🛠️  TOOLS
- 13  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
- 14  tool-test         Tests schreiben, verbessern oder Strategie planen
- 15  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
+ 15  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
+ 16  tool-test         Tests schreiben, verbessern oder Strategie planen
+ 17  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
+ 18  tool-a11y         Accessibility-Audit: WCAG 2.2, Screen Reader, EU Accessibility Act
 
 📁  META
- 16  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
- 17  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
- 18  meta-sync           reference/*.md vs. claude/*.md synchron halten
- 19  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
+ 19  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
+ 20  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
+ 21  meta-sync           reference/*.md vs. claude/*.md synchron halten
+ 22  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
 
 → Zahl eingeben, oder direkt beschreiben was du brauchst.
 ```
@@ -57,4 +60,4 @@ Lade und folge exakt: `${CLAUDE_PLUGIN_ROOT}/skills/<gewählter-skill>/SKILL.md`
 ## Regeln
 - Menü sofort zeigen, kein Intro
 - Nach der Wahl direkt starten, nicht nochmals erklären oder nachfragen
-- Nie alle 19 Skills gleichzeitig laden — immer nur den gewählten
+- Nie alle 22 Skills gleichzeitig laden — immer nur den gewählten

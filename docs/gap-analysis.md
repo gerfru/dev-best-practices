@@ -25,9 +25,9 @@ Stand: 2026-06-08 | Zuletzt aktualisiert: 2026-06-08
 | Bereich | Skill | Prio | Status | Akademische Basis (verifiziert) | Kanonische Bücher |
 |---|---|---|---|---|---|
 | **AI/LLM Engineering** | `design-llm` + `review-llm` | Hoch | ✅ Erledigt (#14) | Stanford CS224N; CMU 11-667; Berkeley CS294-196; MIT 6.5940 | Chip Huyen "Designing ML Systems"; Raschka "Build an LLM from Scratch" |
-| **Observability / SRE** | `design-observability` | Mittel | 🔲 Offen | CMU 18-749; MIT 6.5840 | Google SRE Book (free); Site Reliability Workbook (free); "Observability Engineering" (Majors/Fong-Jones) |
-| **CI/CD Pipeline Design** | `design-cicd` | Mittel | 🔲 Offen | CMU 17-636; Jez Humble (Berkeley) | "Continuous Delivery" (Humble/Farley); "Accelerate" (Forsgren/Humble/Kim); DORA Report 2024 (free) |
-| **Accessibility** | `tool-a11y` | Mittel | 🔲 Offen | CMU HCII 05-332/632; W3C WAI Digital Foundations (edX) | WCAG 2.2 (normativ, free); EU EN 301 549 |
+| **Observability / SRE** | `design-observability` | Mittel | ✅ Erledigt | CMU 18-749; MIT 6.5840 | Google SRE Book (free); Site Reliability Workbook (free); "Observability Engineering" (Majors/Fong-Jones) |
+| **CI/CD Pipeline Design** | `design-cicd` | Mittel | ✅ Erledigt | CMU 17-636; Jez Humble (Berkeley) | "Continuous Delivery" (Humble/Farley); "Accelerate" (Forsgren/Humble/Kim); DORA Report 2024 (free) |
+| **Accessibility** | `tool-a11y` | Mittel | ✅ Erledigt | CMU HCII 05-332/632; W3C WAI Digital Foundations (edX) | WCAG 2.2 (normativ, free); EU EN 301 549 |
 | **Infrastructure as Code** | `design-iac` | Niedrig | 🔲 Offen | NTNU IIKG3005 (einziger dedizierter Kurs weltweit) | "Infrastructure as Code" (Kief Morris); "Terraform: Up & Running" (Brikman) |
 | **Performance Engineering** | `tool-perf` | Niedrig | 🔲 Offen | MIT 6.172 (vollständig auf OCW); CMU 15-721; UT Austin CS395T | "Systems Performance" (Brendan Gregg) — USE Method + Flamegraphs |
 | **design-migration vertiefen** | `design-migration` | Niedrig | 🔲 Offen | Bereits: Fowler + MIT 6.5840 | Kleppmann "Designing Data-Intensive Applications" |
