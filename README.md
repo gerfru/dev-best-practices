@@ -85,8 +85,8 @@ Or just describe what you need in natural language — Claude picks the right sk
 
 plugins/dev/
   .claude-plugin/
-    plugin.json             Plugin metadata (name: "dev")
-  commands/                 Slash-command definitions
+    plugin.json             Plugin metadata (name: "dev", version: "2.0.0")
+  commands/                 Slash-command definitions (one file per skill)
   skills/                   Skill workflow definitions (auto-triggered)
   rules/                    Mirror of claude/*.md (used by skills as reference)
 
@@ -100,6 +100,9 @@ reference/                  Detailed docs for humans
   app-best-practices.md     Security, auth, API, DB, monitoring, OWASP
   github-best-practices.md  CI/CD, linting, testing, Docker, code review
   architecture-best-practices.md  Layers, patterns, infra, 12-Factor
+
+docs/
+  skill-research-basis.md   Academic & industry sources per skill
 
 scripts/
   validate-skills.sh        Plugin structure validator (CI + pre-commit)

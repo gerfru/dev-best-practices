@@ -1,47 +1,65 @@
 # Dev Best Practices
 
-Dieses Repo enthaelt Best-Practice-Regeln fuer Software-Projekte -- typischerweise groessere Applikationen (RAG-Systeme, AI Agents, Data Pipelines, etc.) mit Web-Frontend.
-Drei Stufen: **Essential** (kompakt, fuer CLAUDE.md), **Thematisch** (ausfuehrlichere Regeln), **Reference** (detailliert, fuer Menschen).
+Dieses Repo enthaelt Best-Practice-Regeln fuer Software-Projekte (RAG-Systeme, AI Agents, Data Pipelines, Full-Stack Web Apps) und ein **Claude Code Plugin** mit 24 Skills.
 
 ## Repo-Struktur
 
 ```text
-reference/                          # Detaillierte Dokumentation zum Nachschlagen
-  app-best-practices.md             # Security, Auth, API, DB, Monitoring, OWASP
-  github-best-practices.md          # CI/CD, Linting, Testing, Docker, Code Review
-  architecture-best-practices.md    # Schichten, Patterns, Infra, 12-Factor
+.claude-plugin/
+  marketplace.json          # Macht dieses Repo als Marketplace installierbar
 
-claude/                             # Kondensierte Regeln fuer Claude Code / Vibe-Coding
-  essential-rules.md                # ~80 Zeilen -- in Projekt-CLAUDE.md einfuegen
-  app-rules.md                      # ~170 Zeilen (aus 860)
-  github-rules.md                   # ~210 Zeilen (aus 780)
-  architecture-rules.md             # ~190 Zeilen (aus 1180)
+plugins/dev/
+  .claude-plugin/
+    plugin.json             # Plugin-Metadaten (name: "dev", version: "2.0.0")
+  commands/                 # Slash-Command-Definitionen (eine Datei pro Skill)
+  skills/                   # Skill-Workflow-Definitionen (auto-triggered)
+  rules/                    # Mirror von claude/*.md (wird von Skills als Referenz genutzt)
+
+claude/                     # Kondensierte Regeln fuer Claude Code
+  essential-rules.md        # ~80 Zeilen -- in Projekt-CLAUDE.md einfuegen
+  app-rules.md              # App-Regeln im Detail
+  github-rules.md           # GitHub / CI-Regeln im Detail
+  architecture-rules.md     # Architektur-Regeln im Detail
+
+reference/                  # Detaillierte Dokumentation zum Nachschlagen
+  app-best-practices.md     # Security, Auth, API, DB, Monitoring, OWASP
+  github-best-practices.md  # CI/CD, Linting, Testing, Docker, Code Review
+  architecture-best-practices.md  # Schichten, Patterns, Infra, 12-Factor
+
+docs/
+  skill-research-basis.md   # Akademische & Industrie-Quellen pro Skill
+
+scripts/
+  validate-skills.sh        # Plugin-Struktur-Validator (CI + pre-commit)
 ```
+
+## Plugin-Skills (24)
+
+```text
+DESIGN:  design-app, design-secure, design-api, design-data, design-migration,
+         design-ux, design-llm, design-observability, design-cicd, design-iac
+REVIEW:  review-app, review-arch, review-secure, review-ux, review-llm
+TOOLS:   tool-debug, tool-test, tool-style, tool-a11y, tool-perf
+META:    meta-help, meta-install, meta-drift, meta-sync, meta-create-skill
+```
+
+Navigationsmenue: `/dev:meta-help`
 
 ## Verwendung in Projekten
 
-### Standard: essential-rules.md in Projekt-CLAUDE.md kopieren
+**Plugin installieren:** `claude plugin install dev@gerald-dev-best-practices`
 
-Reicht fuer die meisten Projekte. ~80 Zeilen, kompakt genug neben projektspezifischem Kontext.
+**Nur Regeln (ohne Plugin):** `claude/essential-rules.md` in Projekt-CLAUDE.md kopieren, oder `/dev:meta-install` verwenden.
 
-### Mehr Detail noetig?
-
-Einzelne Sections aus den thematischen Files (`app-rules.md`, `github-rules.md`, `architecture-rules.md`) selektiv ergaenzen.
-
-### Global (optional)
-
-Regeln die IMMER gelten in `~/.claude/CLAUDE.md` ablegen:
-
-- Linting/Formatting-Standards
-- Git-Workflow
-- Security-Grundregeln
+**Mehr Detail:** Sections aus `claude/app-rules.md`, `claude/github-rules.md`, `claude/architecture-rules.md` selektiv ergaenzen.
 
 ## Pflege
 
 - `reference/` aktualisieren wenn sich Best Practices aendern
 - `claude/` synchron halten (nur Regeln, keine Erklaerungen)
-- `essential-rules.md` ist die Single Source of Truth fuer das Kompaktformat
-- Nach Regel-Aenderungen Mirror aktualisieren: `cp claude/*.md plugins/dev/rules/`
+- Mirror aktualisieren nach Regel-Aenderungen: `cp claude/*.md plugins/dev/rules/`
+- Neuen Skill hinzufuegen: `/dev:meta-create-skill`
+- Quellen und akademische Basis: `docs/skill-research-basis.md`
 
 <!-- DEV-BEST-PRACTICES:START — via /dev-best-practices:meta-install aktualisieren -->
 <!-- Version: essential-rules.md @ 2026-06-08 | Umfang: essential | Vorher: 2026-06-05 -->
