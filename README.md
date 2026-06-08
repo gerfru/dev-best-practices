@@ -4,7 +4,7 @@
 
 Opinionated best-practice rules for software projects — RAG systems, AI agents, data pipelines, full-stack web apps. Three detail levels: compact essential rules for `CLAUDE.md`, thematic rule files, and detailed reference docs.
 
-Also a **Claude Code plugin**: install once, get 18 skills in every project.
+Also a **Claude Code plugin**: install once, get 24 skills in every project.
 
 ---
 
@@ -28,6 +28,7 @@ claude plugin install dev@gerald-dev-best-practices
 ## Skills
 
 Start with `/dev:meta-help` — shows the full menu and launches any skill directly.
+Or just describe what you need in natural language — Claude picks the right skill automatically.
 
 ### Design
 
@@ -39,6 +40,10 @@ Start with `/dev:meta-help` — shows the full menu and launches any skill direc
 | `/dev:design-data` | Schema, normalization, indexes, CQRS / Event Sourcing |
 | `/dev:design-migration` | Zero-downtime strategy: Expand-Contract, Strangler Fig, Saga |
 | `/dev:design-ux` | UX/UI design: interaction model, trust, AI features, anti-patterns |
+| `/dev:design-llm` | LLM system: RAG, fine-tune vs. prompt, agents, evals, guardrails |
+| `/dev:design-observability` | SLO/SLI, Golden Signals, tracing, alerting, incident response |
+| `/dev:design-cicd` | CI/CD pipeline, deployment strategies (Blue-Green, Canary), DORA |
+| `/dev:design-iac` | Infrastructure as Code: Terraform, GitOps, state management, drift detection |
 
 ### Review
 
@@ -48,6 +53,7 @@ Start with `/dev:meta-help` — shows the full menu and launches any skill direc
 | `/dev:review-arch` | Coupling, anti-patterns, quality attributes, ADR recommendations |
 | `/dev:review-secure` | Crypto, injection, memory safety, GDPR / ISO 27001 / EU AI Act |
 | `/dev:review-ux` | UX audit based on HAX, PAIR, CHI 2024 and Nielsen Norman |
+| `/dev:review-llm` | LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10 |
 
 ### Tools
 
@@ -56,24 +62,14 @@ Start with `/dev:meta-help` — shows the full menu and launches any skill direc
 | `/dev:tool-debug [error]` | Root-cause analysis with stack-aware fix suggestions |
 | `/dev:tool-test [focus]` | Write missing tests or design test strategy per test pyramid |
 | `/dev:tool-style [task]` | CSS solution matching your existing system (Tailwind, SCSS, …) |
-
-### Design (UX)
-
-| Skill | What it does |
-|---|---|
-| `/dev:design-ux` | UX/UI design: interaction model, trust, AI features, anti-patterns |
-
-### Review (UX)
-
-| Skill | What it does |
-|---|---|
-| `/dev:review-ux` | UX audit based on HAX, PAIR, CHI 2024 and Nielsen Norman |
+| `/dev:tool-a11y` | Accessibility audit: WCAG 2.2, screen reader testing, EU Accessibility Act |
+| `/dev:tool-perf [symptom]` | Performance engineering: USE Method, flame graph, bottleneck analysis, Bentley Rules |
 
 ### Meta
 
 | Skill | What it does |
 |---|---|
-| `/dev:meta-help` | Navigation menu — shows all 18 skills, launches chosen one |
+| `/dev:meta-help` | Navigation menu — shows all 24 skills, launches chosen one |
 | `/dev:meta-install` | Insert `essential-rules.md` into project `CLAUDE.md` (detects install vs. update) |
 | `/dev:meta-drift` | Compare installed rules block against current rule files |
 | `/dev:meta-sync` | Repo-internal: check if `claude/*.md` still reflects `reference/*.md` |
@@ -146,6 +142,7 @@ Put rules that apply to every project in `~/.claude/CLAUDE.md`:
 ```text
 /dev:review-app          → full audit
 /dev:review-secure       → security code review
+/dev:tool-a11y           → accessibility check (EU Accessibility Act)
 ```
 
 **During development:**
@@ -154,6 +151,13 @@ Put rules that apply to every project in `~/.claude/CLAUDE.md`:
 /dev:tool-debug [error]  → root-cause analysis
 /dev:tool-test           → write missing tests
 /dev:tool-style [task]   → CSS fix in your system's style
+```
+
+**LLM / AI features:**
+
+```text
+/dev:design-llm          → RAG vs. fine-tune decision, agent architecture
+/dev:review-llm          → audit existing LLM system (OWASP LLM Top 10)
 ```
 
 **Keep rules up to date:**
