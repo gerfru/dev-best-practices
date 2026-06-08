@@ -24,7 +24,7 @@ Ausfuehrlichere Regeln: `app-rules.md`, `github-rules.md`, `architecture-rules.m
 - Einheitliches Error-Format: `{ error: { code, message, details } }`
 - Rate Limiting auf Middleware/Gateway-Level. Pagination fuer alle Listen
 - API-Typ: Intern → tRPC. Extern → REST
-- DB: Immer Migrations-Tool (nie manuell SQL auf Prod). Prepared Statements, Least Privilege User
+- DB: Immer Migrations-Tool (nie manuell SQL auf Prod). Prepared Statements, Least Privilege User, TLS zum DB-Server
 - ORM-Wahl: Query Builder (Drizzle, SQLAlchemy Core) als Sweet Spot
 - Connection Pooling Pflicht. Serverless → externer Pooler
 
@@ -50,7 +50,7 @@ Ausfuehrlichere Regeln: `app-rules.md`, `github-rules.md`, `architecture-rules.m
 
 ## Testing
 
-- TS: Vitest + Playwright. Python: pytest + Playwright
+- TS: Vitest + Testing Library + MSW (API-Mocking) + Playwright (E2E). Python: pytest + Playwright
 - Prioritaet: 1) API Endpoints 2) Data Transformationen 3) E2E Smoke Test
 - Tests testen Verhalten, nicht Implementierung. Mocke nur an Systemgrenzen
 - Coverage: 70-80% Lines. Kritische Pfade (Auth, Payment) ~100%. 100% gesamt ist kein Ziel
@@ -63,6 +63,7 @@ Ausfuehrlichere Regeln: `app-rules.md`, `github-rules.md`, `architecture-rules.m
 - Reverse Proxy vor der App (Caddy / Nginx). Automatisches HTTPS
 - Health Checks: `/health` (Liveness) + `/ready` (Readiness)
 - Container-Scanning: Trivy (CRITICAL, HIGH, exit-code 1)
+- Feature Flags fuer Zero-Downtime: neues Verhalten hinter Flag → ausrollen → Flag entfernen. Kill Switch fuer sofortiges Rollback
 
 ## Monitoring & Logging
 

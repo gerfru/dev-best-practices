@@ -34,6 +34,13 @@ jobs:
       - name: Validate plugin skills
         run: bash scripts/validate-skills.sh
 
+      - name: Check rule mirror sync
+        run: |
+          diff -r claude/ plugins/dev/rules/ && echo "✅ Mirror in sync" || {
+            echo "❌ plugins/dev/rules/ is out of sync with claude/ — run: cp claude/*.md plugins/dev/rules/"
+            exit 1
+          }
+
   secrets:
     runs-on: ubuntu-latest
     steps:
