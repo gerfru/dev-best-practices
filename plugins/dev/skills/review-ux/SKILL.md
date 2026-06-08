@@ -150,22 +150,7 @@ Checkliste — jedes identifizierte Anti-Pattern als Befund melden:
 Unterschied zu Dimension 6: Dimension 6 prüft schlechte AI UX.
 Dimension 7 prüft absichtliche Manipulation des Users — unabhängig von KI-Beteiligung.
 
-| Pattern | Test | Severity |
-|---------|------|----------|
-| Roach Motel | Anmelden leicht, kündigen versteckt/schwer? | Critical |
-| Forced Continuity | Kostenlos-Periode endet ohne deutliche Vorwarnung in Abo? | Critical |
-| Privacy Zuckering | Cookie-Banner: Ablehnen schwerer als Akzeptieren? | Critical |
-| Hidden Costs | Preise erst im letzten Checkout-Schritt vollständig sichtbar? | Critical |
-| Trick Questions | Doppelte Verneinung / unklare Opt-out Checkboxen? | High |
-| Fake Urgency | Countdown der sich zurücksetzt / falsche Verfügbarkeitsangaben? | High |
-| Confirmshaming | Ablehnen-Button formuliert als Selbstverurteilung? | High |
-| Disguised Ads | Werbung optisch nicht von Content unterscheidbar? | High |
-| Bait & Switch | Etwas versprochen, anderes geliefert? | High |
-| Misdirection | Wichtige Info visuell versteckt oder im Kleingedruckten? | Medium |
-
-**Severity-Regel:** Verstöße gegen DSGVO Art. 7 / DSA → immer Critical.
-EU-Kontext: 97% der populären Apps enthielten 2025 Dark Pattern Elemente (EU-Sweep).
-Bußgeld bis 6% Jahresumsatz. FTC-Präzedenz: Epic Games 245M$ Strafe (2023).
+Vollständige Checkliste mit Severity und EU/FTC-Referenzen: `references/dark-patterns.md`
 
 ---
 
@@ -244,39 +229,4 @@ Findings sind zu verifizieren — kein Ersatz für manuelle Usability-Tests mit 
 
 ## Framework-Kurzreferenz
 
-### Microsoft HAX — 18 Guidelines nach Phase
-
-| Phase | Guidelines |
-|-------|-----------|
-| Initially | G1 (Fähigkeiten kommunizieren), G2 (Qualität kommunizieren) |
-| During | G3 (Timing), G4 (Kontextrelevanz), G5 (Soziale Normen), G6 (Bias), G7 (Aktivierung), G8 (Ablehnung) |
-| When Wrong | G9 (Korrektur), G10 (Einschränken bei Unsicherheit), G11 (Erklärung) |
-| Over Time | G12 (History), G13 (Lernen), G14 (Updates vorsichtig), G15 (Granulares Feedback), G16 (Konsequenzen), G17 (Globale Kontrollen), G18 (Änderungen kommunizieren) |
-
-### Google PAIR — 23 Patterns nach Kapitel
-
-| Kapitel | Patterns |
-|---------|---------|
-| Nutzerbedürfnisse & Erfolg | P1–P4 |
-| Mentale Modelle | P8–P10 |
-| Erklärbarkeit & Vertrauen | P11–P13 |
-| Datenerhebung & Evaluation | P5–P7, P19–P22 |
-| Feedback & Kontrolle | P14–P18 |
-| Fehler & Graceful Failure | P18 (Fallback), P23 (Domain Experts) |
-
-### CHI 2024 — 6 Prinzipien
-
-| # | Prinzip | GenAI-spezifisch |
-|---|---------|-----------------|
-| P1 | Design Responsibly | Nein (reinterpretiert) |
-| P2 | Design for Mental Models | Nein (reinterpretiert) |
-| P3 | Design for Appropriate Trust | Nein (reinterpretiert) |
-| P4 | Design for Generative Variability | **Ja** |
-| P5 | Design for Co-Creation | **Ja** |
-| P6 | Design for Imperfection | **Ja** |
-
-### NNG — 4 KI-Superkräfte & Antipatterns
-
-Superkräfte: Content Creation · Summarization · Basic Data Analysis · Perspective Taking
-
-Kritischste Antipatterns: Technology-first · Chat-Default · Über-Anthropomorphisierung · Hochformatierung hemmt Verifikation
+Kurzreferenz aller vier Frameworks (HAX · PAIR · CHI 2024 · NNG): `references/frameworks.md`

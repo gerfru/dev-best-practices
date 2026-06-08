@@ -45,64 +45,9 @@ Falls kein Frontend vorhanden: kurz melden, kein Styling-Kontext vorhanden.
 
 Nur anwenden wenn kein externes System (MUI, shadcn, Carbon etc.) den visuellen Rahmen vorgibt.
 
-### Color System
+Color System (3-Tier), Typografie-Skala, Spacing-Grid, Platform Design Systems: `references/design-tokens.md`
 
-Drei Token-Ebenen — alle drei definieren:
-
-- **Primitive**: rohe Werte, kebab-case, Skala 50–950 (`color-blue-500: #3B82F6`)
-- **Semantic**: Intention statt Wert (`color-brand-primary`, `color-text-secondary`)
-- **Component**: komponentenspezifisch (`button-bg-hover`)
-
-Regel: Im Code immer Semantic Tokens verwenden, nie Primitive direkt.
-
-**WCAG Kontrast (Pflicht — #1 Accessibility-Fehler im Web):**
-
-- Normaler Text: min. 4.5:1
-- Große Schrift (≥18px / ≥14px bold): min. 3:1
-- Prüfen: webaim.org/resources/contrastchecker
-
-**Dark Mode:** CSS Custom Properties (`--color-surface`, `--color-text-primary`).
-Werte per `@media (prefers-color-scheme: dark)` oder `.dark`-Klasse überschreiben.
-Nie hardcodierte Hex-Werte im Dark-Mode-Pfad.
-
-### Typografie-Skala
-
-- Body: min. 16px
-- Heading-Skala: Faktor 1.25–1.5x (z.B. 16 → 20 → 25 → 31px)
-- Line-height: 1.5x für Fließtext, 1.2x für Headings
-- Max. 2 Schriftfamilien
-
-### Spacing-System (8px-Grid)
-
-`space-1=4px, space-2=8px, space-3=12px, space-4=16px, space-6=24px, space-8=32px`
-
-Keine Einzelwerte außerhalb des Grids (kein `margin: 11px`).
-
-### Platform Design System wählen
-
-| Kontext | System | Referenz |
-|---------|--------|---------|
-| Android / Web (Google-Stil) | Material Design 3 | m3.material.io |
-| iOS / macOS | Apple HIG | developer.apple.com/design/human-interface-guidelines |
-| Enterprise / B2B | IBM Carbon | carbondesignsystem.com |
-| Agnostisch / eigenes | Design Tokens + obige Grundlagen | — |
-
-**Material Design 3 Kernprinzipien:** Color Roles (Primary, Secondary, Surface, Outline) statt Hex-Werte; Elevation via Tonal Color, kein Box-Shadow-Spam; Shape-System für konsistente Eckenradien.
-
-**Apple HIG Kernprinzipien:** Clarity (Text lesbar, Icons präzise, kein Dekor-Spam); Deference (Inhalt im Fokus, UI tritt zurück); Depth (Layering kommuniziert Hierarchie).
-
-### Loading States & Perceived Performance
-
-Prinzip: Wahrgenommene Wartezeit ist wichtiger als tatsächliche Wartezeit.
-
-| Pattern | Wann | Warum |
-|---------|------|-------|
-| **Skeleton Screen** | Content-heavy UIs (Listen, Cards, Feeds) | Zeigt Struktur statt leerer Fläche — reduziert gefühlte Wartezeit |
-| **Optimistic UI** | Mutations mit hoher Erfolgswahrscheinlichkeit (Like, Toggle) | Sofortiges Feedback, bei Fehler zurückrollen |
-| **Progressive Loading** | Bilder, lange Listen | Above-the-fold zuerst, Rest nachladen |
-| **Spinner** | Kurze unbekannte Wartezeit, kein Content-Shape bekannt | Nur wenn Skeleton nicht sinnvoll |
-
-Skeleton-Implementierung: `animate-pulse` (Tailwind) oder `@keyframes pulse` auf Placeholder-Divs die die spätere Content-Struktur spiegeln.
+Loading States (Skeleton, Optimistic UI, Spinner): `references/visual-patterns.md`
 
 ## Schritt 1 — Aufgabe klassifizieren
 
@@ -185,15 +130,7 @@ components: { MuiButton: { styleOverrides: { root: { borderRadius: 8 } } } }
 
 ### Anti-Slop Check
 
-Bevor eine Komponente als fertig gilt:
-
-- [ ] Kein Framework-Default-Blau als einzige Markenfarbe
-- [ ] Typografie-Hierarchie vorhanden (nicht alles gleiche Größe/Gewicht)
-- [ ] Spacing konsistent (kein Mix aus 10px/15px/22px)
-- [ ] Kontrast WCAG AA geprüft (4.5:1 für Text)
-- [ ] Dark Mode: eigene Farbwerte, kein invertiertes Light-Theme
-- [ ] Loading States: Skeleton oder Optimistic UI statt nur Spinner wo sinnvoll
-- [ ] Icons: konsistente Library, nicht gemischt
+Bevor eine Komponente als fertig gilt: `references/visual-patterns.md`
 
 ## Schritt 3 — Ausgabe
 
