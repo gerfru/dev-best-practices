@@ -44,7 +44,7 @@ Regeln die IMMER gelten in `~/.claude/CLAUDE.md` ablegen:
 - Nach Regel-Aenderungen Mirror aktualisieren: `cp claude/*.md plugins/dev/rules/`
 
 <!-- DEV-BEST-PRACTICES:START — via /dev-best-practices:meta-install aktualisieren -->
-<!-- Version: essential-rules.md @ 2026-06-05 | Umfang: essential -->
+<!-- Version: essential-rules.md @ 2026-06-08 | Umfang: essential | Vorher: 2026-06-05 -->
 
 ## Dev Best Practices
 
@@ -60,14 +60,14 @@ Regeln die IMMER gelten in `~/.claude/CLAUDE.md` ablegen:
 - DOM XSS: Kein `innerHTML` mit User-Daten. Trusted Types + DOMPurify bei dynamischem HTML
 - Keine Secrets in Error-Responses. Keine Secrets loggen
 - `.env` nie committen, `.env.example` committen. Env-Validierung beim App-Start (crasht sofort wenn Variable fehlt)
-- Security Assessment: `bandit`+`semgrep` (SAST), `pip-audit` (SCA), ASVS 5.0 als Pruefrahmen
+- Security Assessment: `ruff-S`+`semgrep` (SAST), `pip-audit` (SCA), ASVS 5.0 als Pruefrahmen
 
 ### API & Datenbank
 
 - Einheitliches Error-Format: `{ error: { code, message, details } }`
 - Rate Limiting auf Middleware/Gateway-Level. Pagination fuer alle Listen
 - API-Typ: Intern → tRPC. Extern → REST
-- DB: Immer Migrations-Tool (nie manuell SQL auf Prod). Prepared Statements, Least Privilege User
+- DB: Immer Migrations-Tool (nie manuell SQL auf Prod). Prepared Statements, Least Privilege User, TLS zum DB-Server
 - ORM-Wahl: Query Builder (Drizzle, SQLAlchemy Core) als Sweet Spot
 - Connection Pooling Pflicht. Serverless → externer Pooler
 
@@ -83,17 +83,17 @@ Regeln die IMMER gelten in `~/.claude/CLAUDE.md` ablegen:
 
 ### GitHub & CI/CD
 
-- Pre-commit Hooks Pflicht: gitleaks → bandit → Lint+Fix → Format → Type Check
+- Pre-commit Hooks Pflicht: gitleaks → ruff (Lint+Fix inkl. S-Regeln) → Format → Type Check
 - TS: ESLint Flat Config + Prettier + Husky. Python: Ruff + mypy + pre-commit
 - TS Package Manager: pnpm. Python: uv. Lockfiles immer committen
 - CI: Jeder PR durch Pipeline (Install → Lint → Type Check → Build/Test → gitleaks)
 - Branch Protection auf main: Require PR, Status Checks, No Force Push
-- Renovate (nicht Dependabot). devDeps patch Automerge, Major manuell
+- Renovate (nicht Dependabot). devDeps patch Automerge, Major manuell. Dependabot Alerts aktivieren (Security-Meldungen)
 - PR-Groesse: < 400 LOC, darueber aufteilen
 
 ### Testing
 
-- TS: Vitest + Playwright. Python: pytest + Playwright
+- TS: Vitest + Testing Library + MSW (API-Mocking) + Playwright (E2E). Python: pytest + Playwright
 - Prioritaet: 1) API Endpoints 2) Data Transformationen 3) E2E Smoke Test
 - Tests testen Verhalten, nicht Implementierung. Mocke nur an Systemgrenzen
 - Coverage: 70-80% Lines. Kritische Pfade (Auth, Payment) ~100%. 100% gesamt ist kein Ziel
@@ -106,6 +106,7 @@ Regeln die IMMER gelten in `~/.claude/CLAUDE.md` ablegen:
 - Reverse Proxy vor der App (Caddy / Nginx). Automatisches HTTPS
 - Health Checks: `/health` (Liveness) + `/ready` (Readiness)
 - Container-Scanning: Trivy (CRITICAL, HIGH, exit-code 1)
+- Feature Flags fuer Zero-Downtime: neues Verhalten hinter Flag → ausrollen → Flag entfernen. Kill Switch fuer sofortiges Rollback
 
 ### Monitoring & Logging
 
