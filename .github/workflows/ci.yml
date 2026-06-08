@@ -20,7 +20,7 @@ jobs:
       - name: Link Check
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --exclude-loopback --exclude 'report-uri\.com' --exclude 'github\.com/.*/compare/' --exclude 'github\.com/.*/releases/tag/' '**/*.md'
+          args: --no-progress --exclude-loopback --exclude 'report-uri\.com' --exclude 'github\.com/.*/compare/' --exclude 'github\.com/.*/releases/tag/' --exclude 'pdos\.csail\.mit\.edu' --exclude 'css\.csail\.mit\.edu' '**/*.md'
           fail: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

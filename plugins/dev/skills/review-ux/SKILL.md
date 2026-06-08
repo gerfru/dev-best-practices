@@ -45,9 +45,9 @@ Nenne dem Nutzer kompakt was erkannt wurde: `Typ: Web-App | KI: Empfehlungs-Engi
 
 ---
 
-## Schritt 1 — Sechs Audit-Dimensionen
+## Schritt 1 — Sieben Audit-Dimensionen
 
-Alle sechs Dimensionen systematisch durchgehen. Befunde im Format:
+Alle sieben Dimensionen systematisch durchgehen. Befunde im Format:
 
 ```text
 [G-Code / P-Code] Titel · Severity (Critical/High/Medium/Low) · Befund · Fix
@@ -144,6 +144,31 @@ Checkliste — jedes identifizierte Anti-Pattern als Befund melden:
 
 ---
 
+### Dimension 7 — Dark Patterns & Ethisches Design
+*EU Digital Services Act · DSGVO Art. 7 · FTC Guidelines*
+
+Unterschied zu Dimension 6: Dimension 6 prüft schlechte AI UX.
+Dimension 7 prüft absichtliche Manipulation des Users — unabhängig von KI-Beteiligung.
+
+| Pattern | Test | Severity |
+|---------|------|----------|
+| Roach Motel | Anmelden leicht, kündigen versteckt/schwer? | Critical |
+| Forced Continuity | Kostenlos-Periode endet ohne deutliche Vorwarnung in Abo? | Critical |
+| Privacy Zuckering | Cookie-Banner: Ablehnen schwerer als Akzeptieren? | Critical |
+| Hidden Costs | Preise erst im letzten Checkout-Schritt vollständig sichtbar? | Critical |
+| Trick Questions | Doppelte Verneinung / unklare Opt-out Checkboxen? | High |
+| Fake Urgency | Countdown der sich zurücksetzt / falsche Verfügbarkeitsangaben? | High |
+| Confirmshaming | Ablehnen-Button formuliert als Selbstverurteilung? | High |
+| Disguised Ads | Werbung optisch nicht von Content unterscheidbar? | High |
+| Bait & Switch | Etwas versprochen, anderes geliefert? | High |
+| Misdirection | Wichtige Info visuell versteckt oder im Kleingedruckten? | Medium |
+
+**Severity-Regel:** Verstöße gegen DSGVO Art. 7 / DSA → immer Critical.
+EU-Kontext: 97% der populären Apps enthielten 2025 Dark Pattern Elemente (EU-Sweep).
+Bußgeld bis 6% Jahresumsatz. FTC-Präzedenz: Epic Games 245M$ Strafe (2023).
+
+---
+
 ## Schritt 2 — Befunde konsolidieren
 
 1. Alle Befunde nach **Severity** sortieren (Critical → Low)
@@ -173,7 +198,8 @@ Framework-Basis: HAX (18 Guidelines) · PAIR (23 Patterns) · CHI 2024 (6 Prinzi
 | Feedback & Kontrolle | 🟢 | 0 | 0 | — |
 | Fehlerbehandlung | 🟡 | 0 | 1 | PAIR P18: Kein manueller Fallback |
 | Langzeit & Adaptation | 🟢 | 0 | 0 | — |
-| Anti-Pattern Check | 🔴 | 1 | 1 | Chat-Default ohne Validierung |
+| AI Anti-Pattern Check | 🔴 | 1 | 1 | Chat-Default ohne Validierung |
+| Dark Patterns | 🟢 | 0 | 0 | — |
 
 ## Top-3 Quick Wins
 1. [Titel] · [HAX/PAIR/CHI-Code] · Aufwand: S (<30min) · [konkreter Fix]
@@ -211,7 +237,7 @@ Findings sind zu verifizieren — kein Ersatz für manuelle Usability-Tests mit 
 - Jeder Befund nennt die konkrete verletzte Guideline (HAX G-Nr. / PAIR P-Nr. / CHI P-Nr. / NNG), nicht nur ein generisches Prinzip.
 - **Nichts automatisch fixen.** Erst Report, dann auf Nachfrage gezielt umsetzen.
 - Accessibility-Probleme die gegen EU Accessibility Act / BFSG verstoßen → immer als **High** oder **Critical** melden.
-- Anti-Patterns nicht doppelt melden (einmal in Dimension 1–5 und einmal in Dimension 6).
+- Anti-Patterns nicht doppelt melden: Dimension 6 = AI UX Anti-Patterns, Dimension 7 = Manipulation / Dark Patterns — diese beiden Kategorien sind bewusst getrennt.
 - Positive Befunde explizit erwähnen — was funktioniert gut und warum. UX-Review ist kein reiner Bug-Report.
 
 ---

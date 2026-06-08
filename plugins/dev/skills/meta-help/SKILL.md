@@ -22,21 +22,23 @@ Welcher Skill soll starten?
   3  design-api        REST / GraphQL / gRPC Contract entwerfen oder reviewen
   4  design-data       Schema, Normalisierung, Indexe, CQRS / Event Sourcing
   5  design-migration  Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga
+  6  design-ux         UX/UI Design: Interaktion, Vertrauen, AI-Features, Anti-Patterns
 
 🔍  REVIEW
-  6  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
-  7  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
-  8  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
+  7  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
+  8  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
+  9  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
+ 10  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
 
 🛠️  TOOLS
-  9  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
- 10  tool-test         Tests schreiben, verbessern oder Strategie planen
- 11  tool-style        CSS / Design System konsistent und wartbar halten
+ 11  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
+ 12  tool-test         Tests schreiben, verbessern oder Strategie planen
+ 13  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
 
 📁  META
- 12  meta-install      Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
- 13  meta-drift        Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
- 14  meta-sync         reference/*.md vs. claude/*.md synchron halten
+ 14  meta-install      Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
+ 15  meta-drift        Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
+ 16  meta-sync         reference/*.md vs. claude/*.md synchron halten
 
 → Zahl eingeben, oder direkt beschreiben was du brauchst.
 ```
@@ -52,4 +54,4 @@ Lade und folge exakt: `${CLAUDE_PLUGIN_ROOT}/skills/<gewählter-skill>/SKILL.md`
 ## Regeln
 - Menü sofort zeigen, kein Intro
 - Nach der Wahl direkt starten, nicht nochmals erklären oder nachfragen
-- Nie alle 14 Skills gleichzeitig laden — immer nur den gewählten
+- Nie alle 16 Skills gleichzeitig laden — immer nur den gewählten
