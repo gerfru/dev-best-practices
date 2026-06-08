@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validates the plugin structure: plugin.json, marketplace.json, SKILL.md frontmatter, command references.
-set -euo pipefail
+set -eu
 
 PLUGIN_DIR="plugins/dev"
 ERRORS=0

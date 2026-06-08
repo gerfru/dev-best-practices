@@ -84,6 +84,33 @@ Fuer neue Setups: **GitHub Rulesets** bevorzugen (flexibler als Branch Protectio
 
 ---
 
+## Repository Settings
+
+Einmalig nach Repo-Erstellung konfigurieren:
+
+- **Merge-Strategie:** Squash merge only (saubere `main`-History, WIP-Commits bleiben im PR)
+- **Merge commit + Rebase:** deaktivieren (eine Strategie, kein Mix)
+- **Delete branch on merge:** aktivieren (kein manuelles Aufräumen)
+- **Secret Scanning + Push Protection:** aktivieren (GitHub blockt Secrets beim Push)
+- **Dependabot alerts:** aktivieren
+
+```bash
+# Alles auf einmal via GitHub CLI
+gh api repos/{owner}/{repo} --method PATCH \
+  --field allow_squash_merge=true \
+  --field allow_merge_commit=false \
+  --field allow_rebase_merge=false \
+  --field delete_branch_on_merge=true
+
+gh api repos/{owner}/{repo} --method PATCH \
+  -f 'security_and_analysis[secret_scanning][status]=enabled' \
+  -f 'security_and_analysis[secret_scanning_push_protection][status]=enabled'
+
+gh api repos/{owner}/{repo}/vulnerability-alerts --method PUT
+```
+
+---
+
 ## Secret Scanning
 
 Defense in Depth -- 3 Schichten:
