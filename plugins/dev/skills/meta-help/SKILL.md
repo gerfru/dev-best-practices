@@ -23,23 +23,25 @@ Welcher Skill soll starten?
   4  design-data       Schema, Normalisierung, Indexe, CQRS / Event Sourcing
   5  design-migration  Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga
   6  design-ux         UX/UI Design: Interaktion, Vertrauen, AI-Features, Anti-Patterns
+  7  design-llm        LLM-System: RAG, Fine-tune, Agent, Eval-Strategie, Guardrails
 
 🔍  REVIEW
-  7  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
-  8  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
-  9  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
- 10  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
+  8  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
+  9  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
+ 10  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
+ 11  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
+ 12  review-llm        LLM-Audit: Architektur, Evals, Prompt Injection, OWASP LLM Top 10
 
 🛠️  TOOLS
- 11  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
- 12  tool-test         Tests schreiben, verbessern oder Strategie planen
- 13  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
+ 13  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
+ 14  tool-test         Tests schreiben, verbessern oder Strategie planen
+ 15  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
 
 📁  META
- 14  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
- 15  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
- 16  meta-sync           reference/*.md vs. claude/*.md synchron halten
- 17  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
+ 16  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
+ 17  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
+ 18  meta-sync           reference/*.md vs. claude/*.md synchron halten
+ 19  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
 
 → Zahl eingeben, oder direkt beschreiben was du brauchst.
 ```
@@ -55,4 +57,4 @@ Lade und folge exakt: `${CLAUDE_PLUGIN_ROOT}/skills/<gewählter-skill>/SKILL.md`
 ## Regeln
 - Menü sofort zeigen, kein Intro
 - Nach der Wahl direkt starten, nicht nochmals erklären oder nachfragen
-- Nie alle 18 Skills gleichzeitig laden — immer nur den gewählten
+- Nie alle 19 Skills gleichzeitig laden — immer nur den gewählten

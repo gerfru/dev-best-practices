@@ -1,6 +1,6 @@
 {
   "name": "dev",
   "version": "1.2.0",
-  "description": "18 Skills für Design (inkl. UX/Human-AI Interaction), Security-Review (ISEC/Stanford/MIT), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test, Styling und Skill-Erstellung.",
+  "description": "19 Skills für Design (inkl. LLM-Engineering/RAG/Agents, UX/Human-AI Interaction), Security-Review (ISEC/Stanford/MIT, OWASP LLM Top 10), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test, Styling und Skill-Erstellung.",
   "author": { "name": "Gerald" }
 }
