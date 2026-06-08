@@ -13,7 +13,8 @@ Detaillierte Erklaerungen: `../reference/architecture-best-practices.md`
 - Barrel Exports (`index.ts`) fuer `lib/`, `components/`, `shared/` -- nicht fuer Feature-Ordner
 
 ### Next.js App Router
-```
+
+```text
 src/
   app/            # Routing (App Router)
   components/     # ui/ (generisch) + features/ (spezifisch)
@@ -22,7 +23,8 @@ src/
 ```
 
 ### Python (FastAPI)
-```
+
+```text
 src/
   app/            # main.py, config.py, dependencies.py
   features/       # Pro Feature: router.py, service.py, models.py, schemas.py

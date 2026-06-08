@@ -64,7 +64,7 @@ secrets:
   - uses: gitleaks/gitleaks-action@v2
 ```
 
-### Erweitert (wenn Docker):
+### Erweitert (wenn Docker)
 - Container-Scanning mit Trivy (`severity: CRITICAL,HIGH`, `exit-code: 1`)
 
 ---

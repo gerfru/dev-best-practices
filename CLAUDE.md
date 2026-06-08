@@ -5,7 +5,7 @@ Drei Stufen: **Essential** (kompakt, fuer CLAUDE.md), **Thematisch** (ausfuehrli
 
 ## Repo-Struktur
 
-```
+```text
 reference/                          # Detaillierte Dokumentation zum Nachschlagen
   app-best-practices.md             # Security, Auth, API, DB, Monitoring, OWASP
   github-best-practices.md          # CI/CD, Linting, Testing, Docker, Code Review

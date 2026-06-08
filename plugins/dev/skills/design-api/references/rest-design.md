@@ -27,7 +27,7 @@ That's fine — call it an HTTP API. The important thing is being deliberate.
 
 **Wrong (RPC-style over HTTP):**
 
-```
+```text
 POST /getUser
 POST /createUser
 POST /deleteUser
@@ -36,7 +36,7 @@ POST /updateUserEmail
 
 **Right (resource-oriented):**
 
-```
+```text
 GET    /users/{id}         → retrieve user
 POST   /users              → create user
 DELETE /users/{id}         → delete user
@@ -74,19 +74,19 @@ PATCH is typically not idempotent (increment-by-one patches are not idempotent).
 
 Use the correct status code — clients use these to determine what to do next.
 
-**2xx — Success**
+### 2xx — Success
 
 - `200 OK` — successful GET, PATCH, PUT
 - `201 Created` — successful POST that created a resource; include `Location` header
 - `204 No Content` — successful DELETE or action with no response body
 - `206 Partial Content` — paginated or range response
 
-**3xx — Redirection**
+### 3xx — Redirection
 
 - `301 Moved Permanently` — URL has permanently changed; include `Location` header
 - `304 Not Modified` — conditional GET; client's cached version is current
 
-**4xx — Client Error**
+### 4xx — Client Error
 
 - `400 Bad Request` — malformed syntax, invalid parameters; include error details
 - `401 Unauthorized` — not authenticated (confusingly named — means unauthenticated)
@@ -96,7 +96,7 @@ Use the correct status code — clients use these to determine what to do next.
 - `422 Unprocessable Entity` — well-formed but semantically invalid (use for validation errors)
 - `429 Too Many Requests` — rate limited; include `Retry-After` header
 
-**5xx — Server Error**
+### 5xx — Server Error
 
 - `500 Internal Server Error` — unexpected server-side failure; log and investigate
 - `502 Bad Gateway` — upstream service failure
@@ -175,7 +175,7 @@ Cons: unstable under concurrent insertions (items shift between pages); slow for
 
 ## Filtering, Sorting, Field Selection
 
-```
+```text
 # Filtering — simple equality
 GET /orders?status=shipped&customer_id=123
 
