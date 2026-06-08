@@ -1,230 +1,186 @@
 # Dev Best Practices
 
-Persoenliche Best-Practice-Sammlung fuer Software-Projekte -- typischerweise groessere Applikationen (RAG-Systeme, AI Agents, Data Pipelines, etc.) mit Web-Frontend. Drei Detailstufen: ausfuehrliche Referenz-Docs, thematische Regel-Files und ein kompaktes Essential-File fuer CLAUDE.md.
+[![CI](https://github.com/gerfru/dev-best-practices/actions/workflows/ci.yml/badge.svg)](https://github.com/gerfru/dev-best-practices/actions/workflows/ci.yml)
 
-Das Repo ist ausserdem ein **Claude-Code-Plugin-Marketplace**: einmal installiert, stehen alle Befehle in jedem Projekt zur Verfuegung (siehe [Als Claude Code Plugin](#als-claude-code-plugin)).
+Opinionated best-practice rules for software projects — RAG systems, AI agents, data pipelines, full-stack web apps. Three detail levels: compact essential rules for `CLAUDE.md`, thematic rule files, and detailed reference docs.
 
-## Repo-Struktur
+Also a **Claude Code plugin**: install once, get 17 skills in every project.
+
+---
+
+## Quick Start
+
+```bash
+# Add marketplace (once per machine)
+claude plugin marketplace add gerfru/dev-best-practices
+
+# Install plugin
+claude plugin install dev@gerald-dev-best-practices
+
+# Open navigation menu
+/dev:meta-help
+```
+
+**Windows (VS Code):** Claude icon → `/plugin` → Marketplaces → add `gerfru/dev-best-practices` → Plugins → Install `dev`.
+
+---
+
+## Skills
+
+Start with `/dev:meta-help` — shows the full menu and launches any skill directly.
+
+### Design
+
+| Skill | What it does |
+|---|---|
+| `/dev:design-app` | Stack & architecture decisions from the rule files |
+| `/dev:design-secure` | Threat model, crypto selection, auth, compliance |
+| `/dev:design-api` | REST / GraphQL / gRPC contract design or review |
+| `/dev:design-data` | Schema, normalization, indexes, CQRS / Event Sourcing |
+| `/dev:design-migration` | Zero-downtime strategy: Expand-Contract, Strangler Fig, Saga |
+
+### Review
+
+| Skill | What it does |
+|---|---|
+| `/dev:review-app` | Full audit across 6 axes (architecture, security, tests, CI/CD, …) |
+| `/dev:review-arch` | Coupling, anti-patterns, quality attributes, ADR recommendations |
+| `/dev:review-secure` | Crypto, injection, memory safety, GDPR / ISO 27001 / EU AI Act |
+| `/dev:review-ux` | UX audit based on HAX, PAIR, CHI 2024 and Nielsen Norman |
+
+### Tools
+
+| Skill | What it does |
+|---|---|
+| `/dev:tool-debug [error]` | Root-cause analysis with stack-aware fix suggestions |
+| `/dev:tool-test [focus]` | Write missing tests or design test strategy per test pyramid |
+| `/dev:tool-style [task]` | CSS solution matching your existing system (Tailwind, SCSS, …) |
+
+### Meta
+
+| Skill | What it does |
+|---|---|
+| `/dev:meta-help` | Navigation menu — shows all 17 skills, launches chosen one |
+| `/dev:meta-install` | Insert `essential-rules.md` into project `CLAUDE.md` (detects install vs. update) |
+| `/dev:meta-drift` | Compare installed rules block against current rule files |
+| `/dev:meta-sync` | Repo-internal: check if `claude/*.md` still reflects `reference/*.md` |
+
+---
+
+## Repo Structure
 
 ```text
 .claude-plugin/
-  marketplace.json                  Marketplace-Katalog (macht das Repo installierbar)
-plugins/
-  dev-best-practices/
-    .claude-plugin/plugin.json      Plugin-Metadaten
-    commands/                       Slash-Commands (alle unten gelisteten Befehle)
-    skills/                         Skills mit Workflow-Definitionen -- auto-trigger
-    rules/                          Kopie der claude/*.md (Pruefmassstab fuer die Skills)
+  marketplace.json          Makes this repo installable as a marketplace
 
-reference/                          Detaillierte Dokumentation (fuer Menschen)
-  app-best-practices.md             Security, Auth, API, DB, Monitoring, OWASP
-  github-best-practices.md          CI/CD, Linting, Testing, Docker, Code Review
-  architecture-best-practices.md    Schichten, Patterns, Infra, 12-Factor
+plugins/dev/
+  .claude-plugin/
+    plugin.json             Plugin metadata (name: "dev")
+  commands/                 Slash-command definitions
+  skills/                   Skill workflow definitions (auto-triggered)
+  rules/                    Mirror of claude/*.md (used by skills as reference)
 
-claude/                             Kondensierte Regeln (fuer Claude Code)
-  essential-rules.md                Alles Wichtige in ~80 Zeilen
-  app-rules.md                      App-Regeln ausfuehrlicher (~170 Zeilen)
-  github-rules.md                   GitHub/CI-Regeln ausfuehrlicher (~210 Zeilen)
-  architecture-rules.md             Architektur-Regeln ausfuehrlicher (~190 Zeilen)
+claude/                     Condensed rules for Claude Code
+  essential-rules.md        ~80 lines — copy into project CLAUDE.md
+  app-rules.md              App rules in detail
+  github-rules.md           GitHub / CI rules in detail
+  architecture-rules.md     Architecture rules in detail
+
+reference/                  Detailed docs for humans
+  app-best-practices.md     Security, auth, API, DB, monitoring, OWASP
+  github-best-practices.md  CI/CD, linting, testing, Docker, code review
+  architecture-best-practices.md  Layers, patterns, infra, 12-Factor
+
+scripts/
+  validate-skills.sh        Plugin structure validator (CI + pre-commit)
 ```
 
-## Die drei Stufen
+---
 
-| Stufe | Files | Zeilen | Zweck |
-| --- | --- | --- | --- |
-| **Essential** | `claude/essential-rules.md` | ~80 | In CLAUDE.md einfuegen. Kompakt genug fuer jedes Projekt |
-| **Thematisch** | `claude/app-rules.md` etc. | ~570 | Vertiefte Regeln pro Thema. Selektiv nachschlagen oder einfuegen |
-| **Reference** | `reference/*.md` | ~2800 | Ausfuehrliche Docs mit Theorie, Vergleichen, Links. Fuer Menschen |
+## Using Rules Without the Plugin
 
-## Als Claude Code Plugin
+### Option 1 — Essential rules only (recommended for most projects)
 
-Das Repo stellt als Plugin 15 Skills in vier Kategorien bereit. Einstieg ueber `/dev-best-practices:meta-help` -- zeigt das Navigationsmenue und startet den gewaehlten Skill direkt.
+Copy `claude/essential-rules.md` into your project's `CLAUDE.md` — or use `/dev:meta-install` to do it automatically with version markers.
 
-### 🏗️ Design
+### Option 2 — Add more depth
 
-Skills fuer Entwurf und Planung -- liefern jeweils eine Design-Datei mit Entscheidungstabelle und Setup-Todo.
+Pick sections from `claude/app-rules.md`, `claude/github-rules.md`, or `claude/architecture-rules.md` and append selectively.
 
-| Befehl | Was er tut | Output |
-| --- | --- | --- |
-| `/dev-best-practices:design-app` | App-Idee → Architektur-/Stack-Entscheidungen auf Basis der Regeln | `./design-app.md` |
-| `/dev-best-practices:design-secure` | Security Design: Threat Model, Krypto-Auswahl, Auth, Compliance | `./design-secure.md` |
-| `/dev-best-practices:design-api` | REST / GraphQL / gRPC Contract entwerfen oder reviewen | `./design-api.md` |
-| `/dev-best-practices:design-data` | Schema, Normalisierung, Indexe, CQRS / Event Sourcing | `./design-data.md` |
-| `/dev-best-practices:design-migration` | Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga | `./design-migration.md` |
+### Option 3 — Global rules
 
-### 🔍 Review
+Put rules that apply to every project in `~/.claude/CLAUDE.md`:
 
-Skills fuer Audits bestehender Systeme -- liefern jeweils einen Report mit Findings nach Severity.
+- Linting / formatting standards
+- Git workflow
+- Security baseline
 
-| Befehl | Was er tut | Output |
-| --- | --- | --- |
-| `/dev-best-practices:review-app` | Vollstaendiger App-Audit (6 Achsen, parallele Subagenten); erkennt Stack automatisch | `./review-app-report.md` |
-| `/dev-best-practices:review-arch` | Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR-Empfehlungen | `./review-arch-report.md` |
-| `/dev-best-practices:review-secure` | Security Code Review: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act | `./review-secure-report.md` |
+---
 
-### 🛠️ Tools
+## Typical Workflows
 
-Stack-aware Entwicklungs-Assistenten -- erkennen automatisch Sprache, Framework und Setup.
-
-| Befehl | Was er tut |
-| --- | --- |
-| `/dev-best-practices:tool-debug [Fehlermeldung]` | Root-Cause-Analyse: klassifiziert den Fehler-Typ, prueft stack-spezifische Ursachen (Next.js, FastAPI, Docker, DB …), liefert konkreten Fix |
-| `/dev-best-practices:tool-test [Fokus]` | Erkennt Test-Framework + Coverage-Stand, schreibt fehlende Tests oder entwirft Test-Strategie gemaess Testpyramide |
-| `/dev-best-practices:tool-style [Aufgabe]` | Erkennt CSS-System (Tailwind, CSS Modules, SCSS, CSS-in-JS) + Komponenten-Library, liefert Loesung im Stil des vorhandenen Systems |
-
-### 📁 Meta
-
-Regel-Management fuer dieses Repo und Zielprojekte.
-
-| Befehl | Was er tut |
-| --- | --- |
-| `/dev-best-practices:meta-help` | Navigationsmenue -- zeigt alle 15 Skills gruppiert, startet den gewaehlten direkt |
-| `/dev-best-practices:meta-install [--essential\|--full\|--section X]` | Fuegt `essential-rules.md` automatisch in die `CLAUDE.md` des aktuellen Projekts ein. Erkennt ob Erstinstallation oder Update noetig ist. Projekt-Ausnahmen bleiben erhalten. |
-| `/dev-best-practices:meta-drift` | Vergleicht den installierten Rules-Block mit dem aktuellen Stand -- zeigt fehlende Sections, veraltete Regeln, empfiehlt Update |
-| `/dev-best-practices:meta-sync` | Repo-intern: prueft ob `claude/*.md` noch die Essenz von `reference/*.md` widerspiegelt |
-
-### Typischer Workflow
-
-**Neues Projekt einrichten:**
+**New project:**
 
 ```text
-/dev-best-practices:meta-install
+/dev:meta-install        → inserts essential-rules.md into CLAUDE.md
+/dev:design-app          → architecture & stack decisions
+/dev:design-secure       → threat model & security design
 ```
 
-Fuegt `essential-rules.md` mit Versions-Markern in `CLAUDE.md` ein. Einmalig, kein Copy-Paste.
-
-**Bestehende Installation aktualisieren:**
+**Before release:**
 
 ```text
-/dev-best-practices:meta-drift      # Was hat sich geaendert?
-/dev-best-practices:meta-install    # Update durchfuehren (Marker erkannt -> in-place Update)
+/dev:review-app          → full audit
+/dev:review-secure       → security code review
 ```
 
-**Neue App designen:**
+**During development:**
 
 ```text
-/dev-best-practices:design-app eine kleine Habit-Tracker-App
-/dev-best-practices:design-secure   # Security Design dazu
-/dev-best-practices:design-api      # API Contract entwerfen
+/dev:tool-debug [error]  → root-cause analysis
+/dev:tool-test           → write missing tests
+/dev:tool-style [task]   → CSS fix in your system's style
 ```
 
-**Vor dem Release:**
+**Keep rules up to date:**
 
 ```text
-/dev-best-practices:review-app      # App-Audit
-/dev-best-practices:review-secure   # Security Code Review
+/dev:meta-drift          → what changed since last install?
+/dev:meta-install        → update in-place (preserves project exceptions)
 ```
 
-**Laufende Entwicklung:**
+---
 
-```text
-/dev-best-practices:tool-debug [Fehler]    # Fehler analysieren
-/dev-best-practices:tool-test              # Fehlende Tests schreiben
-/dev-best-practices:tool-style [Problem]   # CSS-Frage klaeren
-```
-
-**Nicht sicher welcher Skill?**
-
-```text
-/dev-best-practices:meta-help   # Menue anzeigen, Skill waehlen
-```
-
-## Benutzung ohne Plugin (manuell)
-
-### Neues Projekt: Essential Rules in CLAUDE.md
-
-Das `essential-rules.md` manuell in die Projekt-CLAUDE.md kopieren -- oder `/dev-best-practices:meta-install` verwenden (automatisch, empfohlen).
-
-| Projekttyp | Essential + ergaenzen mit |
-| --- | --- |
-| RAG / AI App mit Web-UI | Nach Bedarf aus allen drei |
-| AI Agent / Pipeline Backend | app-rules + github-rules |
-| Full-Stack Web App | Nach Bedarf aus allen drei |
-| API-only Service | app-rules |
-| Quick Prototype | Essential reicht |
-
-### Globale Regeln (optional)
-
-Regeln die fuer ALLE Projekte gelten sollen in `~/.claude/CLAUDE.md` ablegen:
-
-- Linting/Formatting-Standards (Ruff, ESLint, Prettier)
-- Pre-commit Hook Setup
-- Git-Workflow (Branch Protection, PR-Template)
-- Security-Grundregeln (Secrets, Input-Validierung)
-
-### Nachschlagen
-
-Die `reference/`-Files enthalten ausfuehrliche Erklaerungen mit Theorie, Hintergruenden, Vergleichstabellen und Links. Gut fuer Tool-Vergleiche, Onboarding und Pre-Deploy-Checklisten.
-
-## Plugin installieren
-
-Voraussetzung: Claude Code ist installiert. Einmal pro Rechner einrichten, danach in jedem Projekt verfuegbar.
-
-### Windows -- ueber Claude Code in VS Code
-
-1. In VS Code links auf das **Claude-Icon** (Spark) klicken → der Claude-Code-Chat oeffnet sich.
-2. Ins Eingabefeld tippen: `/plugin` → der Dialog **Manage Plugins** oeffnet sich.
-3. Tab **Marketplaces** → Feld ausfuellen mit `gerfru/dev-best-practices` → **Add**.
-4. Tab **Plugins** → `dev-best-practices` auswaehlen → **Install**.
-5. Testen: `/dev-best-practices:meta-help`
-
-### Mac / Linux -- ueber bash (CLI)
+## Maintenance
 
 ```bash
-# Marketplace hinzufuegen (GitHub-Pfad)
-claude plugin marketplace add gerfru/dev-best-practices
+# Sync rule mirrors after editing claude/*.md
+cp claude/*.md plugins/dev/rules/
 
-# Plugin installieren (Schema: <plugin>@<marketplace-name>)
-claude plugin install dev-best-practices@gerald-dev-best-practices
+# Validate plugin structure locally
+bash scripts/validate-skills.sh
 
-# pruefen
-claude plugin marketplace list
+# Run all checks (markdownlint + link check + skill validation)
+pre-commit run --all-files
 ```
 
-> Hinweis: Hinter dem `@` steht der **Marketplace-Name** aus `marketplace.json`
-> (`gerald-dev-best-practices`), nicht der GitHub-Pfad.
+CI runs on every PR: markdown lint → skill validation → link check → secret scan.
 
-### Plugin aktualisieren
+---
 
-Regeln/Skills geaendert? Aenderungen pushen, dann auf dem jeweiligen Rechner:
+## Troubleshooting
 
-```bash
-# Mac/Linux
-claude plugin marketplace update gerald-dev-best-practices
+**Skills don't appear after install:** run `/reload-plugins`.
+
+**`Unrecognized token` when adding marketplace:** a JSON file has a BOM. Fix:
+
+```powershell
+Get-ChildItem -Recurse -File -Path .claude-plugin,plugins | ForEach-Object {
+  $c = Get-Content -Raw -LiteralPath $_.FullName
+  [System.IO.File]::WriteAllText($_.FullName, $c, (New-Object System.Text.UTF8Encoding($false)))
+}
 ```
 
-Windows (im Claude-Code-Chat): `/plugin` → Tab **Marketplaces** → beim Eintrag `gerald-dev-best-practices` auf **Refresh** klicken.
+Then push and re-add the marketplace on the client.
 
-In einer laufenden Session danach `/reload-plugins`, damit Aenderungen ohne Neustart greifen.
-
-### Troubleshooting
-
-- **„Failed to parse marketplace file ... Unrecognized token"**: Eine JSON-Datei
-  (`marketplace.json` / `plugin.json`) hat ein BOM. Unter Windows entfernen:
-
-  ```powershell
-  Get-ChildItem -Recurse -File -Path .claude-plugin,plugins | ForEach-Object {
-    $c = Get-Content -Raw -LiteralPath $_.FullName
-    [System.IO.File]::WriteAllText($_.FullName, $c, (New-Object System.Text.UTF8Encoding($false)))
-  }
-  ```
-
-  Dann pushen und den Marketplace auf den Clients neu holen (entfernen + neu hinzufuegen).
-
-- **Befehle erscheinen nicht** nach der Installation: `/reload-plugins` ausfuehren.
-- **`claude plugin marketplace ...` „unknown command"** (aeltere Version): stattdessen
-  `claude` starten und dieselben Befehle als Slash-Kommandos nutzen
-  (`/plugin marketplace add ...`, `/plugin install ...`).
-
-## Pflege
-
-- **reference/** aktualisieren wenn sich Best Practices aendern (neue Tools, neue Standards)
-- **claude/** synchron halten -- nur Regeln, keine Erklaerungen; `/dev-best-practices:meta-sync` zeigt Drift
-- **essential-rules.md** ist die Single Source of Truth fuer das Kompaktformat
-- **Nach Regel-Aenderungen** die Regeln ins Plugin spiegeln:
-
-  ```bash
-  cp claude/*.md plugins/dev-best-practices/rules/
-  ```
-
-- **JSON-Dateien ohne BOM** speichern (`marketplace.json`, `plugin.json`), sonst schlaegt das Hinzufuegen des Marketplace fehl
+**`claude plugin marketplace ...` unknown command** (older Claude Code): use slash commands instead — `/plugin marketplace add ...`.
