@@ -9,11 +9,22 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ### Added
 
+- `meta-create-skill`: new meta skill for building skills using the established methodology (topic → academic research → SKILL.md + references/)
+- All 9 skills with inline lookup tables now follow the consistent structure: SKILL.md = workflow only, `references/` = lookup material
+  - Round 1 (new `references/` directories): `design-ux`, `review-ux`, `tool-style`
+  - Round 2 (`curriculum-mapping.md` added): `design-secure`, `review-arch`, `review-secure`, `design-api`, `design-data`, `design-migration`
+- `design-ux` and `review-ux` now have `commands/` entries (were missing, slash-command discovery now works)
+- `docs/gap-analysis.md`: inventory of content gaps with academic source candidates
+- `docs/academic-basis.md`: verified syllabi for 6 planned new skills (Stanford CS224N, CMU 11-667, Berkeley CS294-196, MIT 6.5940, MIT 6.5840, CMU 18-749, CMU 17-636, W3C WAI, NTNU IIKG3005, MIT 6.172, CMU 15-721, UT Austin CS395T)
 - Feature Flags section in `claude/app-rules.md` and `reference/app-best-practices.md` (Kill Switch, Rollout-Reihenfolge, Flag-Hygiene, Tool-Vergleich)
 - Mirror sync check in CI: `claude/` vs `plugins/dev/rules/` must be identical
 - MSW + Testing Library added to essential-rules.md testing stack
 - TLS zum DB-Server in essential-rules.md API & Datenbank section
 - Secrets rotation frequency (90 days) in `claude/app-rules.md`
+
+### Fixed
+
+- Link check: exclude `github.com/.*/actions/` URLs (returned 504 on CI runners, causing every PR to fail)
 
 ---
 

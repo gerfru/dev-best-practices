@@ -4,7 +4,7 @@
 
 Opinionated best-practice rules for software projects — RAG systems, AI agents, data pipelines, full-stack web apps. Three detail levels: compact essential rules for `CLAUDE.md`, thematic rule files, and detailed reference docs.
 
-Also a **Claude Code plugin**: install once, get 17 skills in every project.
+Also a **Claude Code plugin**: install once, get 18 skills in every project.
 
 ---
 
@@ -38,6 +38,7 @@ Start with `/dev:meta-help` — shows the full menu and launches any skill direc
 | `/dev:design-api` | REST / GraphQL / gRPC contract design or review |
 | `/dev:design-data` | Schema, normalization, indexes, CQRS / Event Sourcing |
 | `/dev:design-migration` | Zero-downtime strategy: Expand-Contract, Strangler Fig, Saga |
+| `/dev:design-ux` | UX/UI design: interaction model, trust, AI features, anti-patterns |
 
 ### Review
 
@@ -56,14 +57,27 @@ Start with `/dev:meta-help` — shows the full menu and launches any skill direc
 | `/dev:tool-test [focus]` | Write missing tests or design test strategy per test pyramid |
 | `/dev:tool-style [task]` | CSS solution matching your existing system (Tailwind, SCSS, …) |
 
+### Design (UX)
+
+| Skill | What it does |
+|---|---|
+| `/dev:design-ux` | UX/UI design: interaction model, trust, AI features, anti-patterns |
+
+### Review (UX)
+
+| Skill | What it does |
+|---|---|
+| `/dev:review-ux` | UX audit based on HAX, PAIR, CHI 2024 and Nielsen Norman |
+
 ### Meta
 
 | Skill | What it does |
 |---|---|
-| `/dev:meta-help` | Navigation menu — shows all 17 skills, launches chosen one |
+| `/dev:meta-help` | Navigation menu — shows all 18 skills, launches chosen one |
 | `/dev:meta-install` | Insert `essential-rules.md` into project `CLAUDE.md` (detects install vs. update) |
 | `/dev:meta-drift` | Compare installed rules block against current rule files |
 | `/dev:meta-sync` | Repo-internal: check if `claude/*.md` still reflects `reference/*.md` |
+| `/dev:meta-create-skill` | Build a new skill: clarify topic, research academic basis, write all files |
 
 ---
 

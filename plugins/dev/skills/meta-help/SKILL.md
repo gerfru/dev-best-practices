@@ -36,9 +36,10 @@ Welcher Skill soll starten?
  13  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
 
 📁  META
- 14  meta-install      Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
- 15  meta-drift        Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
- 16  meta-sync         reference/*.md vs. claude/*.md synchron halten
+ 14  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
+ 15  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
+ 16  meta-sync           reference/*.md vs. claude/*.md synchron halten
+ 17  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
 
 → Zahl eingeben, oder direkt beschreiben was du brauchst.
 ```
@@ -54,4 +55,4 @@ Lade und folge exakt: `${CLAUDE_PLUGIN_ROOT}/skills/<gewählter-skill>/SKILL.md`
 ## Regeln
 - Menü sofort zeigen, kein Intro
 - Nach der Wahl direkt starten, nicht nochmals erklären oder nachfragen
-- Nie alle 16 Skills gleichzeitig laden — immer nur den gewählten
+- Nie alle 18 Skills gleichzeitig laden — immer nur den gewählten
