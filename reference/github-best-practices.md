@@ -306,6 +306,43 @@ gh api repos/{owner}/{repo}/branches/main/protection \
 
 ---
 
+## Repository Settings
+
+Einmalig pro Repo konfigurieren. Gilt für beide Ökosysteme identisch.
+
+### Merge-Strategie
+
+Nur eine Strategie aktivieren — Konsistenz schlägt Flexibilität.
+
+| Strategie | History | Wann verwenden |
+|---|---|---|
+| **Squash merge** | Ein Commit pro PR — sauber, lesbar | Solo oder kleine Teams mit kurzen Feature-Branches |
+| Merge commit | Vollständige Branch-History | Teams die jeden WIP-Commit in `main` brauchen |
+| Rebase merge | Lineare History, alle Commits einzeln | Teams mit disziplinierten Commits ohne WIP-Rauschen |
+
+**Empfehlung: Squash only.** PR-Titel wird automatisch Commit-Message in `main`. WIP-Commits bleiben im PR sichtbar, verschwinden aber aus `main`.
+
+### Empfohlene Konfiguration
+
+| Setting | Wert | Warum |
+|---|---|---|
+| Allow squash merge | Ja | Saubere, lesbare `main`-History |
+| Allow merge commit | Nein | Verhindert Merge-Commit-Noise |
+| Allow rebase merge | Nein | Eine Strategie, kein Mix |
+| Delete branch on merge | Ja | Kein manuelles Aufräumen alter Feature-Branches |
+
+### Setup via GitHub CLI
+
+```bash
+gh api repos/{owner}/{repo} --method PATCH \
+  --field allow_squash_merge=true \
+  --field allow_merge_commit=false \
+  --field allow_rebase_merge=false \
+  --field delete_branch_on_merge=true
+```
+
+---
+
 ## 5. Secret Scanning
 
 Defense in Depth: Mehrere Schichten. Gilt für beide Ökosysteme identisch.
@@ -331,6 +368,17 @@ Standard-Config reicht meistens. Für Custom-Patterns:
 Settings > Code security > Secret scanning > Enable
 
 Mit **Push Protection** werden Pushes geblockt die bekannte Secret-Patterns enthalten, noch bevor sie das Repo erreichen.
+
+Via GitHub CLI:
+
+```bash
+gh api repos/{owner}/{repo} --method PATCH \
+  -f 'security_and_analysis[secret_scanning][status]=enabled' \
+  -f 'security_and_analysis[secret_scanning_push_protection][status]=enabled'
+
+# Dependabot alerts aktivieren
+gh api repos/{owner}/{repo}/vulnerability-alerts --method PUT
+```
 
 ---
 
@@ -726,7 +774,10 @@ CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0"]
 ### Erste Woche
 
 - [ ] CI Pipeline für PRs (lint, typecheck, build/test)
-- [ ] Branch Protection auf `main` aktivieren
+- [ ] Branch Protection auf `main` aktivieren (force push + deletion blockieren, status checks required)
+- [ ] Repository Settings: Squash merge only + delete branch on merge aktivieren
+- [ ] Secret Scanning + Push Protection auf GitHub aktivieren
+- [ ] Dependabot alerts aktivieren
 - [ ] Renovate konfigurieren
 - [ ] gitleaks in CI (nicht nur lokal)
 - [ ] Docker Setup mit pinned Base Images (Digest, nicht Tag)
@@ -736,7 +787,6 @@ CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0"]
 - [ ] Tests einrichten (Vitest / pytest minimum)
 - [ ] Security Scanning (Trivy für Container, Semgrep für Code)
 - [ ] Claude Code Review Action
-- [ ] Secret Scanning auf GitHub aktivieren
 - [ ] Deployment Pipeline (Build > Test > Scan > Deploy)
 
 ---
