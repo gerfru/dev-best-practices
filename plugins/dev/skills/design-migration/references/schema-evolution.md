@@ -1,121 +1,121 @@
-# Schema Evolution — Referenz
+# Schema Evolution — Reference
 
-Quelle: Kleppmann "Designing Data-Intensive Applications" (O'Reilly 2017), Kap. 4 + Kap. 11.
+Source: Kleppmann "Designing Data-Intensive Applications" (O'Reilly 2017), Ch. 4 + Ch. 11.
 
-## Forward vs. Backward Compatibility (Kleppmann Kap. 4)
+## Forward vs. Backward Compatibility (Kleppmann Ch. 4)
 
-| Begriff | Definition | Konkret |
+| Term | Definition | Concretely |
 |---|---|---|
-| **Backward Compatibility** | Neuer Code kann alte Daten lesen | Code v2 liest Daten die mit v1 geschrieben wurden |
-| **Forward Compatibility** | Alter Code kann neue Daten lesen | Code v1 liest Daten die mit v2 geschrieben wurden |
+| **Backward Compatibility** | New code can read old data | Code v2 reads data written with v1 |
+| **Forward Compatibility** | Old code can read new data | Code v1 reads data written with v2 |
 
-**Ziel bei Rolling Deployments:** Beides — neue und alte Code-Version laufen gleichzeitig.
+**Goal for rolling deployments:** Both — new and old code versions run simultaneously.
 
-### Regeln fuer Schema-Aenderungen
+### Rules for Schema Changes
 
-| Aenderung | Backward compat. | Forward compat. | Sicher? |
+| Change | Backward compat. | Forward compat. | Safe? |
 |---|---|---|---|
-| Neues optionales Feld hinzufuegen | ✅ (Defaultwert) | ✅ (ignoriert) | ✅ Sicher |
-| Pflichtfeld hinzufuegen | ❌ Alter Code hat kein Feld | ✅ | ❌ Gefaehrlich |
-| Feld entfernen | ✅ | ❌ Alter Code erwartet Feld | ❌ Expand-Contract noetig |
-| Typ aendern (int → string) | ❌ | ❌ | ❌ Breaking Change |
-| Feld umbenennen | ❌ | ❌ | ❌ Breaking Change |
-| Enum-Wert hinzufuegen | ✅ | ❌ Alter Code kennt Wert nicht | ⚠️ Pruefe alle Consumer |
+| Add new optional field | ✅ (default value) | ✅ (ignored) | ✅ Safe |
+| Add required field | ❌ Old code has no field | ✅ | ❌ Dangerous |
+| Remove field | ✅ | ❌ Old code expects field | ❌ Expand-Contract needed |
+| Change type (int → string) | ❌ | ❌ | ❌ Breaking change |
+| Rename field | ❌ | ❌ | ❌ Breaking change |
+| Add enum value | ✅ | ❌ Old code doesn't know value | ⚠️ Check all consumers |
 
-**Expand-Contract Pattern fuer Feld-Entfernung:**
+**Expand-Contract Pattern for field removal:**
 
 ```text
-Phase 1 — Expand:  Neues Feld hinzufuegen, beide Felder parallel schreiben
-Phase 2 — Migrate: Alte Daten in neues Feld migrieren, altes Feld nur noch lesen
-Phase 3 — Contract: Altes Feld entfernen (kein Code liest es mehr)
+Phase 1 — Expand:   Add new field, write both fields in parallel
+Phase 2 — Migrate:  Migrate old data to new field, only read from old field
+Phase 3 — Contract: Remove old field (no code reads it anymore)
 ```
 
 ---
 
-## Dual-Write Problem (Kleppmann Kap. 11)
+## Dual-Write Problem (Kleppmann Ch. 11)
 
-Wenn zwei Stores gleichzeitig geschrieben werden (z.B. DB + Search Index):
+When two stores are written to simultaneously (e.g. DB + search index):
 
-**Problem:** Kein atomares Commit ueber beide Systeme moeglich.
+**Problem:** No atomic commit across both systems possible.
 
-| Szenario | Risiko |
+| Scenario | Risk |
 |---|---|
-| Write A erfolgreich, Write B fehlgeschlagen | Stores divergieren |
-| Write B zuerst sichtbar (Reihenfolge) | Inkonsistenter Zustand |
-| Fehler nach Write A, vor Write B | Partieller Zustand |
+| Write A successful, Write B failed | Stores diverge |
+| Write B visible first (ordering) | Inconsistent state |
+| Failure after Write A, before Write B | Partial state |
 
-**Loesungen nach Kleppmann:**
+**Solutions per Kleppmann:**
 
-1. **Change Data Capture (CDC):** Nur in DB schreiben, CDC liest Transaction Log und
-   aktualisiert Secondary Stores. Kausal korrekte Reihenfolge durch Log-Basis.
+1. **Change Data Capture (CDC):** Write only to DB; CDC reads transaction log and
+   updates secondary stores. Causally correct ordering via log basis.
 
-2. **Outbox Pattern:** Schreibe Event + Daten in einer DB-Transaktion in Outbox-Tabelle.
-   Separater Processor liest Outbox und publiziert Events.
+2. **Outbox Pattern:** Write event + data in a single DB transaction to outbox table.
+   Separate processor reads outbox and publishes events.
 
-3. **Event Log als Source of Truth:** Alle Schreiboperationen als Events in ordered Log
-   (Kafka). Alle Stores sind Read-Models die den Log konsumieren.
+3. **Event Log as Source of Truth:** All write operations as events in ordered log
+   (Kafka). All stores are read models that consume the log.
 
 ---
 
-## Change Data Capture (CDC) (Kleppmann Kap. 11)
+## Change Data Capture (CDC) (Kleppmann Ch. 11)
 
-CDC liest den Transaction Log der Datenbank (binlog bei MySQL, WAL bei PostgreSQL).
+CDC reads the transaction log of the database (binlog for MySQL, WAL for PostgreSQL).
 
 ```text
-Anwendung → DB (Write) → Transaction Log → CDC Connector → Event Stream → Consumer
+Application → DB (write) → Transaction Log → CDC Connector → Event Stream → Consumer
 ```
 
-**Vorteile gegenueber Dual-Write:**
-- Kausal korrekte Reihenfolge (Log-Reihenfolge)
-- Kein Auslassen von Aenderungen
-- Low Latency (nahezu real-time)
-- Kein Applikationscode-Aenderung noetig
+**Advantages over Dual-Write:**
+- Causally correct ordering (log ordering)
+- No missed changes
+- Low latency (near real-time)
+- No application code changes needed
 
 **CDC Tools:**
-- **Debezium** (Open Source, Kafka Connect) — PostgreSQL, MySQL, MongoDB, SQL Server
-- **AWS DMS** — managed CDC fuer AWS-Ziele
-- **Google Datastream** — managed CDC fuer GCP
+- **Debezium** (open source, Kafka Connect) — PostgreSQL, MySQL, MongoDB, SQL Server
+- **AWS DMS** — managed CDC for AWS targets
+- **Google Datastream** — managed CDC for GCP
 
-**Migration via CDC (Zero-Downtime DB-Migration):**
+**Migration via CDC (zero-downtime DB migration):**
 
 ```text
-1. CDC auf Quell-DB aktivieren (liest WAL/binlog ab Checkpoint)
-2. Initial Snapshot in Ziel-DB laden
-3. CDC streamt alle Delta-Aenderungen in Ziel-DB (Aufholen)
-4. Lesen aus Ziel-DB aktivieren (Shadow Read)
-5. Divergenz-Pruefung (Quelle vs. Ziel)
-6. Schreiben auf Ziel umschalten (Dual-Write-Phase entfaellt)
-7. Quelle abschalten nach Confidence-Periode
+1. Enable CDC on source DB (reads WAL/binlog from checkpoint)
+2. Load initial snapshot into target DB
+3. CDC streams all delta changes into target DB (catching up)
+4. Enable reads from target DB (shadow read)
+5. Divergence check (source vs. target)
+6. Switch writes to target (dual-write phase eliminated)
+7. Shut down source after confidence period
 ```
 
 ---
 
-## Avro Schema Registry (Kleppmann Kap. 4)
+## Avro Schema Registry (Kleppmann Ch. 4)
 
-Fuer Event-Driven Architekturen: Schema-Version mit Event mitschicken.
+For event-driven architectures: send schema version with each event.
 
-**Avro Schema Evolution Regeln:**
-- Feld hinzufuegen: Default-Wert angeben → backward + forward compat
-- Feld entfernen: Default-Wert in altem Schema angeben → backward + forward compat
-- Kein Default: Breaking Change
+**Avro Schema Evolution Rules:**
+- Add field: provide default value → backward + forward compat
+- Remove field: provide default value in old schema → backward + forward compat
+- No default: breaking change
 
 **Confluent Schema Registry Pattern:**
-- Schema-ID im Message Header (`magic byte + schema ID`)
-- Reader liest Schema-ID, holt Schema aus Registry, konvertiert
-- Alte und neue Schemas koennen parallel existieren
+- Schema ID in message header (`magic byte + schema ID`)
+- Reader reads schema ID, fetches schema from registry, converts
+- Old and new schemas can coexist in parallel
 
 ---
 
-## Entscheidungsbaum: Welche Migration-Technik?
+## Decision Tree: Which Migration Technique?
 
 ```text
-Muss altes System weiterlaufen waehrend neu deployed wird?
-├─ Nein → Maintenance Window, Big Bang (nur bei kleinen/unkritischen Systemen)
-└─ Ja →
-   Handelt es sich um Schema-Aenderung in DB?
-   ├─ Ja → Expand-Contract Pattern (Phasen: expand → migrate → contract)
-   └─ Nein (neues System / neuer Store) →
-      Ist Daten-Konsistenz zwischen Stores kritisch?
-      ├─ Ja → CDC (Debezium) + Divergenz-Pruefung
-      └─ Nein / OK mit eventual consistency → Dual-Write + Timeout-basierte Migration
+Must the old system keep running while the new one is deployed?
+├─ No → Maintenance window, big bang (only for small/non-critical systems)
+└─ Yes →
+   Is it a schema change in the DB?
+   ├─ Yes → Expand-Contract Pattern (phases: expand → migrate → contract)
+   └─ No (new system / new store) →
+      Is data consistency between stores critical?
+      ├─ Yes → CDC (Debezium) + divergence check
+      └─ No / OK with eventual consistency → Dual-Write + timeout-based migration
 ```

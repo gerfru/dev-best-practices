@@ -1,53 +1,53 @@
-# Golden Signals — Referenz
+# Golden Signals — Reference
 
-Quelle: Google SRE Book, Kap. 6. Wenn nur 4 Metriken messbar sind — diese vier.
+Source: Google SRE Book, Ch. 6. If only 4 metrics can be measured — these four.
 
-| Signal | Definition | Metric-Typ | PromQL-Muster |
+| Signal | Definition | Metric type | PromQL pattern |
 |---|---|---|---|
-| **Latency** | Zeit bis zur Antwort — getrennt nach success/error | Histogram | `histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))` |
-| **Traffic** | Requests/s oder Events/s — Systemlast | Counter | `rate(http_requests_total[5m])` |
-| **Errors** | % fehlgeschlagener Requests (5xx, Timeouts, aborted) | Counter | `rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])` |
-| **Saturation** | % genutzter Kapazität (CPU, Memory, Queue Depth, Disk) | Gauge | `100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)` |
+| **Latency** | Time to response — tracked separately for success/error | Histogram | `histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))` |
+| **Traffic** | Requests/s or events/s — system load | Counter | `rate(http_requests_total[5m])` |
+| **Errors** | % of failed requests (5xx, timeouts, aborted) | Counter | `rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])` |
+| **Saturation** | % of capacity used (CPU, memory, queue depth, disk) | Gauge | `100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)` |
 
 ---
 
-## Metric-Typen
+## Metric Types
 
-| Typ | Wann | Beispiel |
+| Type | When | Example |
 |---|---|---|
-| **Counter** | Immer monoton steigend, via `rate()` auswerten | `http_requests_total`, `errors_total` |
-| **Gauge** | Aktueller Wert, kann steigen und fallen | `queue_depth`, `memory_bytes`, `active_connections` |
-| **Histogram** | Verteilung von Werten, Percentile berechenbar | `http_request_duration_seconds` |
-| **Summary** | Vorberechnete Percentile (weniger flexibel als Histogram) | Nur wenn Histogram zu teuer |
+| **Counter** | Always monotonically increasing, evaluate via `rate()` | `http_requests_total`, `errors_total` |
+| **Gauge** | Current value, can increase and decrease | `queue_depth`, `memory_bytes`, `active_connections` |
+| **Histogram** | Distribution of values, percentiles computable | `http_request_duration_seconds` |
+| **Summary** | Pre-computed percentiles (less flexible than histogram) | Only when histogram is too expensive |
 
-Faustregel: **Histogram für Latenz, Counter für Fehler/Traffic, Gauge für Saturation.**
+Rule of thumb: **Histogram for latency, Counter for errors/traffic, Gauge for saturation.**
 
 ---
 
-## Kardinalitäts-Regeln
+## Cardinality Rules
 
-**Niemals als Metric-Label:**
+**Never as metric label:**
 - `user_id`, `session_id`, `request_id`, `customer_id`
-- Alles mit > 1000 distinct values
+- Anything with > 1000 distinct values
 
-**Erlaubt als Label (< 100 distinct values):**
+**Allowed as label (< 100 distinct values):**
 - `status_code` (200, 404, 500, ...)
 - `method` (GET, POST, ...)
-- `endpoint` / `route` (nur wenn begrenzte Anzahl Routes)
+- `endpoint` / `route` (only if a limited number of routes)
 - `region`, `environment`, `service_name`
 
-**High-Cardinality-Daten gehören in Traces, nicht Metrics.**
+**High-cardinality data belongs in traces, not metrics.**
 
 ---
 
-## Burn Rate (für SLO-basierte Alerts)
+## Burn Rate (for SLO-based alerts)
 
-Burn Rate = wie viel schneller als normal das Error Budget verbraucht wird.
+Burn rate = how much faster than normal the error budget is being consumed.
 
-Bei SLO 99.9% (Error Budget: 43.2 min / 30 Tage):
+With SLO 99.9% (Error Budget: 43.2 min / 30 days):
 
-| Burn Rate | Bedeutung | Budget verbraucht in |
+| Burn Rate | Meaning | Budget consumed in |
 |---|---|---|
-| 1× | Normalverbrauch | 30 Tage |
-| 6× | 6× schneller | 5 Tage |
-| 14.4× | Kritisch | 2 Stunden |
+| 1× | Normal consumption | 30 days |
+| 6× | 6× faster | 5 days |
+| 14.4× | Critical | 2 hours |

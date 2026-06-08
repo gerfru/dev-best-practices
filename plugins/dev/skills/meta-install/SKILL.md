@@ -1,111 +1,111 @@
 ---
-name: meta-install
-description: Fügt die Dev-Best-Practices-Regeln als strukturierten Block in die CLAUDE.md eines Zielprojekts ein — oder aktualisiert einen bestehenden Block. Use this skill whenever the user wants to add or update best-practice rules in a project CLAUDE.md; triggert bei "Regeln einrichten", "install rules", "rules updaten", "CLAUDE.md setup", "Best Practices aktualisieren", "update rules".
+name: dev:meta-install
+description: Adds the dev best practices rules as a structured block to the CLAUDE.md of a target project — or updates an existing block. Use this skill whenever the user wants to add or update best-practice rules in a project CLAUDE.md; triggers for "set up rules", "install rules", "update rules", "CLAUDE.md setup", "update best practices", "update rules".
 ---
 
 # Install Rules
 
-Fügt `essential-rules.md` (oder ausgewählte Sections) als dedizierten Block in die
-`CLAUDE.md` eines Zielprojekts ein — oder aktualisiert einen bestehenden Block in-place.
-Bestehender Projektkontext und Projekt-Ausnahmen werden nie überschrieben.
+Inserts `essential-rules.md` (or selected sections) as a dedicated block into the
+`CLAUDE.md` of a target project — or updates an existing block in-place.
+Existing project context and project exceptions are never overwritten.
 
-## Schritt 0 — Modus erkennen (Install vs. Update)
+## Step 0 — Detect Mode (Install vs. Update)
 
-1. **Ziel-`CLAUDE.md` lokalisieren** (aktuelles Verzeichnis `./CLAUDE.md`)
+1. **Locate target `CLAUDE.md`** (current directory `./CLAUDE.md`)
 
-2. **Modus bestimmen:**
+2. **Determine mode:**
 
-   | Situation | Modus |
+   | Situation | Mode |
    |---|---|
-   | Keine `CLAUDE.md` vorhanden | **Neu anlegen** |
-   | `CLAUDE.md` ohne `DEV-BEST-PRACTICES:START` Marker | **Erstinstallation** |
-   | `CLAUDE.md` mit `DEV-BEST-PRACTICES:START` Marker | **Update** |
-   | `--force` Flag | **Update** auch ohne Marker (Block neu erzeugen) |
+   | No `CLAUDE.md` present | **Create new** |
+   | `CLAUDE.md` without `DEV-BEST-PRACTICES:START` marker | **Initial install** |
+   | `CLAUDE.md` with `DEV-BEST-PRACTICES:START` marker | **Update** |
+   | `--force` flag | **Update** even without marker (regenerate block) |
 
-3. **Umfang bestimmen** (Default: `--essential`):
-   - `--essential` → nur `essential-rules.md` (~80 Zeilen, empfohlen)
-   - `--full` → alle vier Rule-Files (essential + app + github + architecture)
-   - `--section <name>` → einzelne Section, z.B. `--section security`
-   - `--update` → gleichen Umfang wie beim letzten Install verwenden (aus Marker lesen)
+3. **Determine scope** (default: `--essential`):
+   - `--essential` → only `essential-rules.md` (~80 lines, recommended)
+   - `--full` → all four rule files (essential + app + github + architecture)
+   - `--section <name>` → individual section, e.g. `--section security`
+   - `--update` → use same scope as last install (read from marker)
 
-   Falls keine Angabe und Update-Modus: den im Marker dokumentierten Umfang beibehalten.
+   If no specification and update mode: retain the scope documented in the marker.
 
-## Schritt 1 — Regeln vorbereiten
+## Step 1 — Prepare Rules
 
-1. Lese die gewählten Rule-Files aus `${CLAUDE_PLUGIN_ROOT}/rules/`
-2. Bei `--section`: die relevante Section extrahieren
-3. Prüfe ob Regeln zum erkannten Stack passen:
-   - Python-Projekt ohne TypeScript → TypeScript-spezifische Regeln als `[optional]` markieren
-   - Kein Frontend → Frontend/CSS-Sections überspringen
-   - Solo-Projekt → ASVS L1 als Default vermerken
+1. Read the chosen rule files from `${CLAUDE_PLUGIN_ROOT}/rules/`
+2. For `--section`: extract the relevant section
+3. Check if rules fit the detected stack:
+   - Python project without TypeScript → mark TypeScript-specific rules as `[optional]`
+   - No frontend → skip frontend/CSS sections
+   - Solo project → note ASVS L1 as default
 
-## Schritt 2a — Erstinstallation
+## Step 2a — Initial Install
 
-**Block-Format:**
+**Block format:**
 ```markdown
-<!-- DEV-BEST-PRACTICES:START — via /dev-best-practices:install-rules aktualisieren -->
-<!-- Version: essential-rules.md @ <Datum> | Umfang: essential -->
+<!-- DEV-BEST-PRACTICES:START — update via /dev-best-practices:install-rules -->
+<!-- Version: essential-rules.md @ <date> | Scope: essential -->
 
 ## Dev Best Practices
 
-[Inhalt der Regel-Files]
+[Content of rule files]
 
 <!-- DEV-BEST-PRACTICES:END -->
 ```
 
-**Einfüge-Position:**
-- Nach dem projektspezifischen Kontext (Architektur, Commands)
-- Vor projekt-spezifischen Ausnahmen falls vorhanden
-- Niemals mitten in einen bestehenden Abschnitt
+**Insert position:**
+- After the project-specific context (architecture, commands)
+- Before project-specific exceptions if present
+- Never in the middle of an existing section
 
-## Schritt 2b — Update (Block bereits vorhanden)
+## Step 2b — Update (block already present)
 
-1. **Projekt-Ausnahmen sichern:** Alles innerhalb des Blocks das mit `[Ausnahme:` beginnt
-   oder manuell annotiert wurde → zwischenspeichern
+1. **Save project exceptions:** Everything inside the block that begins with `[Exception:`
+   or was manually annotated → store temporarily
 
-2. **Alten Block ersetzen:** Exakt den Text zwischen `DEV-BEST-PRACTICES:START` und
-   `DEV-BEST-PRACTICES:END` (inkl. Marker) durch den neuen Block ersetzen
+2. **Replace old block:** Replace exactly the text between `DEV-BEST-PRACTICES:START` and
+   `DEV-BEST-PRACTICES:END` (including markers) with the new block
 
-3. **Projekt-Ausnahmen wiederherstellen:** Gesicherte Ausnahmen ans Ende des neuen Blocks
-   einfügen (vor `DEV-BEST-PRACTICES:END`), mit Kommentar `<!-- Projekt-Ausnahmen -->`
+3. **Restore project exceptions:** Insert saved exceptions at the end of the new block
+   (before `DEV-BEST-PRACTICES:END`), with comment `<!-- Project exceptions -->`
 
-4. **Version-Marker aktualisieren:**
+4. **Update version marker:**
    ```text
-   <!-- Version: essential-rules.md @ <neues Datum> | Umfang: essential | Vorher: <altes Datum> -->
+   <!-- Version: essential-rules.md @ <new date> | Scope: essential | Previous: <old date> -->
    ```
 
-**Was beim Update nie angefasst wird:**
-- Alles außerhalb der Marker-Kommentare
-- `[Ausnahme: …]` Blöcke innerhalb des alten Blocks
-- Projektbeschreibung, Commands, Architektur-Notizen
+**What is never touched during an update:**
+- Everything outside the marker comments
+- `[Exception: …]` blocks inside the old block
+- Project description, commands, architecture notes
 
-## Schritt 3 — Vorschau & Bestätigung
+## Step 3 — Preview & Confirmation
 
-**Vor dem Schreiben zeigen:**
+**Show before writing:**
 
 ```text
-Modus: [Erstinstallation / Update]
-Datei: ./CLAUDE.md
-Umfang: essential-rules.md (78 Zeilen)
+Mode: [Initial install / Update]
+File: ./CLAUDE.md
+Scope: essential-rules.md (78 lines)
 
-[Update] Alter Block: Version vom <Datum>, X Zeilen
-[Update] Neuer Block: Version vom heute, Y Zeilen
-[Update] Gesicherte Projekt-Ausnahmen: Z Stück
+[Update] Old block: Version from <date>, X lines
+[Update] New block: Version from today, Y lines
+[Update] Saved project exceptions: Z items
 
-Änderungen außerhalb des Blocks: keine
+Changes outside the block: none
 
-Fortfahren? (ja/nein)
+Proceed? (yes/no)
 ```
 
-Nach dem Schreiben:
-- `✓ Block [eingefügt / aktualisiert]: X Regeln, Y Sections`
-- Bei Update: `Projekt-Ausnahmen erhalten: Z Stück`
-- Nächster Schritt: `check-drift` läuft automatisch zur Verifikation
+After writing:
+- `✓ Block [inserted / updated]: X rules, Y sections`
+- On update: `Project exceptions preserved: Z items`
+- Next step: `check-drift` runs automatically for verification
 
-## Regeln
-- Nur schreiben nach Bestätigung.
-- Niemals Inhalt außerhalb der Marker anfassen.
-- Projekt-Ausnahmen immer erhalten — sie sind bewusste Abweichungen, kein Fehler.
-- Falls `CLAUDE.md` nicht existiert: Datei mit Projekt-Placeholder + Rules-Block anlegen.
-- Nach jedem Update den `check-drift` Skill aufrufen um zu verifizieren dass der neue
-  Block korrekt eingefügt wurde.
+## Rules
+- Only write after confirmation.
+- Never touch content outside the markers.
+- Always preserve project exceptions — they are deliberate deviations, not errors.
+- If `CLAUDE.md` does not exist: create file with project placeholder + rules block.
+- After every update call the `check-drift` skill to verify the new block
+  was inserted correctly.

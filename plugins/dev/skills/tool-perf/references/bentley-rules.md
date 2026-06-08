@@ -1,63 +1,63 @@
-# Bentley Rules fuer Performance-Optimierung
+# Bentley Rules for Performance Optimization
 
-Quelle: MIT 6.172 Lecture 2. Aus Jon Bentley "Writing Efficient Programs" (1982),
-destilliert von Charles Leiserson und Julian Shun.
+Source: MIT 6.172 Lecture 2. From Jon Bentley "Writing Efficient Programs" (1982),
+distilled by Charles Leiserson and Julian Shun.
 
-## Datenstrukturen
+## Data Structures
 
-| Regel | Technik | Beispiel |
+| Rule | Technique | Example |
 |---|---|---|
-| Augmentation | Zusaetzliche Info in Struktur cachen | Summe in BST-Knoten mitfuehren |
-| Precomputing | Teure Ergebnisse vorab berechnen | Lookup-Tabelle fuer Sinus-Werte |
-| Compile-Time Init | Konstanten zur Compile-Zeit | `constexpr`, statische Arrays |
-| Caching | Haeufige Ergebnisse zwischenspeichern | Memoization, LRU-Cache |
-| Lazy Evaluation | Erst berechnen wenn noetig | Iteratoren, Generator-Patterns |
-| Coarsening Recursion | Basisfall frueher abbrechen | n < 16 → Insertion Sort statt Quicksort |
+| Augmentation | Cache additional info in structure | Maintain sum in BST node |
+| Precomputing | Compute expensive results in advance | Lookup table for sine values |
+| Compile-Time Init | Constants at compile time | `constexpr`, static arrays |
+| Caching | Store frequent results | Memoization, LRU cache |
+| Lazy Evaluation | Compute only when needed | Iterators, generator patterns |
+| Coarsening Recursion | Exit base case earlier | n < 16 → insertion sort instead of quicksort |
 
-## Logik
+## Logic
 
-| Regel | Technik | Beispiel |
+| Rule | Technique | Example |
 |---|---|---|
-| Constant Folding | Konstante Subexpressions vorab | `2 * 3.14159` zur Compile-Zeit |
-| Common Subexpression | Gleiche Berechnung nur einmal | `len(arr)` aus dem Loop heraus |
-| Algebraic Identities | Aequivalente guenstigere Op | Division durch 2 → Right-Shift |
-| Short-Circuit Evaluation | Guenstige Bedingung zuerst | `if cheap_check && expensive_check` |
-| Loop-Invariant Hoisting | Konstantes aus Loop | Array-Laenge vor Loop berechnen |
-| Tail-Recursion | Tail Calls → Iteration | Kein Stack-Wachstum |
+| Constant Folding | Pre-compute constant subexpressions | `2 * 3.14159` at compile time |
+| Common Subexpression | Same calculation only once | `len(arr)` hoisted out of loop |
+| Algebraic Identities | Equivalent cheaper operation | Division by 2 → right-shift |
+| Short-Circuit Evaluation | Cheap condition first | `if cheap_check && expensive_check` |
+| Loop-Invariant Hoisting | Constants out of loop | Compute array length before loop |
+| Tail-Recursion | Tail calls → iteration | No stack growth |
 
 ## Loops
 
-| Regel | Technik | Wann |
+| Rule | Technique | When |
 |---|---|---|
-| Hoisting | Invariante Berechnung vor Loop | Jede nicht-abhaengige Berechnung |
-| Sentinels | Grenzwert als letztes Element | Erspart Bounds-Check |
-| Unrolling | Mehrere Iter. pro Loop-Body | Wenn Branch-Prediction kostet |
-| Fusion | Zwei Loops zu einem | Wenn beide ueber gleiche Daten |
-| Early Exit | Break/Return bei erstem Fund | Search, Validation |
+| Hoisting | Invariant computation before loop | Any non-dependent computation |
+| Sentinels | Boundary value as last element | Saves bounds check |
+| Unrolling | Multiple iterations per loop body | When branch prediction costs |
+| Fusion | Two loops into one | When both iterate over same data |
+| Early Exit | Break/return on first find | Search, validation |
 
-## Funktionen
+## Functions
 
-| Regel | Technik | Wann |
+| Rule | Technique | When |
 |---|---|---|
-| Inlining | Kleine Funktion direkt einbetten | Call-Overhead messbar |
-| Tail-Call Optimization | Letzter Call ohne neuen Frame | Rekursive Funktionen |
+| Inlining | Embed small function directly | Call overhead measurable |
+| Tail-Call Optimization | Last call without new frame | Recursive functions |
 
 ## Memory / Cache
 
-| Regel | Technik | Beispiel |
+| Rule | Technique | Example |
 |---|---|---|
-| Cache-Friendly Access | Row-major fuer 2D Arrays | `arr[i][j]` statt `arr[j][i]` |
-| Struct Packing | Padding minimieren | Grosse Felder zuerst |
-| Data Alignment | SIMD / Cache-Line Alignment | `__attribute__((aligned(64)))` |
-| False Sharing vermeiden | Shared Cache-Lines zwischen Threads | Padding zwischen Thread-Daten |
+| Cache-Friendly Access | Row-major for 2D arrays | `arr[i][j]` instead of `arr[j][i]` |
+| Struct Packing | Minimize padding | Large fields first |
+| Data Alignment | SIMD / cache-line alignment | `__attribute__((aligned(64)))` |
+| Avoid False Sharing | Shared cache lines between threads | Padding between thread data |
 
 ---
 
-## Warnung: Premature Optimization
+## Warning: Premature Optimization
 
 > "The real problem is that programmers have spent far too much time worrying about
 > efficiency in the wrong places and at the wrong times."
 > — Donald Knuth
 
-**Vorgehen immer:** Messen → Bottleneck identifizieren → Optimieren → Messen.
-Nie ohne Profiling-Daten optimieren.
+**Always proceed:** Measure → identify bottleneck → optimize → measure.
+Never optimize without profiling data.

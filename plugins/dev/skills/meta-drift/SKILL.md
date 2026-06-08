@@ -1,90 +1,90 @@
 ---
-name: meta-drift
-description: Vergleicht den Dev-Best-Practices-Block in einer Projekt-CLAUDE.md mit dem aktuellen Stand der Rule-Files und zeigt was fehlt, veraltet oder neu hinzugekommen ist. Use this skill whenever the user wants to update their project rules, check if rules are still current, or sync a CLAUDE.md with the latest best practices; triggert bei "Regeln aktualisieren", "sind meine Rules noch aktuell", "drift", "sync CLAUDE.md", "update rules".
+name: dev:meta-drift
+description: Compares the dev-best-practices block in a project CLAUDE.md with the current state of the rule files and shows what is missing, outdated, or newly added. Use this skill whenever the user wants to update their project rules, check if rules are still current, or sync a CLAUDE.md with the latest best practices; triggers for "update rules", "are my rules still current", "drift", "sync CLAUDE.md", "update rules".
 ---
 
 # Check Drift
 
-Vergleicht was im Zielprojekt steht mit dem was unsere Rule-Files aktuell definieren.
-Zeigt den Delta — ohne automatisch zu überschreiben.
+Compares what is in the target project with what our rule files currently define.
+Shows the delta — without automatically overwriting.
 
-## Schritt 0 — Quellen laden
+## Step 0 — Load Sources
 
-1. **Aktueller Stand (SOLL):** Rule-Files aus `${CLAUDE_PLUGIN_ROOT}/rules/`
-   - `essential-rules.md` — immer
-   - `app-rules.md`, `github-rules.md`, `architecture-rules.md` — nur wenn im Projekt-Block vorhanden
+1. **Current state (TARGET):** Rule files from `${CLAUDE_PLUGIN_ROOT}/rules/`
+   - `essential-rules.md` — always
+   - `app-rules.md`, `github-rules.md`, `architecture-rules.md` — only if present in the project block
 
-2. **Projekt-Stand (IST):** `CLAUDE.md` im Ziel-Projekt lesen
-   - Block zwischen `DEV-BEST-PRACTICES:START` und `DEV-BEST-PRACTICES:END` extrahieren
-   - Falls kein Marker: gesamte `CLAUDE.md` auf Best-Practices-Inhalte prüfen
-   - Falls keine `CLAUDE.md`: zu `install-rules` weiterleiten
+2. **Project state (ACTUAL):** Read `CLAUDE.md` in the target project
+   - Extract block between `DEV-BEST-PRACTICES:START` and `DEV-BEST-PRACTICES:END`
+   - If no marker: check entire `CLAUDE.md` for best-practices content
+   - If no `CLAUDE.md`: redirect to `install-rules`
 
-3. **Version aus Marker lesen** (falls vorhanden):
+3. **Read version from marker** (if present):
    ```text
    <!-- Version: essential-rules.md @ 2024-01-15 -->
    ```
-   → Wie alt ist die installierte Version?
+   → How old is the installed version?
 
-## Schritt 1 — Delta-Analyse
+## Step 1 — Delta Analysis
 
-Vergleiche strukturiert auf drei Ebenen:
+Compare structurally on three levels:
 
-**Fehlende Sections** (im SOLL, nicht im IST):
-- Neue Sections die nach dem letzten Install hinzugekommen sind
-- Sections die für diesen Stack relevant wären aber fehlen
+**Missing sections** (in TARGET, not in ACTUAL):
+- New sections added after the last install
+- Sections that would be relevant for this stack but are missing
 
-**Veraltete Inhalte** (im IST, in SOLL geändert oder entfernt):
-- Regeln die sich inhaltlich geändert haben (z.B. Tool-Wechsel: `eslint` → `biome`)
-- Regeln die gelöscht wurden weil überholt
-- Versions-spezifische Regeln die nicht mehr gelten (z.B. deprecated APIs)
+**Outdated content** (in ACTUAL, changed or removed in TARGET):
+- Rules that have changed in content (e.g., tool change: `eslint` → `biome`)
+- Rules that were deleted because outdated
+- Version-specific rules that no longer apply (e.g., deprecated APIs)
 
-**Projekt-Ausnahmen bewahren** (im IST, nicht im SOLL — absichtlich):
-- `[Ausnahme: …]` Blöcke
-- Projektspezifische Ergänzungen
-- Diese werden nie als "Drift" gewertet
+**Preserve project exceptions** (in ACTUAL, not in TARGET — intentional):
+- `[Exception: …]` blocks
+- Project-specific additions
+- These are never counted as "drift"
 
-## Schritt 2 — Rule Inventory ausgeben
+## Step 2 — Output Rule Inventory
 
-Übersicht über den Gesamtstand:
-
-```text
-## Rule Inventory — [Projektname]
-
-| File              | Installiert | Aktuell | Status     |
-|-------------------|-------------|---------|------------|
-| essential-rules   | 2024-01-15  | heute   | ⚠ veraltet |
-| app-rules         | —           | —       | ✗ fehlt    |
-| github-rules      | 2024-01-15  | heute   | ✓ aktuell  |
-| architecture-rules| —           | —       | ✗ fehlt    |
-
-Projekt-Ausnahmen: 2 (werden nicht angefasst)
-```
-
-## Schritt 3 — Delta-Report
+Overview of the overall state:
 
 ```text
-## Rules Drift Report — [Projektname]
+## Rule Inventory — [Project name]
 
-### Fehlende Sections (neu seit letztem Install)
-- [Section-Name] in essential-rules.md → [kurze Beschreibung was neu ist]
+| File              | Installed   | Current | Status       |
+|-------------------|-------------|---------|--------------|
+| essential-rules   | 2024-01-15  | today   | ⚠ outdated  |
+| app-rules         | —           | —       | ✗ missing   |
+| github-rules      | 2024-01-15  | today   | ✓ current   |
+| architecture-rules| —           | —       | ✗ missing   |
 
-### Veraltete Regeln
-- [Regel] → war: "[alter Wert]" / jetzt: "[neuer Wert]"
-  Grund: [warum geändert]
-
-### Empfehlung
-[ ] Update durchführen — X Sections betroffen, Aufwand: S/M
-[ ] Nur kritische Changes übernehmen (Security, Breaking Changes)
-[ ] Manuell prüfen wegen Projekt-Ausnahmen
-
-### Nächster Schritt
-`/dev-best-practices:install-rules` mit `--update` um den Block zu aktualisieren.
-Projekt-Ausnahmen bleiben erhalten.
+Project exceptions: 2 (will not be touched)
 ```
 
-## Regeln
-- Niemals automatisch etwas ändern — nur Report.
-- Projekt-spezifische Ausnahmen und Ergänzungen niemals als Drift werten.
-- Wenn kein `DEV-BEST-PRACTICES:START` Marker vorhanden: explizit darauf hinweisen
-  dass ein Update-Tracking erst nach `install-rules` möglich ist.
-- Bei sehr alten Ständen (>6 Monate): Security-relevante Änderungen als `[KRITISCH]` markieren.
+## Step 3 — Delta Report
+
+```text
+## Rules Drift Report — [Project name]
+
+### Missing Sections (new since last install)
+- [Section name] in essential-rules.md → [brief description of what is new]
+
+### Outdated Rules
+- [Rule] → was: "[old value]" / now: "[new value]"
+  Reason: [why changed]
+
+### Recommendation
+[ ] Perform update — X sections affected, effort: S/M
+[ ] Only adopt critical changes (security, breaking changes)
+[ ] Review manually due to project exceptions
+
+### Next Step
+`/dev-best-practices:install-rules` with `--update` to update the block.
+Project exceptions are preserved.
+```
+
+## Rules
+- Never change anything automatically — report only.
+- Never count project-specific exceptions and additions as drift.
+- If no `DEV-BEST-PRACTICES:START` marker is present: explicitly point out
+  that update tracking is only possible after `install-rules`.
+- For very old states (>6 months): mark security-relevant changes as `[CRITICAL]`.

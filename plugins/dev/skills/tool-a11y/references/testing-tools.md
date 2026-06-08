@@ -1,71 +1,71 @@
 # Testing Tools — Accessibility
 
-## Tool-Uebersicht
+## Tool Overview
 
-| Tool | Typ | Findet | Findet NICHT |
+| Tool | Type | Finds | Does NOT find |
 |---|---|---|---|
-| **axe-core** (Browser Extension) | Automatisiert | ~30% aller WCAG-Issues: Kontrast, alt-Text, ARIA, Labels | Keyboard-Traps, Focus-Reihenfolge, Screen Reader Verhalten |
-| **Lighthouse** (Chrome DevTools) | Automatisiert | Subset von axe-core + Performance-Metriken | Alles was Interaktion erfordert |
-| **NVDA** (Windows, gratis) | Screen Reader | Wie Inhalte vorgelesen werden, ARIA live regions, Navigation | — |
-| **JAWS** (Windows, kostenpflichtig) | Screen Reader | Professionelle Nutzer-Erfahrung, Enterprise-Standard | — |
-| **VoiceOver** (macOS/iOS, built-in) | Screen Reader | Apple-Oekosystem: Safari + iOS | Chrome/Firefox-Eigenheiten |
+| **axe-core** (Browser Extension) | Automated | ~30% of all WCAG issues: contrast, alt text, ARIA, labels | Keyboard traps, focus order, screen reader behavior |
+| **Lighthouse** (Chrome DevTools) | Automated | Subset of axe-core + performance metrics | Anything requiring interaction |
+| **NVDA** (Windows, free) | Screen Reader | How content is announced, ARIA live regions, navigation | — |
+| **JAWS** (Windows, paid) | Screen Reader | Professional user experience, enterprise standard | — |
+| **VoiceOver** (macOS/iOS, built-in) | Screen Reader | Apple ecosystem: Safari + iOS | Chrome/Firefox quirks |
 | **TalkBack** (Android, built-in) | Screen Reader | Android mobile | — |
-| **Colour Contrast Analyser** (gratis) | Manuell | Kontrast-Ratio fuer beliebige Farben (auch screenshots) | — |
-| **Text Spacing Bookmarklet** | Manuell | WCAG 1.4.12: Text Spacing Override | — |
+| **Colour Contrast Analyser** (free) | Manual | Contrast ratio for any colors (including screenshots) | — |
+| **Text Spacing Bookmarklet** | Manual | WCAG 1.4.12: Text Spacing Override | — |
 
 ---
 
-## Screen Reader Testkombinationen
+## Screen Reader Test Combinations
 
-Empfohlene Kombinationen (nach WebAIM Screen Reader Survey):
+Recommended combinations (from WebAIM Screen Reader Survey):
 
-| Kombination | Verbreitung | Wann testen |
+| Combination | Usage | When to test |
 |---|---|---|
-| NVDA + Chrome | Haeufigste Desktop-Kombination (gratis) | Immer |
-| NVDA + Firefox | — | Bei Firefox-spezifischen Features |
-| JAWS + Chrome | Enterprise-Standard | Bei Enterprise-Zielgruppe |
-| VoiceOver + Safari macOS | Mac-User | Bei Mac-Zielgruppe oder iOS-App |
-| VoiceOver + Safari iOS | Mobile | Jede mobile Web-App |
-| TalkBack + Chrome Android | Android Mobile | Jede mobile Web-App |
+| NVDA + Chrome | Most common desktop combination (free) | Always |
+| NVDA + Firefox | — | For Firefox-specific features |
+| JAWS + Chrome | Enterprise standard | For enterprise target audience |
+| VoiceOver + Safari macOS | Mac users | For Mac audience or iOS app |
+| VoiceOver + Safari iOS | Mobile | Every mobile web app |
+| TalkBack + Chrome Android | Android Mobile | Every mobile web app |
 
-Minimum fuer Web: **NVDA + Chrome** + **VoiceOver + Safari iOS**
+Minimum for web: **NVDA + Chrome** + **VoiceOver + Safari iOS**
 
 ---
 
-## Screen Reader Keyboard-Shortcuts (NVDA)
+## Screen Reader Keyboard Shortcuts (NVDA)
 
-| Aktion | Shortcut |
+| Action | Shortcut |
 |---|---|
-| Headings navigieren | H (vorwaerts) / Shift+H (rueckwaerts) |
-| Links navigieren | K / Shift+K |
-| Landmarks navigieren | D / Shift+D |
-| Formulare | F / Shift+F |
-| Tabellen | T / Shift+T |
+| Navigate headings | H (forward) / Shift+H (backward) |
+| Navigate links | K / Shift+K |
+| Navigate landmarks | D / Shift+D |
+| Forms | F / Shift+F |
+| Tables | T / Shift+T |
 | Browse Mode / Forms Mode | NVDA+Space |
-| Alles vorlesen | NVDA+Down |
+| Read all | NVDA+Down |
 
 ---
 
-## Audit-Reihenfolge (Effizienz-optimiert)
+## Audit Sequence (efficiency-optimized)
 
 ```text
 1. axe-core Browser Extension (5 min)
-   → Alle automatisch pruefbaren Issues sofort sichtbar
+   → All automatically checkable issues immediately visible
 
 2. Lighthouse Accessibility Audit (2 min)
-   → Ergaenzende automatische Checks
+   → Supplementary automatic checks
 
-3. Keyboard-Navigation manuell (15 min)
-   → Tab durch alle interaktiven Elemente, Focus-Styles pruefen
+3. Keyboard navigation manually (15 min)
+   → Tab through all interactive elements, check focus styles
 
 4. NVDA + Chrome Screen Reader (30 min)
-   → Headings, Landmarks, Formulare, Fehlermeldungen
+   → Headings, landmarks, forms, error messages
 
-5. WCAG 2.2 neue SC manuell pruefen (15 min)
+5. Manually check WCAG 2.2 new SC (15 min)
    → 2.4.11, 2.5.7, 2.5.8, 3.2.6, 3.3.7, 3.3.8
 
 6. EU Compliance Check (10 min)
-   → EN 301 549 / BFSG wenn relevant
+   → EN 301 549 / BFSG when relevant
 ```
 
-Gesamt: ~75 min fuer eine Basis-Evaluation (ohne tiefgehenden Screen Reader Test).
+Total: ~75 min for a baseline evaluation (without in-depth screen reader testing).

@@ -1,5 +1,5 @@
 ---
-name: design-secure
+name: dev:design-secure
 description: >
   Security-first application design skill grounded in TU Graz ISEC Major curriculum
   and top-university references (Stanford CS255/CS355, MIT 6.566/6.5610).
@@ -18,6 +18,9 @@ description: >
 A structured, educational security design process grounded in the TU Graz
 Information Security curriculum. Every design decision is explained — not
 just prescribed.
+
+> **Note:** German-language sources (e.g. TU Graz ISEC) are valid inputs —
+> Claude processes them regardless of language.
 
 ---
 
@@ -116,40 +119,40 @@ Summarize the key security requirements for the development team:
 
 ---
 
-## Output — Design-Datei
+## Output — Design File
 
-Schreibe das Ergebnis nach `./design-secure.md`:
+Write the result to `./design-secure.md`:
 
 ```markdown
 # Security Design: [App Name]
-Datum: YYYY-MM-DD
+Date: YYYY-MM-DD
 
-## Entscheidungen
-| Entscheidung | Wahl | Begründung | Referenz |
+## Decisions
+| Decision | Choice | Rationale | Reference |
 |---|---|---|---|
 
 ## Threat Model
-[Top-Threats mit Risk Rating]
+[Top threats with risk rating]
 
-## Architektur & Security Controls
-[Per-control: Was | Warum | Implementation | Limitation]
+## Architecture & Security Controls
+[Per control: What | Why | Implementation | Limitation]
 
-## Krypto-Plan
-[Per Use Case: Algorithmus | Modus | Key Management | Begründung]
+## Crypto Plan
+[Per use case: Algorithm | Mode | Key Management | Rationale]
 
 ## Auth & Authorization Design
-[Detailliertes Design mit Rationale]
+[Detailed design with rationale]
 
 ## Compliance Notes
-[Per Regulation: was erfüllt, was noch fehlt]
+[Per regulation: what is satisfied, what is still missing]
 
-## Annahmen & offene Punkte
+## Assumptions & Open Questions
 
 ---
-## ✅ Setup-Todo
+## Setup Todos
 - [ ] ...
 
-## 📋 Nächste Schritte (priorisiert)
+## Next Steps (prioritized)
 1. ...
 ```
 

@@ -1,14 +1,14 @@
 ---
-name: review-llm
+name: dev:review-llm
 description: >
-  LLM-System-Review auf Basis von CMU 11-667 (Harms + Attacking LLMs),
-  Berkeley CS294-196 (Safety/Guardrails) und OWASP LLM Top 10. Use this skill
+  LLM system review grounded in CMU 11-667 (Harms + Attacking LLMs),
+  Berkeley CS294-196 (Safety/Guardrails), and OWASP LLM Top 10. Use this skill
   whenever the user wants to review an existing LLM-powered system or feature
   for architecture quality, eval coverage, safety, and production readiness.
   Triggers: "review my LLM system", "check my RAG", "is my prompt injection safe",
   "review my agent", "audit my AI feature", "LLM code review", "check my evals",
-  "mein RAG funktioniert nicht richtig", "review mein LLM-Setup",
-  "was ist falsch an meinem Agent", "LLM-Audit". Covers: integration pattern
+  "my RAG is not working properly", "review my LLM setup",
+  "what is wrong with my agent", "LLM audit". Covers: integration pattern
   assessment, RAG quality, eval coverage, safety/security (OWASP LLM Top 10),
   production readiness (cost, observability, guardrails).
   Always use this skill for LLM system reviews.
@@ -32,121 +32,121 @@ until exploited. Systematic review catches what spot-checks miss.
 
 ---
 
-## Step 0 — Scope klären
+## Step 0 — Clarify Scope
 
-Vor dem Review etablieren:
+Before the review, establish:
 
-1. **Was wird reviewed?** (RAG-System / Agent / Chat-Feature / Prompt-Chain / Fine-tuned Model)
-2. **Was existiert?** (Code, Prompts, Eval-Daten, Architektur-Beschreibung)
-3. **Bekannte Probleme?** (Halluzinationen, langsam, teuer, schlechte Antworten)
-4. **Production-Status?** (Prototyp / Beta / Production)
-
----
-
-## Step 1 — Architektur-Review
-
-**Pattern-Assessment:** Ist das gewählte Pattern (RAG / Fine-tune / Agent / Prompting)
-das richtige für das Problem? Lade `references/failure-patterns.md`.
-
-Prüfen:
-
-- [ ] **Integration-Pattern:** Gibt es einen Wissens-Bottleneck der RAG erfordert?
-  Gibt es einen Verhaltens-Bottleneck der Fine-tuning erfordert?
-- [ ] **Prompt-Qualität:** Ist der System-Prompt klar, spezifisch, mit Output-Format?
-  Sind Rollen (System / User / Assistant) korrekt getrennt?
-- [ ] **Context-Management:** Wird Context-Window effizient genutzt?
-  Kein Context Stuffing (gesamte Dokumente ohne Retrieval)?
-
-### Bei RAG zusätzlich prüfen
-
-- [ ] **Chunking:** Ist Chunk-Größe evaluiert oder willkürlich (Magic Number)?
-- [ ] **Retrieval-Qualität:** Dense only? Hybrid Search (BM25 + Dense) vorhanden?
-- [ ] **Reranker:** Gibt es einen Cross-Encoder-Reranker für Top-K?
-- [ ] **Embedding-Konsistenz:** Indexierung und Query mit demselben Modell?
-- [ ] **Index-Aktualität:** Wann wurde zuletzt re-indexed? Gibt es Stale-Data-Risiko?
-- [ ] **Similarity-Threshold:** Werden Low-Confidence Chunks herausgefiltert?
-
-### Bei Agent zusätzlich prüfen
-
-- [ ] **Tool-Inventar:** Sind alle Tools dokumentiert? Sind Read-Only Tools klar von Write-Tools getrennt?
-- [ ] **Max-Steps-Limit:** Gibt es ein Limit gegen Infinite Loops?
-- [ ] **Fehlerbehandlung:** Was passiert wenn ein Tool fehlschlägt?
-- [ ] **Irreversible Aktionen:** Gibt es Human-in-the-Loop für Delete/Send/Pay?
+1. **What is being reviewed?** (RAG system / agent / chat feature / prompt chain / fine-tuned model)
+2. **What exists?** (code, prompts, eval data, architecture description)
+3. **Known problems?** (hallucinations, slow, expensive, poor answers)
+4. **Production status?** (prototype / beta / production)
 
 ---
 
-## Step 2 — Eval-Coverage-Review
+## Step 1 — Architecture Review
 
-Lade `references/failure-patterns.md` → "Eval-less Deployment".
+**Pattern assessment:** Is the chosen pattern (RAG / fine-tune / agent / prompting)
+the right one for the problem? Load `references/failure-patterns.md`.
 
-- [ ] **Existieren Evals?** (Golden Dataset, Benchmark, auch manuell)
-- [ ] **Sind Evals domänen-spezifisch?** (Generische Benchmarks ≠ Produktions-Qualität)
-- [ ] **Werden RAG-Metriken gemessen?** (Faithfulness, Answer Relevancy via RAGAS)
-- [ ] **Gibt es einen Regression Gate?** (Kein Deployment wenn Score < Baseline − 3%)
-- [ ] **Werden Evals bei jeder Änderung ausgeführt?** (Prompt-Änderung, Model-Update)
-- [ ] **LLM-as-Judge:** Falls verwendet — wird Positions-/Längen-Bias kontrolliert?
+Check:
 
-**Finding-Severity:** Kein Eval = CRITICAL (silent failures in production).
+- [ ] **Integration pattern:** Is there a knowledge bottleneck that requires RAG?
+  Is there a behavior bottleneck that requires fine-tuning?
+- [ ] **Prompt quality:** Is the system prompt clear, specific, with output format?
+  Are roles (system / user / assistant) correctly separated?
+- [ ] **Context management:** Is the context window used efficiently?
+  No context stuffing (entire documents without retrieval)?
+
+### Additional checks for RAG
+
+- [ ] **Chunking:** Is chunk size evaluated or arbitrary (magic number)?
+- [ ] **Retrieval quality:** Dense only? Hybrid search (BM25 + dense) present?
+- [ ] **Reranker:** Is there a cross-encoder reranker for top-K?
+- [ ] **Embedding consistency:** Indexing and query using the same model?
+- [ ] **Index freshness:** When was the last re-index? Is there a stale-data risk?
+- [ ] **Similarity threshold:** Are low-confidence chunks filtered out?
+
+### Additional checks for agents
+
+- [ ] **Tool inventory:** Are all tools documented? Are read-only tools clearly separated from write tools?
+- [ ] **Max-steps limit:** Is there a limit against infinite loops?
+- [ ] **Error handling:** What happens when a tool fails?
+- [ ] **Irreversible actions:** Is there a human-in-the-loop for delete/send/pay?
+
+---
+
+## Step 2 — Eval Coverage Review
+
+Load `references/failure-patterns.md` → "Eval-less Deployment".
+
+- [ ] **Do evals exist?** (golden dataset, benchmark, even manual)
+- [ ] **Are evals domain-specific?** (generic benchmarks ≠ production quality)
+- [ ] **Are RAG metrics measured?** (faithfulness, answer relevancy via RAGAS)
+- [ ] **Is there a regression gate?** (no deployment if score < baseline − 3%)
+- [ ] **Are evals run on every change?** (prompt change, model update)
+- [ ] **LLM-as-judge:** If used — is position/length bias controlled?
+
+**Finding severity:** No evals = CRITICAL (silent failures in production).
 
 ---
 
 ## Step 3 — Safety & Security Review
 
-Lade `references/security-checks.md` — OWASP LLM Top 10 Checkliste.
+Load `references/security-checks.md` — OWASP LLM Top 10 checklist.
 
-Prüfen (je nach System-Typ):
+Check (depending on system type):
 
 **Prompt Injection (LLM01):**
-- [ ] Direkter Injection-Test durchführen
-- [ ] Sind User-Input und System-Prompt klar getrennt?
-- [ ] Können Dokumente im RAG-Index Instruktionen enthalten? (Indirekte Injection)
+- [ ] Run a direct injection test
+- [ ] Are user input and system prompt clearly separated?
+- [ ] Can documents in the RAG index contain instructions? (indirect injection)
 
 **Insecure Output Handling (LLM02):**
-- [ ] Wird LLM-Output in HTML/Code/Shell eingesetzt?
-- [ ] Gibt es Output-Sanitizing/Schema-Validation?
+- [ ] Is LLM output inserted into HTML/code/shell?
+- [ ] Is there output sanitizing/schema validation?
 
 **Sensitive Information Disclosure (LLM06):**
-- [ ] Enthält der RAG-Index PII? Gibt es Tenant-Isolation?
-- [ ] Kann der System-Prompt extrahiert werden?
+- [ ] Does the RAG index contain PII? Is there tenant isolation?
+- [ ] Can the system prompt be extracted?
 
-**Excessive Agency (LLM08) — nur bei Agents:**
-- [ ] Welche irreversiblen Aktionen sind möglich?
-- [ ] Gibt es Human-in-the-Loop?
-
----
-
-## Step 4 — Production-Readiness-Review
-
-- [ ] **Observability:** Werden LLM-Calls geloggt (Prompt, Response, Latenz, Tokens)?
-  LLM-Tracing-Tool vorhanden (Langfuse / Helicone / LangSmith)?
-- [ ] **Cost-Monitoring:** Gibt es ein Token-Budget-Alert?
-- [ ] **Latenz-Monitoring:** Gibt es p95-Latenz-Alert (z.B. > 5s)?
-- [ ] **Semantic Caching:** Werden häufige/ähnliche Queries gecacht?
-- [ ] **Fallback-Strategie:** Was passiert wenn LLM-API nicht erreichbar ist?
-- [ ] **Guardrails:** Input-Filter (PII, Topik-Guard), Output-Check (Faithfulness-Score)?
+**Excessive Agency (LLM08) — agents only:**
+- [ ] Which irreversible actions are possible?
+- [ ] Is there a human-in-the-loop?
 
 ---
 
-## Standard-Finding-Format
+## Step 4 — Production Readiness Review
+
+- [ ] **Observability:** Are LLM calls logged (prompt, response, latency, tokens)?
+  LLM tracing tool present (Langfuse / Helicone / LangSmith)?
+- [ ] **Cost monitoring:** Is there a token budget alert?
+- [ ] **Latency monitoring:** Is there a p95 latency alert (e.g., > 5s)?
+- [ ] **Semantic caching:** Are frequent/similar queries cached?
+- [ ] **Fallback strategy:** What happens when the LLM API is unavailable?
+- [ ] **Guardrails:** Input filter (PII, topic guard), output check (faithfulness score)?
+
+---
+
+## Standard Finding Format
 
 ```text
-### [SEVERITY] LLM Finding: [Kurztitel]
-**Kategorie:** Architektur | Eval | Safety | Production
+### [SEVERITY] LLM Finding: [Short Title]
+**Category:** Architecture | Eval | Safety | Production
 
-**Was:** Was das aktuelle System tut (oder nicht tut).
+**What:** What the current system does (or does not do).
 
-**Warum es problematisch ist:** Ein Absatz — was in Production schiefgeht,
-welche Angriffsfläche entsteht, welche Kosten entstehen.
+**Why it is problematic:** One paragraph — what goes wrong in production,
+what attack surface is created, what costs arise.
 
-**Empfehlung:** Konkrete Maßnahme mit Beispiel.
+**Recommendation:** Concrete measure with example.
 
-**Referenz:** [CMU 11-667 / OWASP LLM / Berkeley CS294-196 / Chip Huyen Kap.]
+**Reference:** [CMU 11-667 / OWASP LLM / Berkeley CS294-196 / Chip Huyen Ch.]
 ```
 
 ---
 
 ## Reference Files
 
-- `references/failure-patterns.md` — Häufige LLM-System-Fehler (Architektur, RAG, Agent) mit Severity
-- `references/security-checks.md` — OWASP LLM Top 10 Checklisten (Prompt Injection, Output Handling, Excessive Agency)
-- `references/curriculum-mapping.md` — Concept → CMU 11-667 / Berkeley / Stanford / OWASP Mapping
+- `references/failure-patterns.md` — Common LLM system failures (architecture, RAG, agent) with severity
+- `references/security-checks.md` — OWASP LLM Top 10 checklists (prompt injection, output handling, excessive agency)
+- `references/curriculum-mapping.md` — Concept → CMU 11-667 / Berkeley / Stanford / OWASP mapping

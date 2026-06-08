@@ -1,25 +1,25 @@
 # Architecture Rules
 
-Verbindliche Architektur-Entscheidungen. Keine Theorie -- nur Regeln.
-Detaillierte Erklaerungen: `../reference/architecture-best-practices.md`
+Binding architecture decisions. No theory -- rules only.
+Detailed explanations: `../reference/architecture-best-practices.md`
 
 ---
 
-## Projekt-Struktur
+## Project Structure
 
-- **Feature-basiert** (nicht technisch). Alles was zu einem Feature gehoert in einen Ordner
-- Tests neben dem Code (`user.test.ts` neben `user.service.ts`)
-- `shared/` fuer Utilities, Middleware, Types die ueberall gebraucht werden
-- Barrel Exports (`index.ts`) fuer `lib/`, `components/`, `shared/` -- nicht fuer Feature-Ordner
+- **Feature-based** (not technical). Everything belonging to a feature goes in one folder
+- Tests next to the code (`user.test.ts` next to `user.service.ts`)
+- `shared/` for utilities, middleware, types needed everywhere
+- Barrel exports (`index.ts`) for `lib/`, `components/`, `shared/` -- not for feature folders
 
 ### Next.js App Router
 
 ```text
 src/
   app/            # Routing (App Router)
-  components/     # ui/ (generisch) + features/ (spezifisch)
-  lib/            # Services, Storage, Schemas, Types
-  hooks/          # Custom React Hooks
+  components/     # ui/ (generic) + features/ (specific)
+  lib/            # Services, storage, schemas, types
+  hooks/          # Custom React hooks
 ```
 
 ### Python (FastAPI)
@@ -27,170 +27,170 @@ src/
 ```text
 src/
   app/            # main.py, config.py, dependencies.py
-  features/       # Pro Feature: router.py, service.py, models.py, schemas.py
+  features/       # Per feature: router.py, service.py, models.py, schemas.py
   shared/         # Middleware, database.py, exceptions.py
 tests/
-  features/       # Spiegelt src/features/
+  features/       # Mirrors src/features/
 ```
 
 ---
 
-## Schichtung
+## Layering
 
-- **Kleine Projekte / Prototypen:** 2 Schichten (Routes → Service/Logic)
-- **Mittlere Projekte:** 3 Schichten (Routes → Service → Data Access)
-- **Grosse Projekte / Teams:** Vollstaendige Layered/Clean Architecture
+- **Small projects / prototypes:** 2 layers (routes → service/logic)
+- **Medium projects:** 3 layers (routes → service → data access)
+- **Large projects / teams:** Full layered/clean architecture
 
-**Dependency Rule:** Abhaengigkeiten zeigen nur nach innen. Domain-Schicht hat KEINE Abhaengigkeit zu Frameworks, DB, APIs.
+**Dependency rule:** Dependencies point inward only. Domain layer has NO dependency on frameworks, DB, or APIs.
 
-**Clean Architecture:** Erst ab Team-Projekt > 10K LOC oder langlebigem Produkt. Fuer Prototypen/Solo: Over-Engineering.
+**Clean architecture:** Only for team projects > 10K LOC or long-lived products. For prototypes/solo: over-engineering.
 
 ---
 
 ## Monolith vs. Microservices
 
-- **Starte IMMER mit Monolith.** Extrahiere Services nur bei konkretem Grund
-- **Modularer Monolith** als bester Kompromiss: Klare Modul-Grenzen, eigene Domain-Logik und Data Models pro Modul, Kommunikation nur ueber definierte Interfaces
-- Microservices erst wenn: Team waechst, Teile andere Skalierung/Technologie brauchen, Module unabhaengig deployt werden muessen
+- **ALWAYS start with a monolith.** Extract services only for a concrete reason
+- **Modular monolith** as the best compromise: clear module boundaries, own domain logic and data models per module, communication only through defined interfaces
+- Microservices only when: team grows, parts need different scaling/technology, modules need to be deployed independently
 
 ---
 
 ## Monorepo vs. Polyrepo
 
-- **Full-Stack App (Frontend + Backend + Shared):** Monorepo
-- **Solo-Projekt:** Monorepo (Turborepo / pnpm Workspaces)
-- **Unabhaengige Services, verschiedene Teams:** Polyrepo
-- **Monorepo-Tools:** TS → Turborepo. Python → uv Workspaces / Pants
+- **Full-stack app (frontend + backend + shared):** Monorepo
+- **Solo project:** Monorepo (Turborepo / pnpm Workspaces)
+- **Independent services, different teams:** Polyrepo
+- **Monorepo tools:** TS → Turborepo. Python → uv Workspaces / Pants
 
 ---
 
 ## Backend Patterns
 
-- **Standard:** Service Layer Pattern (Controller → Service → Repository)
-- Controller: HTTP-Handling. Service: Business-Logik. Repository: Daten-Zugriff
-- **CQRS:** Nur wenn Reads >> Writes und verschiedene Optimierungen noetig. Fuer CRUD: Overkill
-- **Event-Driven:** Fuer lose Kopplung und asynchrone Verarbeitung. Tools: RabbitMQ, Redis Streams, AWS SQS
+- **Standard:** Service layer pattern (controller → service → repository)
+- Controller: HTTP handling. Service: business logic. Repository: data access
+- **CQRS:** Only when reads >> writes and different optimizations are needed. For CRUD: overkill
+- **Event-driven:** For loose coupling and asynchronous processing. Tools: RabbitMQ, Redis Streams, AWS SQS
 
 ---
 
 ## Frontend Patterns
 
-- **Component-Hierarchie:** Pages → Feature Components (haben State) → UI Components (Props rein, UI raus) → Hooks → Utils
-- **Server Components** (React/Next.js) als Default. `"use client"` nur bei Interaktivitaet
-- **State Management:**
-  - Lokal: `useState` / `useReducer`
-  - 2-3 Komponenten: Props / Composition
-  - Viele Komponenten: React Context
-  - Komplex: Zustand (leichtgewichtig)
-  - **Server State (Daten vom Backend):** TanStack Query / SWR -- nie mit Client State mischen
+- **Component hierarchy:** Pages → feature components (have state) → UI components (props in, UI out) → hooks → utils
+- **Server components** (React/Next.js) as default. `"use client"` only for interactivity
+- **State management:**
+  - Local: `useState` / `useReducer`
+  - 2-3 components: props / composition
+  - Many components: React Context
+  - Complex: Zustand (lightweight)
+  - **Server state (data from backend):** TanStack Query / SWR -- never mix with client state
 
 ---
 
 ## Data Fetching
 
-- **SSR:** SEO wichtig, initialer Load schnell (Next.js Server Components)
-- **SSG:** Inhalt aendert sich selten (`generateStaticParams()`)
-- **ISR:** Statisch + periodisch aktualisiert (`revalidate`)
-- **CSR:** Hinter Login, Dashboard-Apps (TanStack Query)
-- **Deduplizierung:** TanStack Query dedupliziert automatisch
-- **Optimistic Updates:** UI sofort updaten, API im Hintergrund, Rollback bei Fehler
+- **SSR:** SEO important, fast initial load (Next.js server components)
+- **SSG:** Content changes rarely (`generateStaticParams()`)
+- **ISR:** Static + periodically updated (`revalidate`)
+- **CSR:** Behind login, dashboard apps (TanStack Query)
+- **Deduplication:** TanStack Query deduplicates automatically
+- **Optimistic updates:** Update UI immediately, API in background, rollback on error
 
 ---
 
-## Docker Architektur
+## Docker Architecture
 
-- **Single-Container:** Reverse Proxy → App Container (mit Volume fuer Daten)
-- **Multi-Container:** docker-compose mit App + DB + Cache, Named Volumes, Health Checks
-- Container kommunizieren ueber **Service-Namen** (nicht IPs): `postgres://db:5432/myapp`
-- Ports nur auf `127.0.0.1` binden (nicht ans Internet): `"127.0.0.1:3000:3000"`
-- Named Volumes fuer Produktion, Bind Mounts fuer Entwicklung
-- **Resource Limits** setzen (Memory, CPU)
-- **Log-Rotation** konfigurieren (`max-size: "10m"`, `max-file: "3"`)
+- **Single container:** Reverse proxy → app container (with volume for data)
+- **Multi-container:** docker-compose with app + DB + cache, named volumes, health checks
+- Containers communicate via **service names** (not IPs): `postgres://db:5432/myapp`
+- Bind ports only to `127.0.0.1` (not to the internet): `"127.0.0.1:3000:3000"`
+- Named volumes for production, bind mounts for development
+- Set **resource limits** (memory, CPU)
+- Configure **log rotation** (`max-size: "10m"`, `max-file: "3"`)
 
 ---
 
 ## Reverse Proxy & SSL
 
-- **Immer einen Reverse Proxy** vor der App (SSL, Rate Limiting, Static Files, Compression, Security Headers)
-- **Caddy:** Einfachstes Setup, automatisches HTTPS (Let's Encrypt)
-- **Nginx:** Performant, Industriestandard
-- **Cloudflare Tunnel:** Kein offener Port noetig, DDoS-Schutz
+- **Always a reverse proxy** in front of the app (SSL, rate limiting, static files, compression, security headers)
+- **Caddy:** Simplest setup, automatic HTTPS (Let's Encrypt)
+- **Nginx:** Performant, industry standard
+- **Cloudflare Tunnel:** No open port needed, DDoS protection
 
 ---
 
 ## Environments
 
-- **Solo / Kleine Teams:** 2-Tier reicht (Dev + Production)
-  - Absicherung ohne Staging: CI mit Tests, Docker-Image lokal testen, Feature Flags, Health Checks + Rollback
-- **Staging** erst bei: mehreren Entwicklern, komplexen DB-Migrationen, UAT, Compliance
-- Docker Compose Overrides: `docker-compose.yml` (Base/Prod) + `docker-compose.override.yml` (Dev, auto-geladen)
+- **Solo / small teams:** 2-tier is enough (dev + production)
+  - Protection without staging: CI with tests, test Docker image locally, feature flags, health checks + rollback
+- **Staging** only when: multiple developers, complex DB migrations, UAT, compliance
+- Docker Compose overrides: `docker-compose.yml` (base/prod) + `docker-compose.override.yml` (dev, auto-loaded)
 
 ---
 
-## 12-Factor App (Kurzform)
+## 12-Factor App (Short form)
 
-1. Ein Repo, viele Deploys
-2. Dependencies explizit deklariert (Lockfile)
-3. Config in Environment (nicht im Code)
-4. Backing Services als Env Vars (DB-URL, Redis-URL)
-5. Build, Release, Run strikt getrennt
-6. Stateless Processes (Sessions in Redis, nicht in Memory)
-7. Port Binding (`PORT` als Env Var)
-8. Skalierung ueber Prozesse (mehrere Container)
-9. Disposability (schnell starten, graceful stoppen, SIGTERM Handling)
-10. Dev/Prod Parity (Docker macht Dev ≈ Prod)
-11. Logs als Stdout/Stderr (nicht in Dateien)
-12. Admin Processes als eigene Container/Commands
-
----
-
-## Testing-Strategie
-
-- **Test-Pyramide als Leitfaden, nicht Gesetz:** Library → viele Unit. API/Backend → viele Integration. UI → mehr E2E
-- **Tests testen Verhalten, nicht Implementierung** (Refactoring darf Tests nicht brechen)
-- **Arrange → Act → Assert**, ein Konzept pro Test, keine Test-Interdependenz
-- **Mocke an Systemgrenzen** (HTTP, DB, Filesystem). Nie eigene Logik mocken. Fakes > Mocks
-- **Coverage:** 70-80% Lines, 60-70% Branches. Kritische Pfade (Auth, Payment) ~100%. 100% gesamt ist KEIN Ziel
-- **Pragmatisch:** Test-During als Default. TDD fuer Bugs und komplexe Logik. Prototypen: nachholen vor Production
+1. One repo, many deploys
+2. Dependencies explicitly declared (lockfile)
+3. Config in environment (not in code)
+4. Backing services as env vars (DB URL, Redis URL)
+5. Build, release, run strictly separated
+6. Stateless processes (sessions in Redis, not in memory)
+7. Port binding (`PORT` as env var)
+8. Scale via processes (multiple containers)
+9. Disposability (fast start, graceful stop, SIGTERM handling)
+10. Dev/prod parity (Docker makes dev ≈ prod)
+11. Logs as stdout/stderr (not in files)
+12. Admin processes as separate containers/commands
 
 ---
 
-## API-Dokumentation
+## Testing Strategy
 
-- **Code-First** fuer Solo/Kleine Teams (Doku aus Code generiert)
-- **API-First** wenn Frontend/Backend getrennte Teams
-- **FastAPI:** Gold-Standard (automatisch aus Type Hints + Pydantic)
-- **TS/Node:** Scalar als modernes OpenAPI UI
-- Versionierung: URL Path (`/api/v1/`) fuer oeffentliche APIs
+- **Test pyramid as a guide, not a law:** Library → many unit. API/backend → many integration. UI → more E2E
+- **Tests test behavior, not implementation** (refactoring must not break tests)
+- **Arrange → Act → Assert**, one concept per test, no test interdependence
+- **Mock at system boundaries** (HTTP, DB, filesystem). Never mock own logic. Fakes > mocks
+- **Coverage:** 70-80% lines, 60-70% branches. Critical paths (auth, payment) ~100%. 100% overall is NOT the goal
+- **Pragmatic:** Test-during as default. TDD for bugs and complex logic. Prototypes: catch up before production
+
+---
+
+## API Documentation
+
+- **Code-first** for solo/small teams (docs generated from code)
+- **API-first** when frontend/backend are separate teams
+- **FastAPI:** Gold standard (automatic from type hints + Pydantic)
+- **TS/Node:** Scalar as modern OpenAPI UI
+- Versioning: URL path (`/api/v1/`) for public APIs
 
 ---
 
 ## Background Jobs
 
-- Nicht jeder Job braucht eine Queue. Einfache Scheduled Tasks: Cron + Script
-- **Wenn Queue noetig:** TS → BullMQ (Redis). Python → Celery / ARQ (Redis)
-- **Retry:** Exponential Backoff, Max Retries (3-5), Dead Letter Queue
-- **Idempotenz:** Jobs muessen mehrfach ausfuehrbar sein ohne Seiteneffekte
+- Not every job needs a queue. Simple scheduled tasks: cron + script
+- **When queue is needed:** TS → BullMQ (Redis). Python → Celery / ARQ (Redis)
+- **Retry:** Exponential backoff, max retries (3-5), dead letter queue
+- **Idempotency:** Jobs must be executable multiple times without side effects
 
 ---
 
-## Architektur-Checkliste: Neues Projekt
+## Architecture Checklist: New Project
 
-### Vor dem Start
-- [ ] Monolith (nicht Microservices)
-- [ ] Monorepo fuer Full-Stack
-- [ ] SSR Default, CSR fuer Dashboards
-- [ ] tRPC intern, REST extern
-- [ ] PostgreSQL als Default-DB
-- [ ] Server State (TanStack Query) + lokaler State (useState)
+### Before Starting
+- [ ] Monolith (not microservices)
+- [ ] Monorepo for full-stack
+- [ ] SSR default, CSR for dashboards
+- [ ] tRPC internal, REST external
+- [ ] PostgreSQL as default DB
+- [ ] Server state (TanStack Query) + local state (useState)
 
-### Strukturierung
-- [ ] Feature-basierte Ordnerstruktur
-- [ ] Klare Schichtung: Routes → Services → Data Access
-- [ ] Shared Code in eigene Packages/Module
+### Structuring
+- [ ] Feature-based folder structure
+- [ ] Clear layering: routes → services → data access
+- [ ] Shared code in separate packages/modules
 
 ### Docker / Deployment
-- [ ] Multi-Stage Dockerfile
-- [ ] docker-compose fuer lokale Entwicklung
-- [ ] Named Volumes, Health Checks, Resource Limits, Log-Rotation
-- [ ] Reverse Proxy (Caddy / Nginx) mit SSL
+- [ ] Multi-stage Dockerfile
+- [ ] docker-compose for local development
+- [ ] Named volumes, health checks, resource limits, log rotation
+- [ ] Reverse proxy (Caddy / Nginx) with SSL

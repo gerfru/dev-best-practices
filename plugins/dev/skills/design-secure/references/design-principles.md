@@ -1,7 +1,7 @@
 # Security Design Principles
 
-Grundprinzipien die durchgängig in der Security-Architektur angewendet werden.
-Bei jedem Einsatz Prinzip benennen und kurz im Kontext erklären.
+Core principles applied consistently throughout security architecture.
+When applying each principle, name it and briefly explain it in context.
 
 ---
 

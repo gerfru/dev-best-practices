@@ -1,24 +1,25 @@
 ---
-name: design-iac
+name: dev:design-iac
 description: >
   Infrastructure as Code Design grounded in "Infrastructure as Code" (Kief Morris,
-  O'Reilly 2021) und NTNU IIKG3005 (einziger dedizierter akademischer IaC-Kurs weltweit).
-  Deckt IaC-Prinzipien (Immutable Infrastructure, Idempotency, Single Source of Truth),
-  Modul-Design, State Management, Drift Detection, GitOps-Workflow und Testing ab.
+  O'Reilly 2021) and NTNU IIKG3005 (the only dedicated academic IaC course worldwide).
+  Covers IaC principles (Immutable Infrastructure, Idempotency, Single Source of Truth),
+  module design, state management, drift detection, GitOps workflow, and testing.
   Use this skill whenever the user wants to design or improve Infrastructure as Code,
   set up Terraform/Pulumi/CDK, or establish a GitOps workflow.
-  Trigger: "Infrastructure as Code einrichten", "Terraform aufbauen", "IaC Design",
-  "Modul-Struktur fuer Terraform", "State Management", "GitOps einrichten",
-  "Drift Detection", "IaC testen mit Terratest", "Cloud-Infrastruktur versionieren",
-  "Immutable Infrastructure", "wir haben Config Drift", "IaC Best Practices".
-  Deckt ab: IaC-Prinzipien, Modul-Design, State Management (Remote Backend, Locking),
-  Drift Detection, GitOps-Workflow, Testing (Terratest, Static Analysis).
+  Trigger: "set up Infrastructure as Code", "build Terraform", "IaC Design",
+  "module structure for Terraform", "State Management", "set up GitOps",
+  "Drift Detection", "test IaC with Terratest", "version cloud infrastructure",
+  "Immutable Infrastructure", "we have Config Drift", "IaC Best Practices".
+  Covers: IaC principles, module design, state management (remote backend, locking),
+  drift detection, GitOps workflow, testing (Terratest, static analysis).
+  Note: Norwegian/German-language sources are valid inputs — Claude processes them regardless of language.
 ---
 
 # Infrastructure as Code Design
 
-Entwirft eine IaC-Architektur von Modul-Design bis GitOps-Workflow — grounded in
-Kief Morris "Infrastructure as Code" und NTNU IIKG3005.
+Designs an IaC architecture from module design to GitOps workflow — grounded in
+Kief Morris "Infrastructure as Code" and NTNU IIKG3005.
 
 ---
 
@@ -28,90 +29,90 @@ Kief Morris "Infrastructure as Code" und NTNU IIKG3005.
 > version control, testing, code review — to infrastructure definitions."
 > — Kief Morris, Infrastructure as Code (2021)
 
-Immutable Infrastructure und Single Source of Truth eliminieren Config Drift.
-GitOps macht jeden Infrastruktur-Zustand reproduzierbar, reviewbar und rollbackbar.
+Immutable Infrastructure and Single Source of Truth eliminate Config Drift.
+GitOps makes every infrastructure state reproducible, reviewable, and rollbackable.
 
 ---
 
-## Schritt 0 — Kontext klären
+## Step 0 — Clarify Context
 
-**Fragen:**
-- Cloud-Provider: AWS / GCP / Azure / Multi-Cloud / On-Prem?
-- IaC-Tool: Terraform / OpenTofu / Pulumi / CDK / Ansible?
-- Team-Groesse und -Reife: IaC-Erfahrung vorhanden?
-- Bestehendes Setup: manuell provisioniert / teilweise IaC / kein IaC?
+**Questions:**
+- Cloud provider: AWS / GCP / Azure / Multi-Cloud / On-Prem?
+- IaC tool: Terraform / OpenTofu / Pulumi / CDK / Ansible?
+- Team size and maturity: IaC experience present?
+- Existing setup: manually provisioned / partially IaC / no IaC?
 - CI/CD: GitHub Actions / GitLab CI / Jenkins / Terraform Cloud?
-- Compliance-Anforderungen: PCI-DSS, SOC2, ISO 27001?
+- Compliance requirements: PCI-DSS, SOC2, ISO 27001?
 
 ---
 
-## Schritt 1 — IaC-Prinzipien verankern
+## Step 1 — Anchor IaC Principles
 
 (→ `references/iac-patterns.md`)
 
-**1a — Immutable Infrastructure pruefen**
+**1a — Check Immutable Infrastructure**
 
-Werden Server nach dem Provisionieren noch manuell geaendert?
-→ Wenn ja: Snowflake Anti-Pattern — Plan fuer Immutability erstellen.
+Are servers still being modified manually after provisioning?
+→ If yes: Snowflake Anti-Pattern — create a plan for Immutability.
 
-**1b — Single Source of Truth definieren**
+**1b — Define Single Source of Truth**
 
-- Wo lebt der IaC-Code? (Git-Repo-Struktur)
-- Gibt es manuelle Aenderungen parallel? → stoppen
-- Alles was Infra-Zustand definiert muss im Repo sein
+- Where does the IaC code live? (Git repo structure)
+- Are there parallel manual changes? → stop them
+- Everything that defines infrastructure state must be in the repo
 
-**1c — Anti-Patterns identifizieren**
+**1c — Identify Anti-Patterns**
 
-Checklist: Config Drift / Snowflake Server / Copy-Paste IaC / Monolithic Stack / lokaler State in Prod
+Checklist: Config Drift / Snowflake Server / Copy-Paste IaC / Monolithic Stack / local state in prod
 
 ---
 
-## Schritt 2 — Modul-Design
+## Step 2 — Module Design
 
-**2a — Stack-Schichtung planen**
+**2a — Plan Stack Layering**
 
 ```text
-foundation/   # VPC, DNS, IAM Basis, Security Groups
-platform/     # Kubernetes, Datenbanken, Queues, Caches
-services/     # Applikations-Infra (pro Service oder Team)
+foundation/   # VPC, DNS, IAM base, Security Groups
+platform/     # Kubernetes, databases, queues, caches
+services/     # Application infrastructure (per service or team)
 ```
 
-Jede Schicht = eigener State, eigener Apply-Zyklus.
+Each layer = its own state, its own apply cycle.
 
-**2b — Modul-Grenzen ziehen**
+**2b — Draw Module Boundaries**
 
-Pro Modul: Single Responsibility (ein klar abgegrenzter Concern).
-Inputs/Outputs explizit definieren — keine versteckten Abhaengigkeiten.
+Per module: Single Responsibility (one clearly scoped concern).
+Define inputs/outputs explicitly — no hidden dependencies.
 
-**2c — Modul-Versionierung**
+**2c — Module Versioning**
 
-Modules per Git-Tag referenzieren:
+Reference modules via Git tag:
 ```text
 source = "git::https://github.com/org/infra-modules//network?ref=v2.3.0"
 ```
-Kein `?ref=main` in Prod-Environments.
+No `?ref=main` in prod environments.
 
 ---
 
-## Schritt 3 — State Management
+## Step 3 — State Management
 
 (→ `references/state-management.md`)
 
-**3a — Remote Backend waehlen**
+**3a — Choose Remote Backend**
 
 AWS → S3 + DynamoDB. GCP → GCS. Azure → Blob Storage. Multi-Cloud → Terraform Cloud.
-Niemals lokaler State in Staging oder Prod.
+Never local state in staging or prod.
 
-**3b — State-Sicherheit**
+**3b — State Security**
 
-- Encryption at rest + in transit aktivieren
-- Least Privilege: nur CI/CD Pipeline + Admins
-- State-Locking aktivieren (verhindert parallele Applies)
-- Versionierung im Backend (S3 Versioning, GCS Versioning)
+- Enable encryption at rest + in transit
+- Least Privilege: only CI/CD pipeline + admins
+- Enable state locking (prevents parallel applies)
+- Versioning in backend (S3 Versioning, GCS Versioning)
 
-**3c — Workspace-Strategie**
+**3c — Workspace Strategy**
 
-Empfehlung: Separate State-Pfade pro Environment:
+Recommendation: Separate state paths per environment:
 ```text
 s3://infra-state/envs/dev/terraform.tfstate
 s3://infra-state/envs/staging/terraform.tfstate
@@ -120,62 +121,62 @@ s3://infra-state/envs/prod/terraform.tfstate
 
 ---
 
-## Schritt 4 — Drift Detection und Remediation
+## Step 4 — Drift Detection and Remediation
 
-**4a — Drift erkennen**
+**4a — Detect Drift**
 
-`terraform plan` als Scheduled Job (taeglich) — Alert wenn Output != "No changes".
+`terraform plan` as a scheduled job (daily) — alert when output != "No changes".
 Tools: Driftctl, Terraform Cloud Drift Detection, AWS Config.
 
-**4b — Drift klassifizieren** (→ `references/iac-patterns.md`)
+**4b — Classify Drift** (→ `references/iac-patterns.md`)
 
-Gewollter Drift (externe Aenderung beabsichtigt) vs. ungewollter Drift (manueller Eingriff).
+Intentional drift (external change intended) vs. unintentional drift (manual intervention).
 
-**4c — Prozess-Fix**
+**4c — Process Fix**
 
-Root Cause: Wer hat manuell geaendert und warum?
-Losung: Break-Glass-Prozess fuer Notfaelle (erlaubt, aber dokumentiert und nachverfolgt).
+Root cause: who made manual changes and why?
+Solution: Break-glass process for emergencies (allowed, but documented and tracked).
 
 ---
 
-## Schritt 5 — GitOps-Workflow
+## Step 5 — GitOps Workflow
 
-**5a — Branch-Strategie**
+**5a — Branch Strategy**
 
 ```text
-feature/* → main: PR mit Plan-Output als Comment
-main → staging: automatisch (nach PR-Merge)
-staging → prod: manuelles Approval-Gate
+feature/* → main: PR with plan output as comment
+main → staging: automatic (after PR merge)
+staging → prod: manual approval gate
 ```
 
-**5b — Plan-Output im PR**
+**5b — Plan Output in PR**
 
-CI kommentiert `terraform plan` Diff in jeden PR.
-Reviewer sehen exakt was sich aendert — kein Blind-Merge.
+CI comments `terraform plan` diff in every PR.
+Reviewers see exactly what changes — no blind merges.
 
-**5c — Apply-Strategie**
+**5c — Apply Strategy**
 
-- Staging: automatisch nach Merge
-- Prod: manuelles Approval (min. 1 Reviewer) + automatischer Apply
-- Rollback: vorherigen Commit re-applyen (nicht `terraform destroy`)
+- Staging: automatic after merge
+- Prod: manual approval (min. 1 reviewer) + automatic apply
+- Rollback: re-apply previous commit (not `terraform destroy`)
 
 ---
 
-## Schritt 6 — Testing
+## Step 6 — Testing
 
-(→ `references/iac-patterns.md` fuer Drift-Tests)
+(→ `references/iac-patterns.md` for drift tests)
 
 **6a — Static Analysis**
 
-- `terraform validate` — Syntaxfehler
-- `terraform fmt --check` — Formatierung
-- `tflint` — Best-Practice-Violations
-- `checkov` / `tfsec` — Security Misconfigurations
+- `terraform validate` — syntax errors
+- `terraform fmt --check` — formatting
+- `tflint` — best-practice violations
+- `checkov` / `tfsec` — security misconfigurations
 
-**6b — Unit-Tests (Terratest)**
+**6b — Unit Tests (Terratest)**
 
 ```go
-// Beispiel: Terratest prueft ob S3-Bucket erstellt wurde
+// Example: Terratest checks if S3 bucket was created
 terraform.InitAndApply(t, terraformOptions)
 bucketID := terraform.Output(t, terraformOptions, "bucket_id")
 aws.AssertS3BucketExists(t, "us-east-1", bucketID)
@@ -183,47 +184,47 @@ aws.AssertS3BucketExists(t, "us-east-1", bucketID)
 
 **6c — Contract Tests**
 
-Outputs eines Moduls gegen erwartete Struktur pruefen.
-Stellt sicher dass Downstream-Module nicht brechen.
+Validate outputs of a module against the expected structure.
+Ensures downstream modules don't break.
 
 ---
 
 ## Output — `iac-design.md`
 
 ```markdown
-# IaC Design — [Projekt-Name]
+# IaC Design — [Project Name]
 
-## Stack-Schichtung
-| Stack | Zweck | State-Pfad |
+## Stack Layering
+| Stack | Purpose | State Path |
 |---|---|---|
 | foundation | VPC, IAM | s3://state/foundation/ |
 | platform | K8s, DB | s3://state/platform/ |
-| services | App-Infra | s3://state/services/ |
+| services | App infra | s3://state/services/ |
 
-## Module
-| Modul | Inputs | Outputs | Version |
+## Modules
+| Module | Inputs | Outputs | Version |
 |---|---|---|---|
 | network | cidr, region | vpc_id, subnet_ids | v1.2.0 |
 
 ## State Backend
 - Provider: [S3+DynamoDB / GCS / TF Cloud]
-- Encryption: ja
-- Locking: ja
-- Workspace-Strategie: [separate Pfade / Workspaces]
+- Encryption: yes
+- Locking: yes
+- Workspace strategy: [separate paths / workspaces]
 
-## GitOps-Workflow
-- Plan im PR: ja
-- Apply Staging: automatisch nach Merge
-- Apply Prod: manuelles Approval
+## GitOps Workflow
+- Plan in PR: yes
+- Apply Staging: automatic after merge
+- Apply Prod: manual approval
 
 ## Testing
 - Static: tflint + checkov
 - Unit: Terratest
-- Drift Detection: [taeglich / Terraform Cloud]
+- Drift Detection: [daily / Terraform Cloud]
 ```
 
 ## Reference Files
 
-- `references/curriculum-mapping.md` — Concept → Kief Morris Kapitel + NTNU IIKG3005
-- `references/iac-patterns.md` — Core Patterns vs. Anti-Patterns, Modul-Design, Drift-Klassifikation
-- `references/state-management.md` — Remote Backends, Security, Workspace-Strategie, Import-Workflow
+- `references/curriculum-mapping.md` — Concept → Kief Morris chapter + NTNU IIKG3005
+- `references/iac-patterns.md` — Core patterns vs. anti-patterns, module design, drift classification
+- `references/state-management.md` — Remote backends, security, workspace strategy, import workflow

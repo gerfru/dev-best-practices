@@ -1,9 +1,9 @@
 ---
-description: UX/UI Design auf Basis von CMU HCII, Stanford CS247A, Microsoft HAX Guidelines, Google PAIR und CHI 2024 — Interaktion, Vertrauen, AI-Features, Anti-Patterns.
-argument-hint: "[optional: Kontext, z.B. 'Onboarding-Flow für mobile App' oder 'AI-Chat-Interface']"
+description: UX/UI design based on CMU HCII, Stanford CS247A, Microsoft HAX Guidelines, Google PAIR, and CHI 2024 — interaction, trust, AI features, anti-patterns.
+argument-hint: "[optional: context, e.g. 'onboarding flow for mobile app' or 'AI chat interface']"
 ---
 
-Designe die UX/UI eines Produkts, Features oder AI-Systems.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-ux/SKILL.md`.
+Design the UX/UI of a product, feature, or AI system.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-ux/SKILL.md`.
 
-Kontext: $ARGUMENTS
+Context: $ARGUMENTS

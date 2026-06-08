@@ -1,30 +1,30 @@
-# Dark Patterns Checkliste
+# Dark Patterns Checklist
 
-Prüft absichtliche Manipulation des Users — unabhängig von KI-Beteiligung.
-Rechtsgrundlagen: EU Digital Services Act · DSGVO Art. 7 · FTC Guidelines
+Checks for intentional manipulation of the user — independent of AI involvement.
+Legal basis: EU Digital Services Act · GDPR Art. 7 · FTC Guidelines
 
 ---
 
-## Pattern-Checkliste
+## Pattern Checklist
 
 | Pattern | Test | Severity |
 |---------|------|----------|
-| Roach Motel | Anmelden leicht, kündigen versteckt/schwer? | Critical |
-| Forced Continuity | Kostenlos-Periode endet ohne deutliche Vorwarnung in Abo? | Critical |
-| Privacy Zuckering | Cookie-Banner: Ablehnen schwerer als Akzeptieren? | Critical |
-| Hidden Costs | Preise erst im letzten Checkout-Schritt vollständig sichtbar? | Critical |
-| Trick Questions | Doppelte Verneinung / unklare Opt-out Checkboxen? | High |
-| Fake Urgency | Countdown der sich zurücksetzt / falsche Verfügbarkeitsangaben? | High |
-| Confirmshaming | Ablehnen-Button formuliert als Selbstverurteilung? | High |
-| Disguised Ads | Werbung optisch nicht von Content unterscheidbar? | High |
-| Bait & Switch | Etwas versprochen, anderes geliefert? | High |
-| Misdirection | Wichtige Info visuell versteckt oder im Kleingedruckten? | Medium |
+| Roach Motel | Easy to sign up, but cancellation hidden/difficult? | Critical |
+| Forced Continuity | Free trial ends without clear advance warning converting to subscription? | Critical |
+| Privacy Zuckering | Cookie banner: harder to reject than to accept? | Critical |
+| Hidden Costs | Prices only fully visible in the final checkout step? | Critical |
+| Trick Questions | Double negation / unclear opt-out checkboxes? | High |
+| Fake Urgency | Countdown that resets / false availability statements? | High |
+| Confirmshaming | Decline button phrased as self-condemnation? | High |
+| Disguised Ads | Advertising visually indistinguishable from content? | High |
+| Bait & Switch | Something promised, something else delivered? | High |
+| Misdirection | Important information visually hidden or buried in fine print? | Medium |
 
 ---
 
-## Severity-Regel
+## Severity Rule
 
-Verstöße gegen DSGVO Art. 7 / DSA → immer Critical.
+Violations of GDPR Art. 7 / DSA → always Critical.
 
-EU-Kontext: 97% der populären Apps enthielten 2025 Dark Pattern Elemente (EU-Sweep).
-Bußgeld bis 6% Jahresumsatz. FTC-Präzedenz: Epic Games 245M$ Strafe (2023).
+EU context: 97% of popular apps contained dark pattern elements in 2025 (EU Sweep).
+Fine up to 6% of annual turnover. FTC precedent: Epic Games $245M penalty (2023).

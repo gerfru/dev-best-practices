@@ -1,5 +1,5 @@
 ---
-name: design-api
+name: dev:design-api
 description: >
   API contract design skill grounded in CMU 17-625 (API Design, Swarnalatha Ashok /
   Bradley Schmerl) and Google API Design Guide. Use this skill whenever the user
@@ -128,31 +128,31 @@ Google API Design Guide, CMU 17-625, OWASP API Security: `references/curriculum-
 
 ---
 
-## Output — Design-Datei
+## Output — Design File
 
-Schreibe das Ergebnis nach `./design-api.md`:
+Write the result to `./design-api.md`:
 
 ```markdown
-# API Design: [Service/Kontext]
-Stil: REST / GraphQL / gRPC | Datum: YYYY-MM-DD
+# API Design: [Service/Context]
+Style: REST / GraphQL / gRPC | Date: YYYY-MM-DD
 
-## Entscheidungen
-| Entscheidung | Wahl | Begründung | Referenz |
+## Decisions
+| Decision | Choice | Rationale | Reference |
 |---|---|---|---|
 
-## Contract-Übersicht
-[Ressourcen, Endpoints oder Schema-Typen]
+## Contract Overview
+[Resources, endpoints, or schema types]
 
-## Breaking-Change-Analyse
-[Falls bestehende API — was bricht, was ist safe]
+## Breaking Change Analysis
+[If existing API — what breaks, what is safe]
 
-## Annahmen & offene Punkte
+## Assumptions & Open Questions
 
 ---
-## ✅ Setup-Todo
+## ✅ Setup Todo
 - [ ] ...
 
-## 📋 Nächste Schritte (priorisiert)
+## 📋 Next Steps (prioritized)
 1. ...
 ```
 

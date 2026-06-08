@@ -1,73 +1,73 @@
-# RAG Architecture — Patterns & Komponenten
+# RAG Architecture — Patterns & Components
 
-## RAG-Varianten
+## RAG Variants
 
-| Variante | Beschreibung | Wann |
+| Variant | Description | When |
 |---|---|---|
-| **Naive RAG** | Query → Embed → Retrieve → Prompt → Generate | Prototyp, einfache Docs |
-| **Advanced RAG** | + Query Rewriting + Reranking + Hybrid Search | Production, qualitätskritisch |
-| **Modular RAG** | Austauschbare Komponenten: Indexer, Retriever, Reranker, Generator | Skalierung, A/B-Testing |
-| **Agentic RAG** | RAG als Tool in Agent-Loop (iteratives Retrieval) | Multi-Hop Reasoning, Deep Research |
+| **Naive RAG** | Query → Embed → Retrieve → Prompt → Generate | Prototype, simple docs |
+| **Advanced RAG** | + query rewriting + reranking + hybrid search | Production, quality-critical |
+| **Modular RAG** | Exchangeable components: indexer, retriever, reranker, generator | Scaling, A/B testing |
+| **Agentic RAG** | RAG as tool in agent loop (iterative retrieval) | Multi-hop reasoning, deep research |
 
 ---
 
-## Chunking-Strategie
+## Chunking Strategy
 
-| Strategie | Chunk-Größe | Wann |
+| Strategy | Chunk size | When |
 |---|---|---|
-| Fixed-Size | 256–512 Tokens + 50–100 Token Overlap | Homogene Dokumente, schnelles Setup |
-| Sentence-based | Satz-Grenzen | Natürliche Sprache, Prosa |
-| Semantic | Durch Embedding-Ähnlichkeit | Heterogene Inhalte |
-| Hierarchical | Small chunks für Retrieval, große für Kontext | Long-form Docs (Bücher, Reports) |
-| **Late Chunking** | Chunking nach Embedding (vollständiger Kontext) | State-of-the-Art für lange Dokumente |
+| Fixed-size | 256–512 tokens + 50–100 token overlap | Homogeneous documents, quick setup |
+| Sentence-based | Sentence boundaries | Natural language, prose |
+| Semantic | Via embedding similarity | Heterogeneous content |
+| Hierarchical | Small chunks for retrieval, large for context | Long-form docs (books, reports) |
+| **Late Chunking** | Chunking after embedding (full context) | State-of-the-art for long documents |
 
-**Faustregel:** Chunk-Größe = kürzeste Einheit die eine eigenständige Antwort enthält.
+**Rule of thumb:** Chunk size = shortest unit that contains a self-contained answer.
 
 ---
 
-## Retrieval-Methoden
+## Retrieval Methods
 
-| Methode | Wie | Stärke | Schwäche |
+| Method | How | Strength | Weakness |
 |---|---|---|---|
-| **Dense Retrieval** | Embedding-Ähnlichkeit (cosine/dot) | Semantisch, sprachunabhängig | Keyword-blind |
-| **Sparse Retrieval** | BM25 / TF-IDF | Keyword-exakt, schnell | Kein semantisches Verständnis |
-| **Hybrid Search** | Dense + Sparse kombiniert (RRF) | Beste Recall-Werte | Komplexer Stack |
-| **Re-ranking** | Cross-Encoder bewertet top-K neu | Präzision ↑ | Latenz ↑ |
+| **Dense Retrieval** | Embedding similarity (cosine/dot) | Semantic, language-agnostic | Keyword-blind |
+| **Sparse Retrieval** | BM25 / TF-IDF | Exact keyword match, fast | No semantic understanding |
+| **Hybrid Search** | Dense + sparse combined (RRF) | Best recall values | More complex stack |
+| **Re-ranking** | Cross-encoder re-scores top-K | Precision ↑ | Latency ↑ |
 
-**Empfehlung Production:** Hybrid Search (BM25 + Dense) + Reranker (z.B. Cohere Rerank, BGE Reranker).
+**Production recommendation:** Hybrid search (BM25 + Dense) + reranker (e.g. Cohere Rerank, BGE Reranker).
 
 ---
 
-## Embedding-Modelle
+## Embedding Models
 
-| Modell | Dimensionen | Use-Case |
+| Model | Dimensions | Use case |
 |---|---|---|
-| `text-embedding-3-small` (OpenAI) | 1536 | General-Purpose, kostengünstig |
-| `text-embedding-3-large` (OpenAI) | 3072 | Höchste Qualität (OpenAI) |
-| `all-MiniLM-L6-v2` (sentence-transformers) | 384 | Lokal, schnell, offline |
-| `bge-large-en-v1.5` (BAAI) | 1024 | Open-Source, SOTA |
-| `multilingual-e5-large` | 1024 | Mehrsprachig (DE/EN) |
+| `text-embedding-3-small` (OpenAI) | 1536 | General-purpose, cost-efficient |
+| `text-embedding-3-large` (OpenAI) | 3072 | Highest quality (OpenAI) |
+| `all-MiniLM-L6-v2` (sentence-transformers) | 384 | Local, fast, offline |
+| `bge-large-en-v1.5` (BAAI) | 1024 | Open-source, SOTA |
+| `multilingual-e5-large` | 1024 | Multilingual (DE/EN) |
 
 ---
 
-## Context-Management
+## Context Management
 
-| Problem | Lösung |
+| Problem | Solution |
 |---|---|
-| Lost-in-the-middle (Infos in der Mitte des Kontexts ignoriert) | Wichtigste Chunks an Anfang + Ende platzieren |
-| Context-Overflow | Hierarchisches Retrieval: mehr Chunks, weniger Text pro Chunk |
-| Irrelevante Chunks | Similarity-Threshold (nur Chunks > 0.7 Cosine-Similarity) |
-| Duplicate Content | Deduplication vor Indexierung; MMR (Maximal Marginal Relevance) |
+| Lost-in-the-middle (info in the middle of context ignored) | Place most important chunks at start + end |
+| Context overflow | Hierarchical retrieval: more chunks, less text per chunk |
+| Irrelevant chunks | Similarity threshold (only chunks > 0.7 cosine similarity) |
+| Duplicate content | Deduplication before indexing; MMR (Maximal Marginal Relevance) |
 
 ---
 
-## Referenzen
+## References
 
-| Konzept | Quelle |
+| Concept | Source |
 |---|---|
-| RAG Original-Paper | Lewis et al. (2020) — arXiv:2005.11401 |
-| RAG Varianten | CMU 11-667 Lec 5–7 — Retrieval 1–3 |
+| RAG original paper | Lewis et al. (2020) — arXiv:2005.11401 |
+| RAG variants | CMU 11-667 Lec 5–7 — Retrieval 1–3 |
 | Modular RAG | CMU 11-667 Lec 8 — "Deep Research" |
 | Agentic RAG | Berkeley CS294-196 Lec (Oct 7) — "Compound AI Systems" |
-| Late Chunking | CMU 11-667 Lec 5 — "Storing and retrieving knowledge" |
-| Context-Window | MIT 6.5940 Lec 15 — "Long Context LLM" |
+| Late chunking | CMU 11-667 Lec 5 — "Storing and retrieving knowledge" |
+| Context window | MIT 6.5940 Lec 15 — "Long Context LLM" |

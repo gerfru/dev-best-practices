@@ -1,79 +1,79 @@
 ---
-name: tool-perf
+name: dev:tool-perf
 description: >
-  Performance Engineering Workflow grounded in MIT 6.172 (Leiserson/Shun,
-  vollstaendig auf MIT OCW) und "Systems Performance" (Brendan Gregg,
-  Addison-Wesley 2020). Deckt USE Method (Utilization/Saturation/Errors),
-  Flamegraph-Analyse, Bottleneck-Identifikation, Bentley Rules und
-  messbares Before/After-Benchmarking ab.
+  Performance engineering workflow grounded in MIT 6.172 (Leiserson/Shun,
+  fully available on MIT OCW) and "Systems Performance" (Brendan Gregg,
+  Addison-Wesley 2020). Covers USE Method (Utilization/Saturation/Errors),
+  flamegraph analysis, bottleneck identification, Bentley Rules, and
+  measurable before/after benchmarking.
   Use this skill whenever the user has a performance problem, slow code,
   high latency, CPU/memory spikes, or wants to optimize a system.
-  Trigger: "Performance-Problem", "langsame API", "hohe Latenz", "CPU-Spike",
-  "Memory-Leak", "Flamegraph analysieren", "Bottleneck finden", "Code optimieren",
-  "Profiling", "p99 zu hoch", "Throughput erhoehen", "USE Method",
-  "warum ist das so langsam", "Load Test zeigt Probleme".
-  Deckt ab: USE Method, Flamegraph-Analyse, CPU/Memory/I-O/Network Profiling,
-  Bentley Rules, Measurement und Benchmarking.
+  Trigger: "performance problem", "slow API", "high latency", "CPU spike",
+  "memory leak", "analyze flamegraph", "find bottleneck", "optimize code",
+  "profiling", "p99 too high", "increase throughput", "USE Method",
+  "why is this so slow", "load test shows problems".
+  Covers: USE Method, flamegraph analysis, CPU/memory/I-O/network profiling,
+  Bentley Rules, measurement and benchmarking.
 ---
 
 # Performance Engineering (tool-perf)
 
-Strukturierter Performance-Analyse-Workflow — von der Symptom-Beschreibung bis zum
-verifizierten Fix. Grounded in MIT 6.172 und Brendan Gregg "Systems Performance".
+Structured performance analysis workflow — from symptom description to
+verified fix. Grounded in MIT 6.172 and Brendan Gregg "Systems Performance".
 
 ---
 
 ## Core Philosophy (MIT 6.172 + Brendan Gregg)
 
-> "Measure, don't guess." — Grundprinzip Performance Engineering
+> "Measure, don't guess." — Core principle of performance engineering
 >
 > "Never tune for performance without first having a performance target."
 > — Brendan Gregg, Systems Performance
 
-Immer messen bevor optimiert wird. Ohne Profiling-Daten ist Optimierung Raten.
-USE Method gibt den systematischen Rahmen — Flamegraphs zeigen WO die Zeit verbracht wird.
+Always measure before optimizing. Without profiling data, optimization is guessing.
+USE Method provides the systematic framework — flamegraphs show WHERE time is spent.
 
 ---
 
-## Schritt 0 — Scope und Symptom klären
+## Step 0 — Clarify Scope and Symptom
 
-**Fragen:**
-- Was ist das konkrete Symptom? (Hohe Latenz / hoher CPU / Memory-Wachstum / niedrige Throughput)
-- Stack: Web-Service / CLI / Datenbank / Low-Level C/C++ / JVM / Python?
-- Gibt es Metriken? (Prometheus, Datadog, APM-Tool, ab wann schlechter?)
-- Gibt es ein Performance-Ziel? (p99 < 200ms, Throughput > 1000 req/s)
-- Produktions-Problem oder pre-release Optimierung?
+**Questions:**
+- What is the concrete symptom? (High latency / high CPU / memory growth / low throughput)
+- Stack: web service / CLI / database / low-level C/C++ / JVM / Python?
+- Are there metrics? (Prometheus, Datadog, APM tool, when did it get worse?)
+- Is there a performance target? (p99 < 200ms, throughput > 1000 req/s)
+- Production problem or pre-release optimization?
 
-→ Ohne konkrete Zahlen und Ziel ist Performance-Arbeit nicht abschliessbar.
+→ Without concrete numbers and a target, performance work cannot be completed.
 
 ---
 
-## Schritt 1 — USE Method: Bottleneck lokalisieren
+## Step 1 — USE Method: Locate the Bottleneck
 
-(→ `references/use-method.md` fuer vollstaendige Ressourcen-Checkliste)
+(→ `references/use-method.md` for complete resource checklist)
 
-**Fuer jede relevante Ressource messen:**
-- Utilization: Wie viel % der Kapazitaet wird genutzt?
-- Saturation: Bilden sich Warteschlangen?
-- Errors: Gibt es Fehler-Events?
+**Measure for each relevant resource:**
+- Utilization: How many % of capacity is being used?
+- Saturation: Are queues forming?
+- Errors: Are there error events?
 
-**Schnell-Diagnose nach Symptom:**
+**Quick diagnosis by symptom:**
 
-| Symptom | Verdacht | Naechster Schritt |
+| Symptom | Suspicion | Next step |
 |---|---|---|
-| Hohe Latenz, niedrige CPU | I/O-bound | Disk-Queue, Network-Drops, DB-Latenz |
-| Hohe CPU, skaliert mit Traffic | CPU-bound | CPU-Profiling, Flamegraph |
-| Requests in Queue | Concurrency-Limit | Thread/Worker Pool Saturation |
-| Memory steigt ueber Zeit | Memory-Leak | Heap Dump, Allocation Profiling |
-| Sporadische Spikes | Lock Contention oder GC | Mutex Saturation, GC Logs |
+| High latency, low CPU | I/O-bound | Disk queue, network drops, DB latency |
+| High CPU, scales with traffic | CPU-bound | CPU profiling, flamegraph |
+| Requests queueing | Concurrency limit | Thread/worker pool saturation |
+| Memory growing over time | Memory leak | Heap dump, allocation profiling |
+| Sporadic spikes | Lock contention or GC | Mutex saturation, GC logs |
 
-→ Den wahrscheinlichsten Bottleneck identifizieren, dann tiefer analysieren.
+→ Identify the most likely bottleneck, then analyze deeper.
 
 ---
 
-## Schritt 2 — Profiling und Flamegraph
+## Step 2 — Profiling and Flamegraph
 
-**2a — Profiling-Tool waehlen (nach Stack)**
+**2a — Choose profiling tool (by stack)**
 
 | Stack | CPU Profiler | Memory Profiler |
 |---|---|---|
@@ -84,89 +84,89 @@ USE Method gibt den systematischen Rahmen — Flamegraphs zeigen WO die Zeit ver
 | Go | `pprof` | `pprof` Heap Profile |
 | Browser (JS) | Chrome DevTools Performance | Chrome DevTools Memory |
 
-**2b — Flamegraph erstellen und lesen**
+**2b — Create and read flamegraph**
 
 ```text
 perf record -F 99 -g -- <command>
 perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 ```
 
-Flamegraph lesen:
-- X-Achse = Anteil der gesamten Sampling-Zeit (nicht Zeit-Verlauf)
-- Y-Achse = Call Stack (unten = Entry Point, oben = wo Zeit verbracht wird)
-- Breite eines Blocks = % Zeit in dieser Funktion + Callees
-- Plateau (breiter flacher Block oben) = Hotspot — dort optimieren
+Reading a flamegraph:
+- X-axis = share of total sampling time (not time progression)
+- Y-axis = call stack (bottom = entry point, top = where time is spent)
+- Width of a block = % time in that function + callees
+- Plateau (wide flat block at top) = hotspot — optimize there
 
-**2c — Top-Hotspot identifizieren**
+**2c — Identify top hotspot**
 
-Den breitesten Block ganz oben im Flamegraph lokalisieren.
-Das ist die Funktion die am meisten CPU-Zeit verbraucht.
+Locate the widest block at the very top of the flamegraph.
+That is the function consuming the most CPU time.
 
 ---
 
-## Schritt 3 — Bottleneck-Analyse
+## Step 3 — Bottleneck Analysis
 
 **CPU-bound:**
-- Algorithmus-Komplexitaet (O(n²) wo O(n log n) moeglich?)
-- Bentley Rules anwenden (→ `references/bentley-rules.md`)
-- Cache-Effizienz: Memory-Access-Pattern pruefen (Row-major vs Column-major)
-- Parallelisierung: Single-threaded Bottleneck → Multi-threading
+- Algorithm complexity (O(n²) where O(n log n) possible?)
+- Apply Bentley Rules (→ `references/bentley-rules.md`)
+- Cache efficiency: check memory access pattern (row-major vs column-major)
+- Parallelization: single-threaded bottleneck → multi-threading
 
 **Memory-bound:**
-- Heap-Profiling: welche Allokationen dominieren?
-- GC-Druck reduzieren: Object-Pooling, weniger kurzlebige Objekte
-- Memory-Leak: Welche Objekte wachsen ueber Zeit?
+- Heap profiling: which allocations dominate?
+- Reduce GC pressure: object pooling, fewer short-lived objects
+- Memory leak: which objects grow over time?
 
 **I/O-bound:**
-- DB-Queries: EXPLAIN ANALYZE, fehlende Indexe, N+1-Queries
-- Disk: Async I/O, Batching, Sequential statt Random Access
-- Network: Connection Pooling, Keep-Alive, Compression
+- DB queries: EXPLAIN ANALYZE, missing indexes, N+1 queries
+- Disk: async I/O, batching, sequential instead of random access
+- Network: connection pooling, keep-alive, compression
 
-**Lock Contention:**
-- Kritische Sektion minimieren
-- Lock-freie Datenstrukturen wo moeglich
-- Read-Write Lock statt exklusivem Mutex
-
----
-
-## Schritt 4 — Optimierung mit Bentley Rules
-
-(→ `references/bentley-rules.md` fuer vollstaendige Regeln)
-
-**Vor der Optimierung:** Baseline-Benchmark aufnehmen (exakte Zahlen).
-
-Prioritaet nach Hebelwirkung:
-1. **Algorithmus/Datenstruktur** — groesste Wirkung (O(n²) → O(n log n))
-2. **Caching** — teure Berechnungen einmalig
-3. **Loop-Optimierungen** — Hoisting, Fusion, Early Exit
-4. **Memory-Zugriffspattern** — Cache-Freundlichkeit
-
-**Niemals ohne Messung optimieren** (Premature Optimization).
+**Lock contention:**
+- Minimize critical section
+- Lock-free data structures where possible
+- Read-write lock instead of exclusive mutex
 
 ---
 
-## Schritt 5 — Measurement und Verification
+## Step 4 — Optimization with Bentley Rules
 
-**5a — Benchmark aufnehmen**
+(→ `references/bentley-rules.md` for complete rules)
 
-Immer: vor der Optimierung messen, nach der Optimierung messen.
-Gleiche Bedingungen, ausreichend Durchlaeufe (Warmup + Messphase trennen).
+**Before optimizing:** Record baseline benchmark (exact numbers).
 
-**5b — Benchmark-Tools**
+Priority by impact:
+1. **Algorithm/data structure** — greatest impact (O(n²) → O(n log n))
+2. **Caching** — expensive computations done once
+3. **Loop optimizations** — hoisting, fusion, early exit
+4. **Memory access patterns** — cache friendliness
 
-| Typ | Tool |
+**Never optimize without measurement** (premature optimization).
+
+---
+
+## Step 5 — Measurement and Verification
+
+**5a — Record benchmark**
+
+Always: measure before optimization, measure after optimization.
+Same conditions, sufficient runs (separate warmup + measurement phase).
+
+**5b — Benchmark tools**
+
+| Type | Tool |
 |---|---|
 | Microbenchmark | JMH (Java), criterion (Rust), benchmark (Go), pytest-benchmark |
-| HTTP Load Test | k6, wrk, hey, Apache Bench |
-| Profiler-basiert | Flamegraph before/after vergleichen |
-| System-Level | `perf stat` (CPU cycles, cache misses, instructions) |
+| HTTP load test | k6, wrk, hey, Apache Bench |
+| Profiler-based | Compare flamegraph before/after |
+| System level | `perf stat` (CPU cycles, cache misses, instructions) |
 
-**5c — Ergebnis dokumentieren**
+**5c — Document results**
 
-| Metrik | Vorher | Nachher | Verbesserung |
+| Metric | Before | After | Improvement |
 |---|---|---|---|
-| p50 Latenz | X ms | Y ms | Z% |
-| p99 Latenz | X ms | Y ms | Z% |
+| p50 latency | X ms | Y ms | Z% |
+| p99 latency | X ms | Y ms | Z% |
 | Throughput (req/s) | X | Y | Z% |
 | CPU (%) | X | Y | Z% |
 
@@ -178,29 +178,29 @@ Gleiche Bedingungen, ausreichend Durchlaeufe (Warmup + Messphase trennen).
 # Performance Findings — [Service/Component]
 
 ## Symptom
-[Konkrete Beschreibung: p99 Latenz 800ms, Ziel < 200ms]
+[Concrete description: p99 latency 800ms, target < 200ms]
 
-## USE Method Ergebnis
-| Ressource | U | S | E | Befund |
+## USE Method Results
+| Resource | U | S | E | Finding |
 |---|---|---|---|---|
 | CPU | 85% | Load 4 (2 Cores) | 0 | CPU-bound |
 | Memory | 60% | 0 | 0 | OK |
 
 ## Root Cause
-[Flamegraph zeigt: 73% Zeit in `parseJson()` — ineffizienter Parser]
+[Flamegraph shows: 73% time in `parseJson()` — inefficient parser]
 
-## Massnahme
-[Wechsel zu schnellerem JSON-Parser, Ergebnis cachen]
+## Action
+[Switch to faster JSON parser, cache result]
 
-## Messergebnis
-| Metrik | Vorher | Nachher |
+## Measurement Results
+| Metric | Before | After |
 |---|---|---|
-| p99 Latenz | 800ms | 120ms |
+| p99 latency | 800ms | 120ms |
 | CPU | 85% | 35% |
 ```
 
 ## Reference Files
 
-- `references/curriculum-mapping.md` — Concept → MIT 6.172 Lecture + Brendan Gregg Kapitel
-- `references/use-method.md` — Ressourcen-Checkliste (U/S/E), Schnell-Diagnose, p99 vs. Average
-- `references/bentley-rules.md` — Datenstruktur / Logik / Loop / Memory Optimierungsregeln
+- `references/curriculum-mapping.md` — Concept → MIT 6.172 lecture + Brendan Gregg chapter
+- `references/use-method.md` — Resource checklist (U/S/E), quick diagnosis, p99 vs. average
+- `references/bentley-rules.md` — Data structure / logic / loop / memory optimization rules

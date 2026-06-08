@@ -1,6 +1,6 @@
 # Security Concept → Reference Mapping
 
-Mapping von Security Design-Entscheidungen auf Kursreferenzen.
+Mapping of security design decisions to course references.
 
 ---
 

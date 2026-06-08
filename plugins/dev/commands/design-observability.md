@@ -1,9 +1,9 @@
 ---
-description: Observability-Architektur auf Basis der Google SRE Books — SLO/SLI/Error-Budget, Golden Signals, Distributed Tracing (OpenTelemetry), SLO-basiertes Alerting, Incident Response.
-argument-hint: "[optional: Kontext, z.B. 'HTTP API mit Prometheus' oder 'Background Worker auf AWS']"
+description: Observability architecture based on the Google SRE Books — SLO/SLI/error budget, golden signals, distributed tracing (OpenTelemetry), SLO-based alerting, incident response.
+argument-hint: "[optional: context, e.g. 'HTTP API with Prometheus' or 'background worker on AWS']"
 ---
 
-Designe eine Observability-Architektur fuer einen Service oder ein System.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-observability/SKILL.md`.
+Design an observability architecture for a service or system.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-observability/SKILL.md`.
 
-Kontext: $ARGUMENTS
+Context: $ARGUMENTS

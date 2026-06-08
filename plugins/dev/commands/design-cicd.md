@@ -1,9 +1,9 @@
 ---
-description: CI/CD Pipeline Design auf Basis von "Accelerate" (DORA) und "Continuous Delivery" — Pipeline-Architektur, Deployment-Strategien (Blue-Green, Canary, Feature Flags), DORA-Metriken.
-argument-hint: "[optional: Kontext, z.B. 'GitHub Actions fuer Node.js API' oder 'Kubernetes Deployment auf AWS']"
+description: CI/CD pipeline design based on "Accelerate" (DORA) and "Continuous Delivery" — pipeline architecture, deployment strategies (blue-green, canary, feature flags), DORA metrics.
+argument-hint: "[optional: context, e.g. 'GitHub Actions for Node.js API' or 'Kubernetes deployment on AWS']"
 ---
 
-Designe eine CI/CD-Pipeline und Release-Strategie.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-cicd/SKILL.md`.
+Design a CI/CD pipeline and release strategy.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-cicd/SKILL.md`.
 
-Kontext: $ARGUMENTS
+Context: $ARGUMENTS

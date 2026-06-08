@@ -1,11 +1,11 @@
 ---
-description: Strukturiertes Architecture Review auf Basis von CMU 17-633 und Martin Fowler Patterns.
-argument-hint: "[Architekturbeschreibung, Diagramm oder Systemkontext]"
+description: Structured architecture review based on CMU 17-633 and Martin Fowler Patterns.
+argument-hint: "[architecture description, diagram, or system context]"
 ---
 
-Fuehre ein strukturiertes Architecture Review durch. Identifiziere Coupling-Probleme,
-Anti-Patterns und Quality-Attribute-Risiken. Liefere begruendete Findings mit ADR-Empfehlungen.
+Conduct a structured architecture review. Identify coupling problems,
+anti-patterns, and quality attribute risks. Deliver reasoned findings with ADR recommendations.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/review-arch/SKILL.md`.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/review-arch/SKILL.md`.
 
-Architektur/Kontext: $ARGUMENTS
+Architecture/Context: $ARGUMENTS

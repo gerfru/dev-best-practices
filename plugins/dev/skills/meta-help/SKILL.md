@@ -1,65 +1,65 @@
 ---
-name: meta-help
+name: dev:meta-help
 description: >
-  Navigationsmenü für alle Dev-Best-Practices Skills. Zeigt alle verfügbaren Skills
-  gruppiert und startet den gewählten direkt. Trigger bei "welchen skill soll ich nutzen",
-  "was gibt es", "help", "was kann ich nutzen", "zeig mir die skills",
-  "welches tool", "ich weiß nicht welchen skill".
+  Navigation menu for all Dev Best Practices skills. Shows all available skills
+  grouped and starts the chosen one directly. Trigger for "which skill should I use",
+  "what is available", "help", "what can I use", "show me the skills",
+  "which tool", "I don't know which skill".
 ---
 
 # Dev Best Practices — Skill Navigator
 
-Zeige das Menü sofort. Kein langer Einleitungstext.
+Show the menu immediately. No long introduction.
 
-## Schritt 1 — Menü anzeigen
+## Step 1 — Display Menu
 
 ```text
-Welcher Skill soll starten?
+Which skill should start?
 
 🏗️  DESIGN
-  1  design-app              Stack & Architektur aus den Best-Practice-Regeln
-  2  design-secure           Security Design: Threat Model, Krypto, Auth, Compliance
-  3  design-api              REST / GraphQL / gRPC Contract entwerfen oder reviewen
-  4  design-data             Schema, Normalisierung, Indexe, CQRS / Event Sourcing
-  5  design-migration        Migrations-Strategie: Zero-Downtime, Strangler Fig, Saga
-  6  design-ux               UX/UI Design: Interaktion, Vertrauen, AI-Features, Anti-Patterns
-  7  design-llm              LLM-System: RAG, Fine-tune, Agent, Eval-Strategie, Guardrails
-  8  design-observability    Observability: SLO/SLI, Golden Signals, Tracing, Alerting, Incident Response
-  9  design-cicd             CI/CD Pipeline: Deployment-Strategien, DORA-Metriken, Trunk-Based Dev
- 10  design-iac              Infrastructure as Code: Terraform, GitOps, State Management, Drift Detection
+  1  design-app              Stack & architecture from the best-practice rules
+  2  design-secure           Security design: threat model, crypto, auth, compliance
+  3  design-api              REST / GraphQL / gRPC contract design or review
+  4  design-data             Schema, normalization, indexes, CQRS / Event Sourcing
+  5  design-migration        Migration strategy: zero-downtime, Strangler Fig, Saga
+  6  design-ux               UX/UI design: interaction, trust, AI features, anti-patterns
+  7  design-llm              LLM system: RAG, fine-tune, agent, eval strategy, guardrails
+  8  design-observability    Observability: SLO/SLI, golden signals, tracing, alerting, incident response
+  9  design-cicd             CI/CD pipeline: deployment strategies, DORA metrics, trunk-based dev
+ 10  design-iac              Infrastructure as Code: Terraform, GitOps, state management, drift detection
 
 🔍  REVIEW
- 11  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
- 12  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
- 13  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
- 14  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
- 15  review-llm        LLM-Audit: Architektur, Evals, Prompt Injection, OWASP LLM Top 10
+ 11  review-app        Full audit: architecture, security, tests, CI/CD, observability
+ 12  review-arch       Architecture: coupling, anti-patterns, quality attributes, ADR
+ 13  review-secure     Security: crypto, injection, memory safety, GDPR/ISO/EU AI Act
+ 14  review-ux         UX audit: AI anti-patterns, dark patterns, trust design
+ 15  review-llm        LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10
 
 🛠️  TOOLS
- 16  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
- 17  tool-test         Tests schreiben, verbessern oder Strategie planen
- 18  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
- 19  tool-a11y         Accessibility-Audit: WCAG 2.2, Screen Reader, EU Accessibility Act
- 20  tool-perf         Performance Engineering: USE Method, Flamegraph, Bottleneck, Bentley Rules
+ 16  tool-debug        Stack-aware root cause analysis with fix suggestions
+ 17  tool-test         Write, improve, or plan tests
+ 18  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
+ 19  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
+ 20  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
 
 📁  META
- 21  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
- 22  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
- 23  meta-sync           reference/*.md vs. claude/*.md synchron halten
- 24  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
+ 21  meta-install        Add best-practice rules to a project CLAUDE.md
+ 22  meta-drift          Compare project CLAUDE.md against current rule files
+ 23  meta-sync           Keep reference/*.md and claude/*.md in sync
+ 24  meta-create-skill   Build a new skill: research, structure, all files
 
-→ Zahl eingeben, oder direkt beschreiben was du brauchst.
+→ Enter a number, or directly describe what you need.
 ```
 
-## Schritt 2 — Skill starten
+## Step 2 — Start Skill
 
-**Bei Zahl:** Skill sofort starten.  
-**Bei Beschreibung:** Besten passenden Skill wählen, kurz nennen ("→ starte review-secure …"), dann direkt starten.  
-**Bei Argumenten:** An den gestarteten Skill weitergeben.
+**With a number:** Start skill immediately.  
+**With a description:** Choose the best matching skill, mention it briefly ("→ starting review-secure …"), then start directly.  
+**With arguments:** Pass to the started skill.
 
-Lade und folge exakt: `${CLAUDE_PLUGIN_ROOT}/skills/<gewählter-skill>/SKILL.md`
+Load and follow exactly: `${CLAUDE_PLUGIN_ROOT}/skills/<chosen-skill>/SKILL.md`
 
-## Regeln
-- Menü sofort zeigen, kein Intro
-- Nach der Wahl direkt starten, nicht nochmals erklären oder nachfragen
-- Nie alle 24 Skills gleichzeitig laden — immer nur den gewählten
+## Rules
+- Show menu immediately, no intro
+- After the choice: start directly, do not explain or ask again
+- Never load all 24 skills at once — always only the chosen one

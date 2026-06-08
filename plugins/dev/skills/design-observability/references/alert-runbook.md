@@ -1,99 +1,99 @@
-# Alert & Runbook — Referenz
+# Alert & Runbook — Reference
 
-## Burn Rate Alert Tabelle (SLO 99.9%, Error Budget 43.2 min/30d)
+## Burn Rate Alert Table (SLO 99.9%, Error Budget 43.2 min/30d)
 
-| Alert Name | Burn Rate | Window | Budget konsumiert | Severity | Response |
+| Alert Name | Burn Rate | Window | Budget consumed | Severity | Response |
 |---|---|---|---|---|---|
-| SLOCritical | > 14.4× | 1h | ~3 min | Page sofort | < 5 min |
+| SLOCritical | > 14.4× | 1h | ~3 min | Page immediately | < 5 min |
 | SLOHigh | > 6× | 6h | ~36 min | Page | < 30 min |
-| SLOMedium | > 3× | 24h | ~6h | Ticket | nächster Tag |
-| SLOLow | > 1× | 72h | Slow burn | Info | Sprint-Backlog |
+| SLOMedium | > 3× | 24h | ~6h | Ticket | Next day |
+| SLOLow | > 1× | 72h | Slow burn | Info | Sprint backlog |
 
-Für andere SLOs: Burn Rate = `(1 - SLO) × Budget_total / Alert_window`
+For other SLOs: Burn Rate = `(1 - SLO) × Budget_total / Alert_window`
 
 ---
 
 ## Alert Severity Matrix
 
-| Severity | Wann | Response-Zeit | Wer |
+| Severity | When | Response time | Who |
 |---|---|---|---|
-| **Critical (Page)** | Sofortiger Eingriff nötig, User-Impact jetzt | < 5 min | On-Call Primary |
-| **High (Page)** | Eingriff in < 1h nötig, drohender User-Impact | < 30 min | On-Call Primary |
-| **Warning (Ticket)** | Nächsten Arbeitstag beheben | < 24h | Team |
-| **Info** | Kein Eingriff nötig, nur zur Kenntnis | — | Niemand pagen |
+| **Critical (Page)** | Immediate action needed, user impact now | < 5 min | On-call primary |
+| **High (Page)** | Action needed in < 1h, impending user impact | < 30 min | On-call primary |
+| **Warning (Ticket)** | Fix by next business day | < 24h | Team |
+| **Info** | No action needed, for awareness only | — | Nobody paged |
 
 ---
 
-## Runbook-Template (pro Alert)
+## Runbook Template (per alert)
 
 ```markdown
-# Runbook: [Alert-Name]
+# Runbook: [Alert Name]
 
-**Alert-Bedingung:** [PromQL / Bedingung]
+**Alert condition:** [PromQL / condition]
 **Severity:** Critical / High / Warning
 
 ## Symptom
-Was sieht der On-Call? (Dashboard-Link, typische Fehlermeldung)
+What does the on-call see? (dashboard link, typical error message)
 
 ## Impact
-- Betroffene User / Features:
-- SLO-Impact: [ja/nein, wie viel Budget]
+- Affected users / features:
+- SLO impact: [yes/no, how much budget]
 
-## Diagnose
-1. [Dashboard-Link] prüfen: [was man dort sieht]
-2. [Query oder Log-Suche]
-3. [Nächster Diagnoseschritt]
+## Diagnosis
+1. Check [dashboard link]: [what to look for]
+2. [Query or log search]
+3. [Next diagnosis step]
 
 ## Mitigation
-- Schnellster Workaround: [Schritt]
-- Permanenter Fix: [Schritt oder Ticket]
+- Fastest workaround: [step]
+- Permanent fix: [step or ticket]
 
-## Eskalation
-Wenn Mitigation nicht hilft nach [X min] → [Name/Rolle] kontaktieren
+## Escalation
+If mitigation doesn't help after [X min] → contact [name/role]
 ```
 
 ---
 
-## Postmortem-Template (nach SEV-1 / SEV-2)
+## Postmortem Template (after SEV-1 / SEV-2)
 
 ```markdown
-# Postmortem: [Incident-Titel]
+# Postmortem: [Incident Title]
 
-**Datum:** [Datum]
-**Dauer:** [Start] – [Ende] ([X] Minuten)
+**Date:** [date]
+**Duration:** [start] – [end] ([X] minutes)
 **Severity:** SEV-1 / SEV-2
-**SLO-Verletzung:** ja/nein — [X min Error Budget konsumiert]
+**SLO violation:** yes/no — [X min error budget consumed]
 
 ## Impact
-- Betroffene User:
-- Betroffene Features / Services:
+- Affected users:
+- Affected features / services:
 
 ## Root Cause
-[Was ist passiert — 5-Why oder Fishbone]
+[What happened — 5-Why or Fishbone]
 
 ## Contributing Factors
-[Systemische Ursachen, die den Incident möglich gemacht haben]
+[Systemic causes that made the incident possible]
 
 ## Timeline
-| Zeit | Ereignis |
+| Time | Event |
 |---|---|
-| HH:MM | [Was passiert ist] |
-| HH:MM | [Erkennung durch ...] |
-| HH:MM | [Erste Maßnahme] |
+| HH:MM | [What happened] |
+| HH:MM | [Detected by ...] |
+| HH:MM | [First action] |
 | HH:MM | [Resolved] |
 
 ## Detection
-- Erkannt durch: [Alert / User-Report / Monitoring]
-- Zeit bis zur Erkennung: [X min]
-- Hätte früher erkannt werden können: ja/nein — [wie?]
+- Detected by: [alert / user report / monitoring]
+- Time to detection: [X min]
+- Could have been detected earlier: yes/no — [how?]
 
 ## Action Items
 | Task | Owner | Due Date |
 |---|---|---|
-| [Konkrete Maßnahme, kein "wir sollten..."] | [Name] | [Datum] |
+| [Concrete action, not "we should..."] | [Name] | [Date] |
 
 ## Lessons Learned
-- Was hat funktioniert:
-- Was hat nicht funktioniert:
-- Was ändern wir am Prozess:
+- What worked:
+- What didn't work:
+- What we change in the process:
 ```

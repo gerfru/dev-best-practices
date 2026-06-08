@@ -1,9 +1,9 @@
 ---
-description: Accessibility-Audit auf Basis von WCAG 2.2 — axe-core, Keyboard-Navigation, Screen Reader Testing (NVDA/VoiceOver), EU Accessibility Act / BFSG / EN 301 549 Compliance.
-argument-hint: "[optional: Kontext, z.B. 'Web-App mit React' oder 'EU Accessibility Act relevant']"
+description: Accessibility audit based on WCAG 2.2 — axe-core, keyboard navigation, screen reader testing (NVDA/VoiceOver), EU Accessibility Act / BFSG / EN 301 549 compliance.
+argument-hint: "[optional: context, e.g. 'web app with React' or 'EU Accessibility Act relevant']"
 ---
 
-Fuehre einen strukturierten Accessibility-Audit durch.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/tool-a11y/SKILL.md`.
+Conduct a structured accessibility audit.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/tool-a11y/SKILL.md`.
 
-Kontext: $ARGUMENTS
+Context: $ARGUMENTS

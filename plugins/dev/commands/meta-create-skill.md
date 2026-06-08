@@ -1,9 +1,9 @@
 ---
-description: Erstellt einen neuen Skill für dieses Plugin nach der etablierten Methodik: Thema → akademische Recherche (Uni-Curricula + kanonische Bücher) → SKILL.md + references/. Nutze diesen Skill wenn du einen neuen /dev-Skill erstellen willst. Trigger: "create a new skill", "neuen Skill bauen", "Skill für X erstellen", "füge einen Skill hinzu", "add skill", "new skill for X". Deckt ab: Themen-Klärung, akademische Recherche, Struktur-Entscheidung, Schreiben aller Dateien, Housekeeping (commands/, meta-help, plugin.json).
-argument-hint: "[optional: Skill-Thema, z.B. 'LLM Engineering' oder 'Performance Monitoring']"
+description: Creates a new skill for this plugin following the established methodology: topic → academic research (university curricula + canonical books) → SKILL.md + references/. Use this skill when you want to create a new /dev skill. Trigger: "create a new skill", "build a new skill", "create skill for X", "add a skill", "add skill", "new skill for X". Covers: topic clarification, academic research, structure decision, writing all files, housekeeping (commands/, meta-help, plugin.json).
+argument-hint: "[optional: skill topic, e.g. 'LLM Engineering' or 'Performance Monitoring']"
 ---
 
-Erstelle einen neuen /dev-Skill nach der etablierten Methodik.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-create-skill/SKILL.md`.
+Create a new /dev skill following the established methodology.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-create-skill/SKILL.md`.
 
-Thema/Kontext: $ARGUMENTS
+Topic/Context: $ARGUMENTS

@@ -1,9 +1,9 @@
 ---
-description: LLM-System-Review — Architektur, Eval-Coverage, Safety (OWASP LLM Top 10, Prompt Injection, Excessive Agency) und Production-Readiness auf Basis von CMU 11-667 und Berkeley CS294-196.
-argument-hint: "[optional: zu reviewendes System, z.B. 'mein RAG-Setup' oder 'Agent-Code in src/agent.py']"
+description: LLM system review — architecture, eval coverage, safety (OWASP LLM Top 10, prompt injection, excessive agency), and production readiness based on CMU 11-667 and Berkeley CS294-196.
+argument-hint: "[optional: system to review, e.g. 'my RAG setup' or 'agent code in src/agent.py']"
 ---
 
-Reviewe ein bestehendes LLM-System oder eine LLM-Integration.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/review-llm/SKILL.md`.
+Review an existing LLM system or LLM integration.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/review-llm/SKILL.md`.
 
-Kontext/System: $ARGUMENTS
+Context/System: $ARGUMENTS
