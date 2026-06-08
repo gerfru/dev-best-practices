@@ -45,7 +45,7 @@ Nenne dem Nutzer kompakt was erkannt wurde: `Typ: Web-App | KI: Empfehlungs-Engi
 
 ---
 
-## Schritt 1 — Sechs Audit-Dimensionen
+## Schritt 1 — Sieben Audit-Dimensionen
 
 Alle sieben Dimensionen systematisch durchgehen. Befunde im Format:
 
