@@ -10,7 +10,7 @@ Detaillierte Erklaerungen: `../reference/github-best-practices.md`
 Jedes Projekt MUSS Pre-Commit Hooks haben. Reihenfolge:
 
 1. **Secret Scanning:** `gitleaks protect --staged`
-2. **Linting + Auto-Fix:** TS → `eslint --fix`, Python → `ruff --fix` (inkl. S-Regeln = bandit-Subset)
+2. **Linting + Auto-Fix:** TS → `eslint --fix`, Python → `ruff --fix`
 3. **Formatting:** TS → `prettier --write`, Python → `ruff format`
 4. **Type Check:** TS → `tsc --noEmit`, Python → `mypy`
 
@@ -130,9 +130,9 @@ Defense in Depth -- 3 Schichten:
 
 ## Dependency Management
 
-- **Renovate** fuer Version-Update-PRs (nicht Dependabot) -- gruppiert Updates, weniger PR-Noise, Dashboard Issue
+- **Renovate** (nicht Dependabot) -- gruppiert Updates, weniger PR-Noise, Dashboard Issue
 - devDependencies patch: **Automerge** (nur wenn CI + required checks aktiv)
-- **Dependabot Alerts** trotzdem aktivieren (GitHub-nativ, nur Security-Meldungen -- kein Widerspruch zu Renovate)
+- **Dependabot Alerts** aktivieren (Security-Meldungen, kein Konflikt zu Renovate)
 - Docker Digest Updates: **Monatlich**, kein Automerge
 - Major Updates: Manuell reviewen
 
