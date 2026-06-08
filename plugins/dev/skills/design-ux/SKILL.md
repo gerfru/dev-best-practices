@@ -235,6 +235,7 @@ Datum: YYYY-MM-DD
 ## Entscheidungen
 | Dimension | Entscheidung | Begründung | Framework-Referenz |
 |-----------|-------------|-----------|-------------------|
+| Platform Design System | … | … | m3.material.io / HIG / Carbon |
 | Interaktionsmodell | … | … | NNG / PAIR P… |
 | Mental Model Onboarding | … | … | HAX G1/G2, PAIR Ch.2 |
 | Vertrauenskalibrierung | … | … | CHI 2024 P3, PAIR P11 |

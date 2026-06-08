@@ -47,7 +47,7 @@ Nenne dem Nutzer kompakt was erkannt wurde: `Typ: Web-App | KI: Empfehlungs-Engi
 
 ## Schritt 1 — Sechs Audit-Dimensionen
 
-Alle sechs Dimensionen systematisch durchgehen. Befunde im Format:
+Alle sieben Dimensionen systematisch durchgehen. Befunde im Format:
 
 ```text
 [G-Code / P-Code] Titel · Severity (Critical/High/Medium/Low) · Befund · Fix
@@ -237,7 +237,7 @@ Findings sind zu verifizieren — kein Ersatz für manuelle Usability-Tests mit 
 - Jeder Befund nennt die konkrete verletzte Guideline (HAX G-Nr. / PAIR P-Nr. / CHI P-Nr. / NNG), nicht nur ein generisches Prinzip.
 - **Nichts automatisch fixen.** Erst Report, dann auf Nachfrage gezielt umsetzen.
 - Accessibility-Probleme die gegen EU Accessibility Act / BFSG verstoßen → immer als **High** oder **Critical** melden.
-- Anti-Patterns nicht doppelt melden (einmal in Dimension 1–5 und einmal in Dimension 6).
+- Anti-Patterns nicht doppelt melden: Dimension 6 = AI UX Anti-Patterns, Dimension 7 = Manipulation / Dark Patterns — diese beiden Kategorien sind bewusst getrennt.
 - Positive Befunde explizit erwähnen — was funktioniert gut und warum. UX-Review ist kein reiner Bug-Report.
 
 ---
