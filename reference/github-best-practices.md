@@ -1,13 +1,13 @@
 # GitHub Setup Best Practices
 
-Referenz-Checkliste für neue Projekte (Stand: März 2026).
-Framework-spezifische Abschnitte sind mit **[TS/Node]** bzw. **[Python]** markiert.
+Reference checklist for new projects (as of March 2026).
+Framework-specific sections are marked with **[TS/Node]** and **[Python]** respectively.
 
 ---
 
 ## 1. Pre-Commit Hooks
 
-Lokale Quality-Gates bevor Code überhaupt ins Repo kommt.
+Local quality gates before code even enters the repo.
 
 ### [TS/Node] Setup: Husky + lint-staged
 
@@ -23,7 +23,7 @@ gitleaks protect --staged
 npx lint-staged
 ```
 
-**`package.json` (lint-staged Config):**
+**`package.json` (lint-staged config):**
 
 ```json
 {
@@ -53,27 +53,27 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.0
     hooks:
-      - id: ruff          # Linting (ersetzt flake8, isort, pyflakes, etc.)
+      - id: ruff          # Linting (replaces flake8, isort, pyflakes, etc.)
         args: [--fix]
-      - id: ruff-format   # Formatting (ersetzt black)
+      - id: ruff-format   # Formatting (replaces black)
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.14.0
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests]  # Type Stubs nach Bedarf
+        additional_dependencies: [types-requests]  # Type stubs as needed
 ```
 
-### Empfohlene Checks (beide Ökosysteme)
+### Recommended Checks (both ecosystems)
 
-| Reihenfolge | Check | TS/Node Tool | Python Tool |
+| Order | Check | TS/Node tool | Python tool |
 |-------------|-------|-------------|-------------|
-| 1 | Secret Scanning | `gitleaks` | `gitleaks` |
-| 2 | Linting + Auto-Fix | `eslint --fix` | `ruff --fix` |
+| 1 | Secret scanning | `gitleaks` | `gitleaks` |
+| 2 | Linting + auto-fix | `eslint --fix` | `ruff --fix` |
 | 3 | Formatting | `prettier --write` | `ruff format` |
-| 4 | Type Check | `tsc --noEmit` | `mypy` |
+| 4 | Type check | `tsc --noEmit` | `mypy` |
 
-**Optional:** `commitlint` für Conventional Commits – nur sinnvoll wenn man automated releases (semantic-release) nutzen will.
+**Optional:** `commitlint` for Conventional Commits – only useful when using automated releases (semantic-release).
 
 ---
 
@@ -82,39 +82,39 @@ repos:
 ### [TS/Node] ESLint + Prettier
 
 **ESLint:**
-- **Flat Config** (`eslint.config.mjs`) ist der Standard seit ESLint 9. Altes `.eslintrc` Format ist deprecated.
-- Für Next.js: `eslint-config-next` (enthält bereits TypeScript, React Hooks, Import-Checks, Core Web Vitals)
-- `eslint-config-prettier` um Konflikte mit Prettier zu vermeiden
+- **Flat Config** (`eslint.config.mjs`) is the standard since ESLint 9. Old `.eslintrc` format is deprecated.
+- For Next.js: `eslint-config-next` (already includes TypeScript, React Hooks, import checks, Core Web Vitals)
+- `eslint-config-prettier` to avoid conflicts with Prettier
 
-**Empfohlene Zusatz-Plugins:**
+**Recommended additional plugins:**
 
-| Plugin | Was es macht |
+| Plugin | What it does |
 |--------|-------------|
-| `eslint-plugin-security` | Fängt `eval()`, unsichere RegEx, etc. |
-| `@typescript-eslint/no-floating-promises` | Vergessene `await` Statements |
+| `eslint-plugin-security` | Catches `eval()`, unsafe regex, etc. |
+| `@typescript-eslint/no-floating-promises` | Forgotten `await` statements |
 
 **Prettier:**
-- Als eigenständiges Tool, nicht als ESLint-Plugin
-- `.prettierrc` im Repo für konsistente Formatierung
-- `.prettierignore` für generierte Dateien
+- As a standalone tool, not as an ESLint plugin
+- `.prettierrc` in repo for consistent formatting
+- `.prettierignore` for generated files
 
 **Alternative: Biome**
-- Rust-basiert, 15x schneller, Linter + Formatter in einem
-- Stand 2026: Noch keine volle Parität mit `eslint-config-next`
-- Für Non-Next.js Projekte bereits empfehlenswert
+- Rust-based, 15x faster, linter + formatter in one
+- As of 2026: Not yet full parity with `eslint-config-next`
+- Already recommended for non-Next.js projects
 
 ### [Python] Ruff (All-in-One)
 
-Ruff ersetzt das gesamte alte Python-Tooling in einem einzigen Rust-basierten Tool:
+Ruff replaces the entire old Python tooling in a single Rust-based tool:
 
-| Alt (2023) | Neu (2025+) |
+| Old (2023) | New (2025+) |
 |------------|-------------|
 | flake8 | `ruff check` |
 | black | `ruff format` |
 | isort | `ruff check --select I` |
-| pyflakes | in ruff enthalten |
-| pycodestyle | in ruff enthalten |
-| bandit (Security) | `ruff check --select S` |
+| pyflakes | included in ruff |
+| pycodestyle | included in ruff |
+| bandit (security) | `ruff check --select S` |
 
 **`pyproject.toml`:**
 
@@ -129,10 +129,10 @@ select = [
     "W",    # pycodestyle warnings
     "F",    # pyflakes
     "I",    # isort
-    "S",    # bandit (Security)
+    "S",    # bandit (security)
     "B",    # bugbear
     "UP",   # pyupgrade
-    "RUF",  # ruff-spezifische Regeln
+    "RUF",  # ruff-specific rules
 ]
 
 [tool.ruff.format]
@@ -141,12 +141,12 @@ quote-style = "double"
 
 ### [Python] Type Checking: mypy vs. pyright
 
-| Tool | Stärke | Schwäche |
+| Tool | Strength | Weakness |
 |------|--------|----------|
-| **mypy** | Standard, großes Ökosystem, viele Type Stubs | Langsamer |
-| **pyright** (Microsoft) | Schneller, besser bei Inferenz, VS Code Integration | Weniger verbreitet in CI |
+| **mypy** | Standard, large ecosystem, many type stubs | Slower |
+| **pyright** (Microsoft) | Faster, better at inference, VS Code integration | Less common in CI |
 
-**Empfehlung:** mypy für CI, pyright für IDE-Integration. Beide in `strict` Mode.
+**Recommendation:** mypy for CI, pyright for IDE integration. Both in `strict` mode.
 
 **`pyproject.toml`:**
 
@@ -162,9 +162,9 @@ warn_unused_configs = true
 
 ## 3. CI Pipeline (GitHub Actions)
 
-**Wichtigste Regel:** Jeder PR muss durch CI, bevor er gemergt werden kann.
+**Most important rule:** Every PR must go through CI before it can be merged.
 
-### [TS/Node] Minimale CI-Pipeline
+### [TS/Node] Minimal CI Pipeline
 
 ```yaml
 name: CI
@@ -198,7 +198,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### [Python] Minimale CI-Pipeline
+### [Python] Minimal CI Pipeline
 
 ```yaml
 name: CI
@@ -229,21 +229,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Warum jeder Schritt wichtig ist
+### Why Each Step Matters
 
-| Schritt | TS/Node | Python | Fängt ab |
+| Step | TS/Node | Python | Catches |
 |---------|---------|--------|----------|
-| Install | `pnpm install --frozen-lockfile` | `uv sync --frozen` | Lockfile-Drift |
-| Lint | `pnpm lint` | `ruff check` | Code-Qualität |
-| Format-Check | (in lint enthalten) | `ruff format --check` | Inkonsistente Formatierung |
-| Type Check | `tsc --noEmit` | `mypy` | Type-Fehler |
-| Build/Test | `pnpm build` | `pytest` | Build-/Test-Fehler |
-| Secrets | `gitleaks` | `gitleaks` | `--no-verify` Bypasses |
+| Install | `pnpm install --frozen-lockfile` | `uv sync --frozen` | Lockfile drift |
+| Lint | `pnpm lint` | `ruff check` | Code quality |
+| Format check | (included in lint) | `ruff format --check` | Inconsistent formatting |
+| Type check | `tsc --noEmit` | `mypy` | Type errors |
+| Build/test | `pnpm build` | `pytest` | Build/test failures |
+| Secrets | `gitleaks` | `gitleaks` | `--no-verify` bypasses |
 
-### Erweiterte Pipeline (beide Ökosysteme)
+### Extended Pipeline (both ecosystems)
 
 ```yaml
-  # Container-Scanning mit Trivy
+  # Container scanning with Trivy
   container-scan:
     runs-on: ubuntu-latest
     needs: quality
@@ -257,7 +257,7 @@ jobs:
           exit-code: 1
 ```
 
-### [Python] Matrix-Testing (mehrere Python-Versionen)
+### [Python] Matrix Testing (multiple Python versions)
 
 ```yaml
   test:
@@ -278,21 +278,21 @@ jobs:
 
 ## 4. Branch Protection Rules
 
-Technische Durchsetzung von "nie direkt auf main pushen". Gilt für beide Ökosysteme identisch.
+Technical enforcement of "never push directly to main". Applies identically to both ecosystems.
 
-### Empfohlene Konfiguration für `main`
+### Recommended Configuration for `main`
 
-| Setting | Wert | Warum |
+| Setting | Value | Why |
 |---------|------|-------|
-| Require pull request | Ja | Erzwingt Review-Prozess |
-| Required approvals | 1 (oder 0 für Solo + CI) | Vier-Augen-Prinzip |
-| Require status checks | Ja | Gate auf CI-Ergebnisse |
-| Required checks | `quality`, `secrets` | Spezifische Jobs die passen müssen |
-| Require up-to-date branch | Ja | Verhindert Merge-Konflikte auf main |
-| Restrict force pushes | Ja | Kein History-Rewriting auf main |
-| Restrict deletions | Ja | Kein versehentliches Branch-Löschen |
+| Require pull request | Yes | Enforces review process |
+| Required approvals | 1 (or 0 for solo + CI) | Four-eyes principle |
+| Require status checks | Yes | Gate on CI results |
+| Required checks | `quality`, `secrets` | Specific jobs that must pass |
+| Require up-to-date branch | Yes | Prevents merge conflicts on main |
+| Restrict force pushes | Yes | No history rewriting on main |
+| Restrict deletions | Yes | No accidental branch deletion |
 
-**GitHub Rulesets** (neuer) vs. **Branch Protection** (klassisch): Rulesets sind flexibler (mehrere Branches, Tag-Rules). Für neue Setups Rulesets bevorzugen.
+**GitHub Rulesets** (newer) vs. **Branch Protection** (classic): Rulesets are more flexible (multiple branches, tag rules). Prefer Rulesets for new setups.
 
 ### Setup via GitHub CLI
 
@@ -308,28 +308,28 @@ gh api repos/{owner}/{repo}/branches/main/protection \
 
 ## Repository Settings
 
-Einmalig pro Repo konfigurieren. Gilt für beide Ökosysteme identisch.
+Configure once per repo. Applies identically to both ecosystems.
 
-### Merge-Strategie
+### Merge Strategy
 
-Nur eine Strategie aktivieren — Konsistenz schlägt Flexibilität.
+Only one strategy active — consistency beats flexibility.
 
-| Strategie | History | Wann verwenden |
+| Strategy | History | When to use |
 |---|---|---|
-| **Squash merge** | Ein Commit pro PR — sauber, lesbar | Solo oder kleine Teams mit kurzen Feature-Branches |
-| Merge commit | Vollständige Branch-History | Teams die jeden WIP-Commit in `main` brauchen |
-| Rebase merge | Lineare History, alle Commits einzeln | Teams mit disziplinierten Commits ohne WIP-Rauschen |
+| **Squash merge** | One commit per PR — clean, readable | Solo or small teams with short feature branches |
+| Merge commit | Full branch history | Teams that need every WIP commit in `main` |
+| Rebase merge | Linear history, all commits individually | Teams with disciplined commits without WIP noise |
 
-**Empfehlung: Squash only.** PR-Titel wird automatisch Commit-Message in `main`. WIP-Commits bleiben im PR sichtbar, verschwinden aber aus `main`.
+**Recommendation: Squash only.** PR title automatically becomes commit message in `main`. WIP commits stay visible in PR but disappear from `main`.
 
-### Empfohlene Konfiguration
+### Recommended Configuration
 
-| Setting | Wert | Warum |
+| Setting | Value | Why |
 |---|---|---|
-| Allow squash merge | Ja | Saubere, lesbare `main`-History |
-| Allow merge commit | Nein | Verhindert Merge-Commit-Noise |
-| Allow rebase merge | Nein | Eine Strategie, kein Mix |
-| Delete branch on merge | Ja | Kein manuelles Aufräumen alter Feature-Branches |
+| Allow squash merge | Yes | Clean, readable `main` history |
+| Allow merge commit | No | Prevents merge commit noise |
+| Allow rebase merge | No | One strategy, no mix |
+| Delete branch on merge | Yes | No manual cleanup of old feature branches |
 
 ### Setup via GitHub CLI
 
@@ -345,29 +345,29 @@ gh api repos/{owner}/{repo} --method PATCH \
 
 ## 5. Secret Scanning
 
-Defense in Depth: Mehrere Schichten. Gilt für beide Ökosysteme identisch.
+Defense in depth: Multiple layers. Applies identically to both ecosystems.
 
-| Schicht | Tool | Wann |
+| Layer | Tool | When |
 |---------|------|------|
-| Pre-commit | gitleaks | Vor jedem Commit (lokal) |
-| CI | gitleaks-action | Bei jedem PR (fängt `--no-verify` ab) |
-| GitHub-nativ | Secret Scanning + Push Protection | Kontinuierlich (kostenlos für public Repos) |
+| Pre-commit | gitleaks | Before every commit (local) |
+| CI | gitleaks-action | On every PR (catches `--no-verify` bypasses) |
+| GitHub-native | Secret scanning + push protection | Continuously (free for public repos) |
 
-### gitleaks Konfiguration
+### gitleaks Configuration
 
-Standard-Config reicht meistens. Für Custom-Patterns:
+Default config is usually sufficient. For custom patterns:
 
 ```toml
 # .gitleaks.toml
 [allowlist]
-  paths = ["docs/examples/"]  # Beispiel-Dateien ignorieren
+  paths = ["docs/examples/"]  # Ignore example files
 ```
 
-### GitHub Secret Scanning aktivieren
+### Enable GitHub Secret Scanning
 
 Settings > Code security > Secret scanning > Enable
 
-Mit **Push Protection** werden Pushes geblockt die bekannte Secret-Patterns enthalten, noch bevor sie das Repo erreichen.
+With **Push Protection**, pushes containing known secret patterns are blocked before they reach the repo.
 
 Via GitHub CLI:
 
@@ -376,7 +376,7 @@ gh api repos/{owner}/{repo} --method PATCH \
   -f 'security_and_analysis[secret_scanning][status]=enabled' \
   -f 'security_and_analysis[secret_scanning_push_protection][status]=enabled'
 
-# Dependabot alerts aktivieren
+# Enable Dependabot alerts
 gh api repos/{owner}/{repo}/vulnerability-alerts --method PUT
 ```
 
@@ -384,22 +384,22 @@ gh api repos/{owner}/{repo}/vulnerability-alerts --method PUT
 
 ## 6. Package Management
 
-### [TS/Node] pnpm (empfohlen)
+### [TS/Node] pnpm (recommended)
 
-| Manager | Stärke | Schwäche |
+| Manager | Strength | Weakness |
 |---------|--------|----------|
-| **pnpm** | Schnell, disk-effizient (symlinks), strikt | Braucht eigene Setup-Action |
-| npm | Überall vorhanden | Langsamer, flache node_modules |
-| yarn | Workspaces, PnP | Komplexere Config |
-| bun | Extrem schnell | Noch nicht 100% Node-kompatibel |
+| **pnpm** | Fast, disk-efficient (symlinks), strict | Needs its own setup action |
+| npm | Available everywhere | Slower, flat node_modules |
+| yarn | Workspaces, PnP | More complex config |
+| bun | Extremely fast | Not yet 100% Node-compatible |
 
-**Lockfile immer committen** (`pnpm-lock.yaml`). In CI immer `--frozen-lockfile`.
+**Always commit lockfile** (`pnpm-lock.yaml`). Always use `--frozen-lockfile` in CI.
 
-### [Python] uv (empfohlen, 2025+)
+### [Python] uv (recommended, 2025+)
 
-uv ersetzt das alte Python-Tooling:
+uv replaces the old Python tooling:
 
-| Alt | Neu (uv) |
+| Old | New (uv) |
 |-----|----------|
 | pip + pip-tools | `uv pip install` / `uv pip compile` |
 | venv | `uv venv` |
@@ -407,13 +407,13 @@ uv ersetzt das alte Python-Tooling:
 | pipx | `uv tool install` |
 | poetry / pipenv | `uv init` + `uv add` + `uv sync` |
 
-**Warum uv statt poetry/pipenv:**
-- 10-100x schneller (Rust-basiert, von den Ruff-Machern)
-- Einheitliches Tool für alles (venv, install, lock, run)
-- PEP-konform (`pyproject.toml` + `uv.lock`)
-- Ersetzt auch pyenv für Python-Version-Management
+**Why uv instead of poetry/pipenv:**
+- 10-100x faster (Rust-based, by the Ruff makers)
+- Unified tool for everything (venv, install, lock, run)
+- PEP-compliant (`pyproject.toml` + `uv.lock`)
+- Also replaces pyenv for Python version management
 
-**`pyproject.toml` (uv-Projekt):**
+**`pyproject.toml` (uv project):**
 
 ```toml
 [project]
@@ -433,24 +433,24 @@ dev = [
 ]
 ```
 
-**Lockfile immer committen** (`uv.lock`). In CI immer `uv sync --frozen`.
+**Always commit lockfile** (`uv.lock`). Always use `uv sync --frozen` in CI.
 
 ---
 
 ## 7. Dependency Management (Renovate)
 
-### Renovate (empfohlen) vs. Dependabot
+### Renovate (recommended) vs. Dependabot
 
-| Aspekt | Renovate | Dependabot |
+| Aspect | Renovate | Dependabot |
 |--------|----------|------------|
-| PR-Noise | Gruppiert verwandte Updates | Ein PR pro Dependency |
-| Konfiguration | Extrem flexibel | Basic YAML |
-| Plattformen | GitHub, GitLab, Bitbucket, Azure | Nur GitHub |
-| Monorepo-Support | Exzellent | Eingeschränkt |
-| Dashboard | Dependency Dashboard Issue | Keines |
-| Python Support | pip, poetry, uv, pipenv | pip, poetry, pipenv |
+| PR noise | Groups related updates | One PR per dependency |
+| Configuration | Extremely flexible | Basic YAML |
+| Platforms | GitHub, GitLab, Bitbucket, Azure | GitHub only |
+| Monorepo support | Excellent | Limited |
+| Dashboard | Dependency Dashboard issue | None |
+| Python support | pip, poetry, uv, pipenv | pip, poetry, pipenv |
 
-### Empfohlene `renovate.json`
+### Recommended `renovate.json`
 
 ```json
 {
@@ -458,7 +458,7 @@ dev = [
   "extends": ["config:recommended"],
   "packageRules": [
     {
-      "description": "Gruppiere alle non-major devDependencies",
+      "description": "Group all non-major devDependencies",
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "dev dependencies (non-major)"
@@ -470,7 +470,7 @@ dev = [
       "automerge": true
     },
     {
-      "description": "Docker Digest Updates monatlich",
+      "description": "Docker digest updates monthly",
       "matchDatasources": ["docker"],
       "schedule": ["before 6am on the first day of the month"],
       "automerge": false
@@ -479,19 +479,19 @@ dev = [
 }
 ```
 
-**Wichtig:** Automerge nur wenn CI-Pipeline existiert und required Status Checks aktiv sind.
+**Important:** Automerge only when CI pipeline exists and required status checks are active.
 
 ---
 
 ## 8. Code Review Automation
 
-Ergänzt menschliches Review mit automatischen Checks.
+Supplements human review with automated checks.
 
-| Schicht | Tool | Was es prüft |
+| Layer | Tool | What it checks |
 |---------|------|-------------|
-| CI Checks | Pipeline (lint, types, build, tests) | Objektive Qualität |
-| AI Review | Claude Code Review / CodeRabbit | Logik, Security, Architektur |
-| Human Review | Required Reviewer auf PRs | Business-Logik, Design-Entscheidungen |
+| CI checks | Pipeline (lint, types, build, tests) | Objective quality |
+| AI review | Claude Code Review / CodeRabbit | Logic, security, architecture |
+| Human review | Required reviewer on PRs | Business logic, design decisions |
 
 ### Claude Code Review (GitHub Action)
 
@@ -513,111 +513,111 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           review_comment_prompt: |
-            Prüfe auf: Type Safety, Error Handling, Security, Performance.
+            Check for: Type safety, error handling, security, performance.
 ```
 
-### Danger.js (optional, für Teams)
+### Danger.js (optional, for teams)
 
-Automatische PR-Regeln wie "Beschreibung muss Testplan enthalten", "API-Änderungen brauchen Type-Updates".
+Automated PR rules like "description must contain test plan", "API changes require type updates".
 
-### Menschliche Code Review Guidelines
+### Human Code Review Guidelines
 
-Automatisierung ersetzt kein menschliches Review. CI prüft _objektive Qualität_ (Syntax, Types, Tests). Menschen prüfen _subjektive Qualität_ (Design, Lesbarkeit, Wartbarkeit).
+Automation does not replace human review. CI checks _objective quality_ (syntax, types, tests). Humans check _subjective quality_ (design, readability, maintainability).
 
-#### PR-Größe
+#### PR Size
 
-| Größe | Lines of Code | Review-Qualität |
+| Size | Lines of code | Review quality |
 |-------|--------------|-----------------|
-| **XS** | < 50 | Schnell, gründlich |
+| **XS** | < 50 | Fast, thorough |
 | **S** | 50-200 | Ideal |
-| **M** | 200-500 | Noch okay, besser aufteilen |
-| **L** | 500+ | Review-Qualität sinkt drastisch |
+| **M** | 200-500 | Still OK, better to split |
+| **L** | 500+ | Review quality drops drastically |
 
-**Faustregel:** Wenn ein PR > 400 LOC ist, aufteilen. Lieber 3 kleine PRs als 1 großer. Ausnahme: generierte Dateien, Migrationen, Renames.
+**Rule of thumb:** If a PR is > 400 LOC, split it. Better 3 small PRs than 1 large one. Exception: generated files, migrations, renames.
 
-#### Was beim Review prüfen
+#### What to Check in Review
 
-| Kategorie | Worauf achten |
+| Category | What to look for |
 |-----------|--------------|
-| **Korrektheit** | Tut der Code was er soll? Edge Cases? Off-by-one? |
-| **Design** | Passt es zur bestehenden Architektur? Zu komplex? Zu clever? |
-| **Lesbarkeit** | Verständlich ohne Erklärung? Gute Benennung? |
-| **Sicherheit** | Input-Validierung? Secrets? SQL Injection? XSS? |
-| **Performance** | N+1 Queries? Unnötige Loops? Große Payloads? |
-| **Error Handling** | Was passiert bei Fehlern? Werden sie verschluckt? |
-| **Tests** | Sind die richtigen Szenarien getestet? |
-| **Breaking Changes** | API-Änderungen die andere Clients betreffen? |
+| **Correctness** | Does the code do what it should? Edge cases? Off-by-one? |
+| **Design** | Does it fit the existing architecture? Too complex? Too clever? |
+| **Readability** | Understandable without explanation? Good naming? |
+| **Security** | Input validation? Secrets? SQL injection? XSS? |
+| **Performance** | N+1 queries? Unnecessary loops? Large payloads? |
+| **Error handling** | What happens on errors? Are they swallowed? |
+| **Tests** | Are the right scenarios tested? |
+| **Breaking changes** | API changes affecting other clients? |
 
-#### Review-Etikette
+#### Review Etiquette
 
-| Regel | Warum |
+| Rule | Why |
 |-------|-------|
-| **Fragen statt Befehle** | "Wäre X hier besser?" statt "Mach X" |
-| **Begründen** | "Lieber Y weil Z" statt nur "Mach Y" |
-| **Nitpicks kennzeichnen** | `nit:` Prefix für Kleinigkeiten (optional, nicht blockierend) |
-| **Positives erwähnen** | Gute Lösungen loben → fördert Motivation |
-| **Blocker klar markieren** | Muss gefixt werden vs. Vorschlag/Idee |
-| **Zeitnah reviewen** | Innerhalb von 24h, sonst wird es zum Bottleneck |
+| **Ask questions instead of commands** | "Would X be better here?" instead of "Do X" |
+| **Give reasons** | "Prefer Y because Z" instead of just "Do Y" |
+| **Mark nitpicks** | `nit:` prefix for small things (optional, not blocking) |
+| **Mention positives** | Praise good solutions → encourages motivation |
+| **Clearly mark blockers** | Must be fixed vs. suggestion/idea |
+| **Review promptly** | Within 24 hours, otherwise becomes a bottleneck |
 
-#### PR-Template (empfohlen)
+#### PR Template (recommended)
 
 ```markdown
-## Was ändert sich?
-<!-- 1-3 Sätze: Was und Warum -->
+## What changes?
+<!-- 1-3 sentences: What and why -->
 
-## Wie getestet?
-<!-- Manuell / Unit Tests / E2E / Screenshot -->
+## How was it tested?
+<!-- Manual / unit tests / E2E / screenshot -->
 
-## Checkliste
-- [ ] Tests hinzugefügt/angepasst
-- [ ] Keine Breaking Changes (oder dokumentiert)
-- [ ] Keine Secrets im Code
+## Checklist
+- [ ] Tests added/updated
+- [ ] No breaking changes (or documented)
+- [ ] No secrets in code
 ```
 
-In GitHub unter `.github/pull_request_template.md` ablegen – wird automatisch bei jedem PR vorausgefüllt.
+Place in GitHub under `.github/pull_request_template.md` – automatically pre-filled for every PR.
 
 ---
 
 ## 9. Testing
 
-### [TS/Node] Empfohlener Stack
+### [TS/Node] Recommended Stack
 
-| Level | Tool | Was testen | Priorität |
+| Level | Tool | What to test | Priority |
 |-------|------|-----------|-----------|
-| Unit | **Vitest** + React Testing Library | Utilities, Transformationen, Hooks | Must-Have |
-| Integration | **Vitest** + MSW | API Routes, Component-Interaktionen | Must-Have |
-| E2E | **Playwright** | Kritische User Flows | High-Value |
-| Accessibility | **axe-core** (via Playwright) | WCAG Compliance | High-Value |
+| Unit | **Vitest** + React Testing Library | Utilities, transformations, hooks | Must-have |
+| Integration | **Vitest** + MSW | API routes, component interactions | Must-have |
+| E2E | **Playwright** | Critical user flows | High-value |
+| Accessibility | **axe-core** (via Playwright) | WCAG compliance | High-value |
 
-**Warum Vitest statt Jest:**
-- Natives ESM (kein Transform nötig für Next.js)
-- First-class TypeScript Support
-- 2-5x schnellere Ausführung
-- Jest-kompatibles API
-- Offiziell von Next.js empfohlen (seit 2025)
+**Why Vitest instead of Jest:**
+- Native ESM (no transform needed for Next.js)
+- First-class TypeScript support
+- 2-5x faster execution
+- Jest-compatible API
+- Officially recommended by Next.js (since 2025)
 
-**Minimales Setup:**
+**Minimal setup:**
 
 ```bash
 pnpm add -D vitest @testing-library/react @testing-library/jest-dom msw
 ```
 
-### [Python] Empfohlener Stack
+### [Python] Recommended Stack
 
-| Level | Tool | Was testen | Priorität |
+| Level | Tool | What to test | Priority |
 |-------|------|-----------|-----------|
-| Unit | **pytest** | Funktionen, Klassen, Module | Must-Have |
-| Integration | **pytest** + **httpx** (für FastAPI TestClient) | API Endpoints, DB-Interaktionen | Must-Have |
-| E2E | **Playwright** | Kritische User Flows (wenn Frontend) | High-Value |
-| Coverage | **pytest-cov** | Test-Abdeckung messen | High-Value |
+| Unit | **pytest** | Functions, classes, modules | Must-have |
+| Integration | **pytest** + **httpx** (for FastAPI TestClient) | API endpoints, DB interactions | Must-have |
+| E2E | **Playwright** | Critical user flows (when frontend) | High-value |
+| Coverage | **pytest-cov** | Measure test coverage | High-value |
 
-**Warum pytest statt unittest:**
-- Einfachere Syntax (keine Klassen nötig)
-- Fixtures statt setUp/tearDown
-- Parametrize für mehrere Testfälle
-- Riesiges Plugin-Ökosystem
+**Why pytest instead of unittest:**
+- Simpler syntax (no classes needed)
+- Fixtures instead of setUp/tearDown
+- Parametrize for multiple test cases
+- Huge plugin ecosystem
 
-**`pyproject.toml` (pytest Config):**
+**`pyproject.toml` (pytest config):**
 
 ```toml
 [tool.pytest.ini_options]
@@ -633,36 +633,36 @@ fail_under = 80
 show_missing = true
 ```
 
-**Minimales Setup:**
+**Minimal setup:**
 
 ```bash
 uv add --dev pytest pytest-cov pytest-asyncio httpx
 ```
 
-### Was zuerst testen (beide Ökosysteme)
+### What to Test First (both ecosystems)
 
-1. API Route Handler / Endpoints (Error-Handling, Edge Cases)
-2. Data Transformationen (Parsing, Validierung, Mapping)
-3. E2E Smoke Test (App startet, Hauptseite lädt ohne Fehler)
+1. API route handlers / endpoints (error handling, edge cases)
+2. Data transformations (parsing, validation, mapping)
+3. E2E smoke test (app starts, main page loads without errors)
 
-### Warum Playwright statt Cypress (E2E)
+### Why Playwright Instead of Cypress (E2E)
 
-- Multi-Browser (Chromium, Firefox, WebKit) mit einem API
-- Weniger Dependencies, leichter
-- Besseres Async-Handling
-- Built-in Accessibility Testing
-- Gleiche API für TS und Python (`playwright` npm / `pytest-playwright` pip)
+- Multi-browser (Chromium, Firefox, WebKit) with one API
+- Fewer dependencies, lighter
+- Better async handling
+- Built-in accessibility testing
+- Same API for TS and Python (`playwright` npm / `pytest-playwright` pip)
 
 ---
 
 ## 10. Security Scanning (SAST / SCA / Container)
 
-| Typ | Tool | Sprachen | Kosten |
+| Type | Tool | Languages | Cost |
 |-----|------|----------|--------|
-| SAST (Code) | **Semgrep** | TS, Python, Go, Java, ... | Free (Open Source) |
-| SCA (Dependencies) | **Renovate Alerts** / `npm audit` / `pip audit` | Alle | Free |
-| Container | **Trivy** | Docker Images | Free |
-| Secrets | **gitleaks** | Alle | Free |
+| SAST (code) | **Semgrep** | TS, Python, Go, Java, ... | Free (open source) |
+| SCA (dependencies) | **Renovate alerts** / `npm audit` / `pip audit` | All | Free |
+| Container | **Trivy** | Docker images | Free |
+| Secrets | **gitleaks** | All | Free |
 
 ### Trivy in CI
 
@@ -671,7 +671,7 @@ uv add --dev pytest pytest-cov pytest-asyncio httpx
   with:
     image-ref: myapp:latest
     severity: CRITICAL,HIGH
-    exit-code: 1  # Pipeline schlägt fehl bei Findings
+    exit-code: 1  # Pipeline fails on findings
 ```
 
 ### Semgrep in CI
@@ -688,29 +688,29 @@ uv add --dev pytest pytest-cov pytest-asyncio httpx
     config: p/python p/django p/flask p/owasp-top-ten
 ```
 
-### [Python] Zusätzlich: pip-audit / safety
+### [Python] Additionally: pip-audit / safety
 
 ```yaml
-- run: uv run pip-audit  # Prüft installierte Packages gegen bekannte CVEs
+- run: uv run pip-audit  # Checks installed packages against known CVEs
 ```
 
 ---
 
 ## 11. Release Management (Optional)
 
-Nur relevant wenn man Versioning / Changelogs braucht.
+Only relevant when versioning / changelogs are needed.
 
-| Tool | Ansatz | Für wen |
+| Tool | Approach | For whom |
 |------|--------|---------|
-| **semantic-release** | Voll automatisiert aus Conventional Commits | Hands-off Releases |
-| **Release Please** (Google) | Erstellt Release-PRs zum Review | Teams die Kontrolle wollen |
-| **Changesets** | Explizite Changeset-Dateien | Monorepos, kuratierte Changelogs |
+| **semantic-release** | Fully automated from Conventional Commits | Hands-off releases |
+| **Release Please** (Google) | Creates release PRs for review | Teams that want control |
+| **Changesets** | Explicit changeset files | Monorepos, curated changelogs |
 
-Für Solo-Projekte mit Auto-Deploy (merge to main = deploy): Nicht nötig.
+For solo projects with auto-deploy (merge to main = deploy): Not needed.
 
 ---
 
-## Docker Best Practices (beide Ökosysteme)
+## Docker Best Practices (both ecosystems)
 
 ### Multi-Stage Builds
 
@@ -723,7 +723,7 @@ RUN corepack enable && pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build
 
-FROM cgr.dev/chainguard/node:latest  # Minimales, sicheres Base Image
+FROM cgr.dev/chainguard/node:latest  # Minimal, secure base image
 COPY --from=builder /app/.next/standalone ./
 CMD ["server.js"]
 ```
@@ -744,72 +744,72 @@ ENV PATH="/app/.venv/bin:$PATH"
 CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0"]
 ```
 
-### Checkliste
+### Checklist
 
-- [ ] Multi-Stage Build (Builder + Runner getrennt)
-- [ ] Base Images mit Digest pinnen (nicht nur Tag)
-- [ ] `--frozen-lockfile` / `--frozen` im Build
-- [ ] Non-root User wenn möglich (`USER nonroot`)
-- [ ] HEALTHCHECK definieren
-- [ ] `.dockerignore` pflegen (`.env*`, `.git`, `node_modules`, `__pycache__`)
-- [ ] Minimales Base Image (Alpine, Slim, Chainguard)
+- [ ] Multi-stage build (builder + runner separated)
+- [ ] Pin base images with digest (not just tag)
+- [ ] `--frozen-lockfile` / `--frozen` in build
+- [ ] Non-root user where possible (`USER nonroot`)
+- [ ] Define HEALTHCHECK
+- [ ] Maintain `.dockerignore` (`.env*`, `.git`, `node_modules`, `__pycache__`)
+- [ ] Minimal base image (Alpine, Slim, Chainguard)
 
 ---
 
-## Checkliste: Neues Projekt aufsetzen
+## Checklist: Setting Up a New Project
 
-### Tag 1 (Minimum Viable Setup)
+### Day 1 (Minimum Viable Setup)
 
-| Schritt | TS/Node | Python |
+| Step | TS/Node | Python |
 |---------|---------|--------|
 | Repo init | `git init` | `git init` |
 | .gitignore | `.env*`, `node_modules`, `.next` | `.env*`, `__pycache__`, `.venv`, `.mypy_cache` |
-| Package Manager | `pnpm init` | `uv init` |
-| Linting | ESLint Flat Config + Prettier | Ruff (`ruff check` + `ruff format`) |
-| Type Checking | TypeScript strict | mypy strict |
-| Pre-commit | Husky + lint-staged | pre-commit Framework |
-| Secret Scanning | gitleaks Hook | gitleaks Hook |
-| Projekt-Config | `CLAUDE.md` anlegen | `CLAUDE.md` anlegen |
+| Package manager | `pnpm init` | `uv init` |
+| Linting | ESLint flat config + Prettier | Ruff (`ruff check` + `ruff format`) |
+| Type checking | TypeScript strict | mypy strict |
+| Pre-commit | Husky + lint-staged | pre-commit framework |
+| Secret scanning | gitleaks hook | gitleaks hook |
+| Project config | Create `CLAUDE.md` | Create `CLAUDE.md` |
 
-### Erste Woche
+### First Week
 
-- [ ] CI Pipeline für PRs (lint, typecheck, build/test)
-- [ ] Branch Protection auf `main` aktivieren (force push + deletion blockieren, status checks required)
-- [ ] Repository Settings: Squash merge only + delete branch on merge aktivieren
-- [ ] Secret Scanning + Push Protection auf GitHub aktivieren
-- [ ] Dependabot alerts aktivieren
-- [ ] Renovate konfigurieren
-- [ ] gitleaks in CI (nicht nur lokal)
-- [ ] Docker Setup mit pinned Base Images (Digest, nicht Tag)
+- [ ] CI pipeline for PRs (lint, typecheck, build/test)
+- [ ] Branch protection on `main` (block force push + deletion, require status checks)
+- [ ] Repository settings: squash merge only + delete branch on merge
+- [ ] Enable secret scanning + push protection on GitHub
+- [ ] Enable Dependabot alerts
+- [ ] Configure Renovate
+- [ ] gitleaks in CI (not just locally)
+- [ ] Docker setup with pinned base images (digest, not tag)
 
-### Wenn Production-ready
+### When Production-Ready
 
-- [ ] Tests einrichten (Vitest / pytest minimum)
-- [ ] Security Scanning (Trivy für Container, Semgrep für Code)
+- [ ] Set up tests (Vitest / pytest minimum)
+- [ ] Security scanning (Trivy for containers, Semgrep for code)
 - [ ] Claude Code Review Action
-- [ ] Deployment Pipeline (Build > Test > Scan > Deploy)
+- [ ] Deployment pipeline (build > test > scan > deploy)
 
 ---
 
-## Tool-Vergleich auf einen Blick
+## Tool Comparison at a Glance
 
-| Kategorie | TS/Node | Python |
+| Category | TS/Node | Python |
 |-----------|---------|--------|
-| Package Manager | **pnpm** | **uv** |
-| Linter | **ESLint** (Flat Config) | **Ruff** |
+| Package manager | **pnpm** | **uv** |
+| Linter | **ESLint** (flat config) | **Ruff** |
 | Formatter | **Prettier** | **Ruff** (built-in) |
-| Type Checker | **TypeScript** (tsc) | **mypy** / pyright |
-| Test Runner | **Vitest** | **pytest** |
-| E2E Tests | **Playwright** | **Playwright** (pytest-playwright) |
-| HTTP Mocking | **MSW** | **respx** / httpx MockTransport |
-| Pre-commit | **Husky** + lint-staged | **pre-commit** Framework |
-| CI Lockfile | `pnpm install --frozen-lockfile` | `uv sync --frozen` |
+| Type checker | **TypeScript** (tsc) | **mypy** / pyright |
+| Test runner | **Vitest** | **pytest** |
+| E2E tests | **Playwright** | **Playwright** (pytest-playwright) |
+| HTTP mocking | **MSW** | **respx** / httpx MockTransport |
+| Pre-commit | **Husky** + lint-staged | **pre-commit** framework |
+| CI lockfile | `pnpm install --frozen-lockfile` | `uv sync --frozen` |
 
 ---
 
-## Referenzen
+## References
 
-### Allgemein
+### General
 - [gitleaks GitHub](https://github.com/gitleaks/gitleaks)
 - [Renovate Docs](https://docs.renovatebot.com/)
 - [Trivy GitHub Action](https://github.com/aquasecurity/trivy-action)
@@ -819,7 +819,7 @@ CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0"]
 
 ### TS/Node
 - [Next.js Testing Guide](https://nextjs.org/docs/app/guides/testing)
-- [Vitest Setup für Next.js](https://nextjs.org/docs/app/guides/testing/vitest)
+- [Vitest Setup for Next.js](https://nextjs.org/docs/app/guides/testing/vitest)
 - [ESLint Flat Config](https://eslint.org/docs/latest/use/configure/configuration-files)
 - [pnpm Docs](https://pnpm.io/)
 

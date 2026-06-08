@@ -1,39 +1,38 @@
 ---
-name: design-app
-description: Von einer App-Idee zu fundierten Architektur- und Stack-Entscheidungen auf Basis der Dev-Best-Practices-Regeln. Use this skill whenever the user describes a new app idea and wants help choosing architecture, stack, structure, or a scaffolding plan; triggert bei "neue App", "App-Idee", "wie strukturiere ich", "welcher Stack", "Architektur fuer ...".
+name: dev:design-app
+description: From an app idea to well-founded architecture and stack decisions based on the Dev-Best-Practices rules. Use this skill whenever the user describes a new app idea and wants help choosing architecture, stack, structure, or a scaffolding plan; triggers on "new app", "app idea", "how do I structure", "which stack", "architecture for ...".
 ---
 
-# App Design (regel-basiert)
+# App Design (rule-based)
 
-Wandelt eine App-Idee in begruendete Entscheidungen um. Maszstab: die Regel-Files
-unter `${CLAUDE_PLUGIN_ROOT}/rules/` (v.a. architecture-rules.md, app-rules.md,
-github-rules.md). Keine generischen Ratschlaege - jede Entscheidung verweist auf die Regel.
+Turns an app idea into justified decisions. Standard: the rule files
+under `${CLAUDE_PLUGIN_ROOT}/rules/` (especially architecture-rules.md, app-rules.md,
+github-rules.md). No generic advice — every decision references the rule.
 
-## Schritt 0 - Idee & Rahmen klaeren
-Erfasse aus der Beschreibung: Domaene, Nutzer, erwartete Last, Team-Groesse (Solo?),
-ob Web-Frontend, ob sensible Daten (DSGVO/MDR). Fehlt Wesentliches: einmal nachfragen,
-nicht raten.
+## Step 0 - Clarify Idea & Scope
+Gather from the description: domain, users, expected load, team size (solo?),
+whether there's a web frontend, whether sensitive data is involved (GDPR/MDR). If anything essential is missing: ask once, don't guess.
 
-## Schritt 1 - Entscheidungen entlang der Regeln treffen
-Arbeite die Entscheidungsbaeume aus architecture-rules.md ab und begruende jede Wahl:
+## Step 1 - Make Decisions Along the Rules
+Work through the decision trees from architecture-rules.md and justify each choice:
 - Monolith vs. Microservices (Default: Monolith-First)
 - Monorepo vs. Polyrepo
 - Rendering (SSR/SSG/ISR/CSR)
-- API-Typ (tRPC intern / REST extern / GraphQL)
-- Datenbank + ORM/Query-Builder
-- State-Management (Server- vs. Client-State)
-- Schichtung passend zur Projektgroesse
-- Ziel-ASVS-Level (Default L1 Solo, L2 Production) und relevante Security-Grundregeln
-- CI/CD-Grundgeruest (Pipeline, Branch Protection, Scanning)
+- API type (tRPC internal / REST external / GraphQL)
+- Database + ORM/Query-Builder
+- State management (Server vs. Client State)
+- Layering appropriate to project size
+- Target ASVS level (Default L1 Solo, L2 Production) and relevant security fundamentals
+- CI/CD skeleton (pipeline, branch protection, scanning)
 
-## Schritt 2 - Liefern
-Schreibe nach `./design-app.md`:
-1. Kurzes Architektur-Decision-Record: Entscheidung | Wahl | Begruendung (Regel-Referenz)
-2. Empfohlene Ordnerstruktur (feature-basiert) fuer den gewaehlten Stack
-3. "Tag 1"- und "Erste Woche"-Setup-Checkliste (aus github-rules.md / app-rules.md)
-4. Offene Punkte / bewusste Trade-offs als "[zu verifizieren]"
+## Step 2 - Deliver
+Write to `./design-app.md`:
+1. Short Architecture Decision Record: Decision | Choice | Rationale (rule reference)
+2. Recommended folder structure (feature-based) for the chosen stack
+3. "Day 1" and "First Week" setup checklist (from github-rules.md / app-rules.md)
+4. Open questions / deliberate trade-offs marked as "[to verify]"
 
-## Regeln
-- Kein Over-Engineering: fuer Solo/Prototyp die einfachste regelkonforme Variante.
-- Jede Entscheidung nennt die zugrundeliegende Regel (Datei -> Section).
-- Annahmen explizit als "[Annahme]" markieren statt still zu fuellen.
+## Rules
+- No over-engineering: for solo/prototype use the simplest rule-compliant variant.
+- Every decision cites the underlying rule (file -> section).
+- Assumptions explicitly marked as "[Assumption]" rather than silently filled in.

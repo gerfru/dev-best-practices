@@ -1,52 +1,52 @@
-# IaC Patterns und Anti-Patterns
+# IaC Patterns and Anti-Patterns
 
-Quelle: Kief Morris "Infrastructure as Code", O'Reilly 2021.
+Source: Kief Morris "Infrastructure as Code", O'Reilly 2021.
 
 ## Core Patterns
 
-| Pattern | Beschreibung | Anti-Pattern |
+| Pattern | Description | Anti-Pattern |
 |---|---|---|
-| **Immutable Infrastructure** | Infra-Ressourcen nie aendern — immer neu provisionieren | Mutable: Server mit SSH patchen (Config Drift) |
-| **Dynamic Infrastructure** | Ressourcen per API erzeugen/loeschen | Static: manuelles Setup, Snowflake Server |
-| **Single Source of Truth** | Ein Repo definiert Soll-Zustand — kein manuelles Eingreifen | IaC + parallele manuelle Aenderungen |
-| **Idempotent Apply** | Mehrfaches Apply → immer gleicher Zustand | Scripts mit Seiteneffekten bei Re-Run |
-| **Small Focused Stacks** | Ein Stack pro Concern (Network / Compute / App) | Monolithic Stack (alles in einem) |
-| **Composable Modules** | Module = wiederverwendbare Bausteine mit klaren Inputs/Outputs | Copy-Paste IaC |
-| **GitOps** | Git = Single Source of Truth, Aenderungen nur per PR | Direkte CLI-Aenderungen in Prod |
+| **Immutable Infrastructure** | Never change infra resources — always re-provision | Mutable: patching servers via SSH (Config Drift) |
+| **Dynamic Infrastructure** | Create/delete resources via API | Static: manual setup, Snowflake Server |
+| **Single Source of Truth** | One repo defines desired state — no manual intervention | IaC + parallel manual changes |
+| **Idempotent Apply** | Multiple applies → always the same state | Scripts with side effects on re-run |
+| **Small Focused Stacks** | One stack per concern (network / compute / app) | Monolithic stack (everything in one) |
+| **Composable Modules** | Modules = reusable building blocks with clear inputs/outputs | Copy-Paste IaC |
+| **GitOps** | Git = Single Source of Truth, changes only via PR | Direct CLI changes in prod |
 
-**Snowflake Anti-Pattern:** Jeder Server wurde durch manuelle Aenderungen einzigartig — nicht reproduzierbar, nicht skalierbar, nicht loeschbar ohne Angst.
+**Snowflake Anti-Pattern:** Every server became unique through manual changes — not reproducible, not scalable, not deletable without fear.
 
 ---
 
-## Modul-Design Prinzipien
+## Module Design Principles
 
-| Prinzip | Beschreibung |
+| Principle | Description |
 |---|---|
-| Single Responsibility | Ein Modul = ein klar abgegrenzter Concern |
-| Stabile Interfaces | Input-Variablen und Outputs aendern sich selten |
-| Keine versteckten Abhaengigkeiten | Alles was ein Modul braucht, kommt als Input |
-| Versionierung | Module per Git-Tag versionieren (kein `?ref=main` in Prod) |
-| Minimale Outputs | Nur was Downstream-Module wirklich brauchen |
+| Single Responsibility | One module = one clearly scoped concern |
+| Stable Interfaces | Input variables and outputs change rarely |
+| No Hidden Dependencies | Everything a module needs comes as input |
+| Versioning | Version modules via Git tag (no `?ref=main` in prod) |
+| Minimal Outputs | Only what downstream modules actually need |
 
 ---
 
-## Stack-Schichtung (empfohlen)
+## Stack Layering (recommended)
 
 ```text
-foundation/     # VPC, DNS, Security Groups, IAM Basis
-platform/       # Kubernetes, Datenbanken, Message Queues
-services/       # Applikations-Infrastruktur (pro Service/Team)
+foundation/     # VPC, DNS, Security Groups, IAM base
+platform/       # Kubernetes, databases, message queues
+services/       # Application infrastructure (per service/team)
 ```
 
-Jede Schicht hat eigenen State. Services-Schicht referenziert Platform-Outputs via Remote State Read.
+Each layer has its own state. Services layer references platform outputs via remote state read.
 
 ---
 
-## Drift-Klassifikation
+## Drift Classification
 
-| Typ | Ursache | Massnahme |
+| Type | Cause | Action |
 |---|---|---|
-| Config Drift | Manuelle Aenderung nach Apply | `terraform plan` zeigt Diff, dann Apply |
-| Version Drift | Modul-Version in einer Env zu alt | Update + Apply in allen Envs |
-| Secret Drift | Secrets direkt geaendert, nicht per IaC | Secrets in Secrets-Manager, Referenz in IaC |
-| Resource Drift | Ressource manuell geloescht | Import oder neu provisionieren |
+| Config Drift | Manual change after apply | `terraform plan` shows diff, then apply |
+| Version Drift | Module version in one env is outdated | Update + apply in all envs |
+| Secret Drift | Secrets changed directly, not via IaC | Secrets in secrets manager, reference in IaC |
+| Resource Drift | Resource manually deleted | Import or re-provision |

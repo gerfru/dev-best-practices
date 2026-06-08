@@ -1,117 +1,117 @@
 ---
-name: tool-test
-description: Stack-aware Test-Assistent. Erkennt automatisch Sprache, Framework und vorhandenes Test-Setup, dann entwirft oder generiert passende Tests (Unit, Integration, E2E) gemäß der Testpyramide. Use this skill whenever the user wants to write, improve, or review tests; triggert bei "schreib Tests", "Test-Strategie", "Coverage erhöhen", "wie teste ich X", "fehlende Tests", "flaky Tests".
+name: dev:tool-test
+description: Stack-aware test assistant. Automatically detects language, framework, and existing test setup, then designs or generates appropriate tests (unit, integration, E2E) according to the test pyramid. Use this skill whenever the user wants to write, improve, or review tests; triggers for "write tests", "test strategy", "increase coverage", "how do I test X", "missing tests", "flaky tests".
 ---
 
 # Test (stack-aware)
 
-Analysiert zuerst was vorhanden ist (Stack, Test-Framework, Coverage), dann entscheidet
-er was fehlt und warum — keine generischen Templates, sondern Tests die in dieses Projekt passen.
+First analyzes what is present (stack, test framework, coverage), then decides
+what is missing and why — no generic templates, but tests that fit this project.
 
-## Schritt 0 — Stack & Test-Setup erkennen
+## Step 0 — Detect Stack & Test Setup
 
-Scanne automatisch:
+Scan automatically:
 
-**Test-Framework erkennen:**
+**Detect test framework:**
 - `package.json` → `jest`, `vitest`, `playwright`, `cypress`, `testing-library`
 - `pyproject.toml` / `pytest.ini` → `pytest`, `unittest`, `hypothesis`
-- `*.test.ts` / `*.spec.ts` / `test_*.py` → vorhandene Test-Konventionen
+- `*.test.ts` / `*.spec.ts` / `test_*.py` → existing test conventions
 
-**Vorhandenes Setup bewerten:**
-- Wie viel Coverage gibt es schon? (`coverage/`, `.coverage`, `jest.config`)
-- Welche Test-Typen existieren? (Unit / Integration / E2E / Snapshot)
-- Gibt es Fixtures, Mocks, Test-Utils?
-- Läuft die Test-Suite in CI? (`.github/workflows/`)
+**Evaluate existing setup:**
+- How much coverage already exists? (`coverage/`, `.coverage`, `jest.config`)
+- What test types exist? (Unit / Integration / E2E / Snapshot)
+- Are there fixtures, mocks, test utils?
+- Does the test suite run in CI? (`.github/workflows/`)
 
-**Projekt-Kontext:**
-- Was ist das Kernstück der App? (Auth, Payment, API, Datenverarbeitung …)
-- Welche Pfade sind kritisch und noch ungetestet?
-- `CLAUDE.md` des Projekts auf bekannte Test-Ausnahmen prüfen
+**Project context:**
+- What is the core of the app? (Auth, payment, API, data processing …)
+- Which paths are critical and still untested?
+- Check project `CLAUDE.md` for known test exceptions
 
-Falls unklar was getestet werden soll: einmal konkret nachfragen.
+If unclear what should be tested: ask once concretely.
 
-## Schritt 1 — Test-Strategie ableiten (Pyramide)
+## Step 1 — Derive Test Strategy (Pyramid)
 
-Bewerte den aktuellen Stand gegen die Testpyramide und identifiziere die größten Lücken:
+Evaluate the current state against the test pyramid and identify the biggest gaps:
 
 ```text
-        [E2E]          wenige, langsam, hoher Wert für kritische Flows
-       [Integr.]       Service-Grenzen, DB, externe APIs
-      [Unit Tests]     Funktionen, Klassen, pure Logic — schnell, viele
+        [E2E]          few, slow, high value for critical flows
+       [Integr.]       service boundaries, DB, external APIs
+      [Unit Tests]     functions, classes, pure logic — fast, many
 ```
 
-**Kritische Pfade die IMMER Tests brauchen:**
-- Authentifizierung & Autorisierung (Login, Token-Validierung, Permission-Checks)
-- Datenmutationen (Create/Update/Delete mit Validierung)
-- Externe Integrationen (API-Calls, Webhooks, Payment)
-- Fehlerbehandlung (was passiert wenn X fehlschlägt?)
+**Critical paths that ALWAYS need tests:**
+- Authentication & authorization (login, token validation, permission checks)
+- Data mutations (create/update/delete with validation)
+- External integrations (API calls, webhooks, payment)
+- Error handling (what happens when X fails?)
 
-**Stack-spezifische Test-Empfehlungen:**
+**Stack-specific test recommendations:**
 
 *Next.js / React:*
-- Vitest + React Testing Library für Komponenten (kein Enzyme)
-- Server Actions: Integration-Test mit echtem DB-Zugriff, nicht mocken
-- `playwright` für kritische User-Flows (Login, Checkout)
-- Snapshot-Tests sparsam — nur für stabile UI-Komponenten
+- Vitest + React Testing Library for components (not Enzyme)
+- Server Actions: integration test with real DB access, not mocked
+- `playwright` for critical user flows (login, checkout)
+- Snapshot tests sparingly — only for stable UI components
 
 *FastAPI / Python:*
-- `pytest` + `httpx.AsyncClient` für API-Endpoints
-- `pytest-asyncio` für async-Tests
-- Echte DB für Integration-Tests (`pytest-postgresql` / SQLite in-memory)
-- `factory_boy` für Test-Fixtures statt manuelle Fixtures
+- `pytest` + `httpx.AsyncClient` for API endpoints
+- `pytest-asyncio` for async tests
+- Real DB for integration tests (`pytest-postgresql` / SQLite in-memory)
+- `factory_boy` for test fixtures instead of manual fixtures
 
 *Express / Node.js:*
-- Vitest oder Jest + Supertest für HTTP-Tests
-- Test-DB via Docker oder in-memory (bessere Isolation als Mocking)
+- Vitest or Jest + Supertest for HTTP tests
+- Test DB via Docker or in-memory (better isolation than mocking)
 
-*Generell:*
-- Keine Mock-Kaskaden für eigene Infrastruktur — echte DB im Test ist zuverlässiger
-- External APIs (Stripe, SendGrid …) mocken — aber mit realistischen Payloads
+*General:*
+- No mock cascades for own infrastructure — real DB in test is more reliable
+- Mock external APIs (Stripe, SendGrid …) — but with realistic payloads
 
-## Schritt 2 — Tests schreiben oder verbessern
+## Step 2 — Write or Improve Tests
 
-Je nach Anfrage des Nutzers:
+Depending on the user's request:
 
-**Neue Tests generieren:**
-1. Identifiziere die zu testende Unit (Funktion / Endpoint / Komponente)
-2. Bestimme sinnvolle Testfälle: Happy Path, Edge Cases, Fehler-Szenarien
-3. Schreibe Tests im vorhandenen Format (Dateinamen-Konvention, Import-Stil, Fixture-Pattern)
-4. Keine Duplikation von vorhandenen Tests
+**Generate new tests:**
+1. Identify the unit to test (function / endpoint / component)
+2. Determine sensible test cases: happy path, edge cases, error scenarios
+3. Write tests in the existing format (filename convention, import style, fixture pattern)
+4. No duplication of existing tests
 
-**Test-Strategie entwerfen:**
-1. Lücken-Analyse: Was ist kritisch und ungetestet?
-2. Priorisierung: Auth > Datenmutationen > Business Logic > UI
-3. Aufwandsschätzung pro Bereich (S/M/L)
-4. Roadmap: Was zuerst, was kann warten?
+**Design test strategy:**
+1. Gap analysis: what is critical and untested?
+2. Prioritization: auth > data mutations > business logic > UI
+3. Effort estimate per area (S/M/L)
+4. Roadmap: what first, what can wait?
 
-**Vorhandene Tests verbessern:**
-1. Flaky Tests: Timing-Abhängigkeiten, externe State-Abhängigkeiten identifizieren
-2. Zu breite Mocks: Was wird gemockt das nicht gemockt werden sollte?
-3. Test-Dopplung: Gleiche Logik in Unit + Integration + E2E → nur auf einer Ebene
-4. Fehlende Assertions: Tests die nur "kein Fehler" prüfen statt Verhalten
+**Improve existing tests:**
+1. Flaky tests: identify timing dependencies, external state dependencies
+2. Overly broad mocks: what is mocked that should not be mocked?
+3. Test duplication: same logic in unit + integration + E2E → only at one level
+4. Missing assertions: tests that only check "no error" instead of behavior
 
-## Schritt 3 — Ausgabe
+## Step 3 — Output
 
 ```text
-## Test-Analyse: [Kontext]
+## Test Analysis: [Context]
 
-**Stack:** [erkannter Stack + Test-Framework]
-**Aktueller Stand:** [kurze Bewertung der vorhandenen Tests]
+**Stack:** [detected stack + test framework]
+**Current state:** [brief assessment of existing tests]
 
-### Kritische Lücken (priorisiert)
-1. [Pfad/Funktion] — [warum kritisch] — Aufwand: S/M/L
+### Critical Gaps (prioritized)
+1. [path/function] — [why critical] — Effort: S/M/L
 2. …
 
-### Generierte Tests
-[direkt verwendbare Test-Datei(en) im richtigen Format]
+### Generated Tests
+[directly usable test file(s) in the correct format]
 
-### Nicht abgedeckt (bewusst)
-[Was aus Scope-Gründen weggelassen wurde und warum]
+### Not covered (intentionally)
+[What was omitted for scope reasons and why]
 ```
 
-## Regeln
-- Tests schreiben die Verhalten prüfen, nicht Implementierungsdetails.
-- Kein Test-Code der komplexer ist als der Code den er testet.
-- `// TODO: add more tests` niemals stehen lassen — entweder schreiben oder als Lücke dokumentieren.
-- Automatisch in Dateien schreiben nur wenn der Nutzer es explizit verlangt.
-- Coverage als Metrik nennen aber nicht als Ziel — schlecht geschriebene Tests die Coverage erhöhen sind wertlos.
+## Rules
+- Write tests that check behavior, not implementation details.
+- No test code that is more complex than the code it tests.
+- Never leave `// TODO: add more tests` — either write them or document as a gap.
+- Auto-write to files only when the user explicitly requests it.
+- Cite coverage as a metric but not as a goal — poorly written tests that increase coverage are worthless.

@@ -1,5 +1,5 @@
 ---
-name: design-migration
+name: dev:design-migration
 description: >
   Migration planning skill grounded in MIT 6.5840 (Distributed Systems, Morris/
   Kaashoek/Zeldovich) and Martin Fowler's migration patterns. Use this skill
@@ -11,11 +11,11 @@ description: >
   "how do I break this apart safely", "migration strategy". Always use this skill
   for migration planning — these decisions have high failure risk and must be
   approached systematically. Also grounded in Kleppmann "Designing Data-Intensive
-  Applications" Kap. 4 (Schema Evolution, Forward/Backward Compatibility) and
-  Kap. 11 (Dual-Write Problem, Change Data Capture, Event Log).
-  Additional triggers: "Schema Migration ohne Downtime", "CDC einrichten",
-  "Dual-Write Problem", "Debezium", "Schema Registry", "Expand-Contract Pattern",
-  "Forward Compatibility", "Schema versioning".
+  Applications" Ch. 4 (Schema Evolution, Forward/Backward Compatibility) and
+  Ch. 11 (Dual-Write Problem, Change Data Capture, Event Log).
+  Additional triggers: "schema migration without downtime", "set up CDC",
+  "dual-write problem", "Debezium", "Schema Registry", "expand-contract pattern",
+  "forward compatibility", "schema versioning".
 ---
 # Migration Plan Skill
 
@@ -94,43 +94,43 @@ and compare responses with the old system. Measure divergence before going live.
 
 ---
 
-## Output — Design-Datei
+## Output — Design File
 
-Schreibe das Ergebnis nach `./design-migration.md`:
+Write the result to `./design-migration.md`:
 
 ```markdown
-# Migration Plan: [Titel]
-Von: ... → Nach: ... | Datum: YYYY-MM-DD
+# Migration Plan: [Title]
+From: ... → To: ... | Date: YYYY-MM-DD
 
-## Entscheidungen
-| Entscheidung | Wahl | Begründung | Referenz |
+## Decisions
+| Decision | Choice | Rationale | Reference |
 |---|---|---|---|
 
 ## Scope
-Was migriert; was explizit NICHT in dieser Migration.
+What is migrating; what is explicitly NOT in this migration.
 
-## Risiko-Assessment
-| Risiko | Wahrscheinlichkeit | Impact | Mitigation |
+## Risk Assessment
+| Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
 
-## Migrationsphasen
-[Phase-by-phase: Was ändert sich | Verifikation | Rollback]
+## Migration Phases
+[Phase-by-phase: What changes | Verification | Rollback]
 
-## Rollback-Strategie
-[Abbruchkriterium + Rollback-Schritte]
+## Rollback Strategy
+[Abort criteria + rollback steps]
 
-## Erfolgskriterien
+## Success Criteria
 - Error rate < X%
 - P99 < Xms
-- Daten konsistent verifiziert
+- Data consistency verified
 
-## Annahmen & offene Punkte
+## Assumptions & Open Questions
 
 ---
-## ✅ Setup-Todo
+## Setup Todo
 - [ ] ...
 
-## 📋 Nächste Schritte (priorisiert)
+## Next Steps (prioritized)
 1. ...
 ```
 
@@ -147,5 +147,5 @@ Fowler patterns, MIT 6.5840, Richardson Saga: `references/curriculum-mapping.md`
 - `references/migration-patterns.md` — Strangler Fig, seam finding, zero-downtime DB migration,
   CAP theorem, consistency models, 2PC, Saga pattern
 - `references/schema-evolution.md` — Forward/Backward Compatibility, Dual-Write, CDC (Debezium),
-  Avro Schema Registry, Expand-Contract Pattern (Kleppmann DDIA Kap. 4 + 11)
+  Avro Schema Registry, Expand-Contract Pattern (Kleppmann DDIA Ch. 4 + 11)
 - `references/curriculum-mapping.md` — Concept → course/blog link mapping

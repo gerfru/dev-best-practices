@@ -1,5 +1,5 @@
 ---
-name: design-data
+name: dev:design-data
 description: >
   Data model design skill grounded in CMU 15-445 (Database Systems, Prof. Andy Pavlo)
   and Stanford CS245. Use this skill whenever the user needs to design or review a
@@ -95,31 +95,31 @@ CMU 15-445, Fowler EventSourcing/CQRS, DynamoDB: `references/curriculum-mapping.
 
 ---
 
-## Output — Design-Datei
+## Output — Design File
 
-Schreibe das Ergebnis nach `./design-data.md`:
+Write the result to `./design-data.md`:
 
 ```markdown
-# Data Model: [Domäne/Kontext]
-DB: ... | Datum: YYYY-MM-DD
+# Data Model: [Domain/Context]
+DB: ... | Date: YYYY-MM-DD
 
-## Entscheidungen
-| Entscheidung | Wahl | Begründung | Referenz |
+## Decisions
+| Decision | Choice | Rationale | Reference |
 |---|---|---|---|
 
 ## Schema
-[DDL oder ER-Diagramm-Beschreibung]
+[DDL or ER diagram description]
 
-## Index-Strategie
-[Pro Index: Typ | Spalten | Begründung | Trade-off]
+## Index Strategy
+[Per index: Type | Columns | Rationale | Trade-off]
 
-## Annahmen & offene Punkte
+## Assumptions & Open Questions
 
 ---
-## ✅ Setup-Todo
+## ✅ Setup Todo
 - [ ] ...
 
-## 📋 Nächste Schritte (priorisiert)
+## 📋 Next Steps (prioritized)
 1. ...
 ```
 

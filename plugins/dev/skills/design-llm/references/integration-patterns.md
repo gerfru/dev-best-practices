@@ -1,47 +1,47 @@
-# LLM Integration Patterns — Entscheidungsmatrix
+# LLM Integration Patterns — Decision Matrix
 
-## Wann welches Pattern?
+## When to Use Which Pattern?
 
-| Pattern | Wählen wenn... | Nicht wählen wenn... |
+| Pattern | Choose when... | Do not choose when... |
 |---|---|---|
-| **Prompting-only** | Aufgabe mit Kontext lösbar, kein externes Wissen nötig, schnelles Prototyping | Wissen muss aktuell/domänenspezifisch sein, Verhalten muss konsistent angepasst sein |
-| **RAG** | Wissens-Bottleneck: Modell kennt Inhalte nicht (Docs, DB, aktuelle Daten), kein Fine-tuning-Budget | Aufgabe braucht keine externe Wissensquelle, Latenz-kritisch ohne Caching |
-| **Fine-tuning** | Verhaltens-Bottleneck: Stil/Format/Ton muss konsistent angepasst sein, viele Beispiele vorhanden, Production-Volume hoch | Wissen fehlt (→ RAG), Budget klein, wenige Beispiele (<500) |
-| **Agent / Tool-Use** | Mehrere Schritte, externe Aktionen nötig (APIs, Code-Ausführung, Search), Aufgabe nicht mit einem LLM-Call lösbar | Einfache Q&A, Latenz-kritisch, Kosten-kritisch |
+| **Prompting-only** | Task is solvable with context, no external knowledge needed, rapid prototyping | Knowledge must be current/domain-specific, behavior must be consistently adapted |
+| **RAG** | Knowledge bottleneck: model doesn't know the content (docs, DB, current data), no fine-tuning budget | Task needs no external knowledge source, latency-critical without caching |
+| **Fine-tuning** | Behavior bottleneck: style/format/tone must be consistently adapted, many examples available, high production volume | Knowledge is missing (→ RAG), small budget, few examples (<500) |
+| **Agent / Tool-Use** | Multiple steps, external actions needed (APIs, code execution, search), task not solvable with a single LLM call | Simple Q&A, latency-critical, cost-critical |
 
-**Faustregel (CMU 11-667):** Prompt → RAG → Fine-tune → Agent. Immer mit dem einfachsten Pattern starten.
+**Rule of thumb (CMU 11-667):** Prompt → RAG → Fine-tune → Agent. Always start with the simplest pattern.
 
 ---
 
-## Pattern-Kombinationen (häufig in Produktion)
+## Pattern Combinations (common in production)
 
-| Kombination | Typischer Use-Case |
+| Combination | Typical use case |
 |---|---|
-| RAG + Prompting | Dokumenten-Q&A, Knowledge-Base-Chat |
-| Fine-tune + RAG | Domänen-Assistent mit spezifischem Stil + aktuellem Wissen |
-| Agent + RAG | Deep Research, Code-Generierung mit Dokumentations-Zugriff |
-| Agent + Fine-tune | Spezialisierter Code-Agent (z.B. SQL-Agent) |
+| RAG + Prompting | Document Q&A, knowledge base chat |
+| Fine-tune + RAG | Domain assistant with specific style + current knowledge |
+| Agent + RAG | Deep research, code generation with documentation access |
+| Agent + Fine-tune | Specialized code agent (e.g. SQL agent) |
 
 ---
 
-## Kosten-/Latenz-Profil
+## Cost / Latency Profile
 
-| Pattern | Latenz (p95) | Kosten/Request | Wartungsaufwand |
+| Pattern | Latency (p95) | Cost/request | Maintenance effort |
 |---|---|---|---|
-| Prompting-only | Niedrig (1 LLM-Call) | Gering | Minimal |
-| RAG | Mittel (+Retrieval-Latenz) | Mittel (+Embedding-Calls) | Mittel (Index-Pflege) |
-| Fine-tune | Niedrig (kleineres Modell möglich) | Niedrig (kleineres Modell) | Hoch (Retraining) |
-| Agent | Hoch (multiple LLM-Calls) | Hoch (N × Token-Kosten) | Hoch (Tool-Integration) |
+| Prompting-only | Low (1 LLM call) | Low | Minimal |
+| RAG | Medium (+retrieval latency) | Medium (+embedding calls) | Medium (index maintenance) |
+| Fine-tune | Low (smaller model possible) | Low (smaller model) | High (retraining) |
+| Agent | High (multiple LLM calls) | High (N × token costs) | High (tool integration) |
 
 ---
 
-## Referenzen
+## References
 
-| Entscheidung | Quelle |
+| Decision | Source |
 |---|---|
-| Prompting vs. Fine-tune | CMU 11-667 Lec 4 — "Deciding when to finetune and finetuning efficiently" |
-| RAG-Grundlagen | CMU 11-667 Lec 5–7 — "Retrieval 1–3: Storing, RAG, Deep Research" |
-| Multi-Agent | CMU 11-667 Lec 14 — "Multi-agent systems" |
-| Tool-Use | CMU 11-667 Lec 11 — "Tool-use, chitchat, personas" |
-| Agent Frameworks | Berkeley CS294-196 Lec (Oct 7) — "Compound AI Systems & DSPy" (Omar Khattab) |
-| Inference-Optimierung | MIT 6.5940 Lec 13 — "Efficient LLM Deployment" |
+| Prompting vs. fine-tune | CMU 11-667 Lec 4 — "Deciding when to finetune and finetuning efficiently" |
+| RAG fundamentals | CMU 11-667 Lec 5–7 — "Retrieval 1–3: Storing, RAG, Deep Research" |
+| Multi-agent | CMU 11-667 Lec 14 — "Multi-agent systems" |
+| Tool use | CMU 11-667 Lec 11 — "Tool-use, chitchat, personas" |
+| Agent frameworks | Berkeley CS294-196 Lec (Oct 7) — "Compound AI Systems & DSPy" (Omar Khattab) |
+| Inference optimization | MIT 6.5940 Lec 13 — "Efficient LLM Deployment" |

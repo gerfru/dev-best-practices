@@ -1,15 +1,15 @@
 ---
-name: meta-sync
-description: Prüft ob die kompakten claude/*.md Rule-Files noch die Essenz der detaillierten reference/*.md widerspiegeln — findet Sections die in reference/ neu/geändert sind aber noch nicht in claude/ übertragen wurden. Use this skill for maintaining this dev-best-practices repo itself; triggert bei "Regeln synchronisieren", "reference aktualisieren", "claude/ sync", "sind die Rules noch aktuell", Repo-Wartung. NUR für das dev-best-practices Repo selbst — nicht für andere Projekte.
+name: dev:meta-sync
+description: Checks whether the compact claude/*.md rule files still reflect the essence of the detailed reference/*.md — finds sections that are new/changed in reference/ but not yet transferred to claude/. Use this skill for maintaining this dev-best-practices repo itself; triggers for "synchronize rules", "update reference", "claude/ sync", "are the rules still current", repo maintenance. ONLY for the dev-best-practices repo itself — not for other projects.
 ---
 
-# Doc Sync (Repo-intern)
+# Doc Sync (repo-internal)
 
-Dieser Skill ist für die Wartung des dev-best-practices Repos selbst.
-Maßstab: `reference/*.md` sind die detaillierte Quelle (Master).
-`claude/*.md` sind die kondensierte Ableitung (Derived).
+This skill is for maintaining the dev-best-practices repo itself.
+Standard: `reference/*.md` are the detailed source (master).
+`claude/*.md` are the condensed derivation (derived).
 
-## Schritt 0 — Dateipaar-Mapping laden
+## Step 0 — Load File Pair Mapping
 
 | Reference (Master) | Claude (Derived) |
 |---|---|
@@ -17,79 +17,79 @@ Maßstab: `reference/*.md` sind die detaillierte Quelle (Master).
 | `reference/github-best-practices.md` | `claude/github-rules.md` |
 | `reference/architecture-best-practices.md` | `claude/architecture-rules.md` |
 
-`claude/essential-rules.md` ist eigenständig — es destilliert aus allen drei.
-Es wird separat geprüft: Enthält es die wichtigsten Punkte aus allen drei Derived-Files?
+`claude/essential-rules.md` is standalone — it distills from all three.
+It is checked separately: does it contain the most important points from all three derived files?
 
-## Schritt 1 — Paarweise Analyse
+## Step 1 — Pairwise Analysis
 
-Für jedes Dateipaar (parallel lesbar):
+For each file pair (can be read in parallel):
 
-**Was suchen:**
+**What to look for:**
 
-1. **Neue Sections in Reference die in Claude fehlen:**
-   - Heading in `reference/` der kein Pendant in `claude/` hat
-   - Neue Tools / Frameworks die erwähnt werden (z.B. Biome, Bun, uv, Ruff)
-   - Neue Compliance-Anforderungen (ASVS 5.0 Änderungen, neue OWASP-Items)
+1. **New sections in reference missing in claude:**
+   - Heading in `reference/` with no counterpart in `claude/`
+   - New tools / frameworks mentioned (e.g. Biome, Bun, uv, Ruff)
+   - New compliance requirements (ASVS 5.0 changes, new OWASP items)
 
-2. **Veraltete Regeln in Claude:**
-   - Empfehlungen in `claude/` die in `reference/` zurückgezogen oder geändert wurden
-   - Deprecated Tools die noch in `claude/` stehen
-   - Versionsnummern die nicht mehr stimmen
+2. **Outdated rules in claude:**
+   - Recommendations in `claude/` that were withdrawn or changed in `reference/`
+   - Deprecated tools still in `claude/`
+   - Version numbers that are no longer correct
 
-3. **Qualität der Kondensierung:**
-   - Ist die Essenz korrekt erfasst oder fehlt ein wichtiger Nuancen?
-   - Ist eine Section in `claude/` zu lang geworden (>20% der Reference-Section)?
-   - Enthält `claude/` noch Erklärungen die nur in `reference/` gehören?
+3. **Quality of condensation:**
+   - Is the essence correctly captured or is an important nuance missing?
+   - Has a section in `claude/` grown too long (>20% of the reference section)?
+   - Does `claude/` still contain explanations that belong only in `reference/`?
 
-## Schritt 2 — Essential-Rules Cross-Check
+## Step 2 — Essential-Rules Cross-Check
 
-`essential-rules.md` extra prüfen:
+Check `essential-rules.md` separately:
 
-1. Enthält es mindestens einen Punkt aus jeder Haupt-Section der drei `claude/`-Files?
-2. Gibt es neue Security/Architecture-Regeln in `claude/` die in `essential-rules.md` fehlen aber hingehören?
-3. Ist `essential-rules.md` noch unter ~100 Zeilen? (Ziel: kompakt genug für CLAUDE.md)
+1. Does it contain at least one point from each main section of the three `claude/` files?
+2. Are there new security/architecture rules in `claude/` that are missing from `essential-rules.md` but belong there?
+3. Is `essential-rules.md` still under ~100 lines? (Goal: compact enough for CLAUDE.md)
 
-## Schritt 3 — Sync-Report
+## Step 3 — Sync Report
 
 ```text
 ## Doc Sync Report
 
 ### app-rules.md
-✓ Aktuell: [X Sections]
-⚠ Neu in Reference, fehlt in Claude:
-  - [Section] — [was hinzugekommen ist, 1 Satz]
-⚠ Veraltet in Claude:
-  - [Regel/Tool] — [was sich geändert hat]
+✓ Current: [X sections]
+⚠ New in reference, missing in claude:
+  - [Section] — [what was added, 1 sentence]
+⚠ Outdated in claude:
+  - [Rule/Tool] — [what changed]
 
 ### github-rules.md
-[analog]
+[same structure]
 
 ### architecture-rules.md
-[analog]
+[same structure]
 
 ### essential-rules.md Cross-Check
-✓ Deckt alle Kern-Sections ab
-⚠ Fehlt: [neue kritische Regel die aufgenommen werden sollte]
-ℹ Größe: [aktuelle Zeilenzahl] / Ziel: <100 Zeilen
+✓ Covers all core sections
+⚠ Missing: [new critical rule that should be included]
+ℹ Size: [current line count] / Target: <100 lines
 
 ---
-### Empfohlene Änderungen (priorisiert)
-1. [KRITISCH] [Datei] — [was und warum kritisch]
-2. [NORMAL] [Datei] — [was]
-3. [MINOR] [Datei] — [was]
+### Recommended Changes (prioritized)
+1. [CRITICAL] [File] — [what and why critical]
+2. [NORMAL] [File] — [what]
+3. [MINOR] [File] — [what]
 
-Gesamtaufwand: S/M/L
+Total effort: S/M/L
 ```
 
-## Schritt 4 — Änderungen umsetzen (nur auf Anfrage)
+## Step 4 — Implement Changes (only on request)
 
-Falls der Nutzer die Änderungen durchführen will:
-1. Zeige für jede Änderung: aktueller Text → vorgeschlagener neuer Text
-2. Nutzer bestätigt pro Änderung oder für alle
-3. Schreibe nur bestätigte Änderungen
+If the user wants to make the changes:
+1. Show for each change: current text → proposed new text
+2. User confirms per change or for all
+3. Only write confirmed changes
 
-## Regeln
-- Keine automatischen Änderungen ohne Bestätigung.
-- `reference/` wird nie verändert — nur `claude/` und `essential-rules.md`.
-- Kondensierung bewahren: `claude/`-Files sollen knapp bleiben. Keine langen Erklärungen rüberkopieren.
-- Inhaltliche Korrektheit vor Vollständigkeit: lieber eine Regel weglassen als eine falsch kondensieren.
+## Rules
+- No automatic changes without confirmation.
+- `reference/` is never changed — only `claude/` and `essential-rules.md`.
+- Preserve condensation: `claude/` files should stay concise. Do not copy over long explanations.
+- Content correctness over completeness: better to omit a rule than condense it incorrectly.

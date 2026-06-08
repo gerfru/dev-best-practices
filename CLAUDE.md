@@ -1,39 +1,39 @@
 # Dev Best Practices
 
-Dieses Repo enthaelt Best-Practice-Regeln fuer Software-Projekte (RAG-Systeme, AI Agents, Data Pipelines, Full-Stack Web Apps) und ein **Claude Code Plugin** mit 24 Skills.
+This repo contains best-practice rules for software projects (RAG systems, AI agents, data pipelines, full-stack web apps) and a **Claude Code Plugin** with 24 skills.
 
-## Repo-Struktur
+## Repo Structure
 
 ```text
 .claude-plugin/
-  marketplace.json          # Macht dieses Repo als Marketplace installierbar
+  marketplace.json          # Makes this repo installable as a marketplace plugin
 
 plugins/dev/
   .claude-plugin/
-    plugin.json             # Plugin-Metadaten (name: "dev", version: "2.0.0")
-  commands/                 # Slash-Command-Definitionen (eine Datei pro Skill)
-  skills/                   # Skill-Workflow-Definitionen (auto-triggered)
-  rules/                    # Mirror von claude/*.md (wird von Skills als Referenz genutzt)
+    plugin.json             # Plugin metadata (name: "dev", version: "2.0.0")
+  commands/                 # Slash command definitions (one file per skill)
+  skills/                   # Skill workflow definitions (auto-triggered)
+  rules/                    # Mirror of claude/*.md (used by skills as reference)
 
-claude/                     # Kondensierte Regeln fuer Claude Code
-  essential-rules.md        # ~80 Zeilen -- in Projekt-CLAUDE.md einfuegen
-  app-rules.md              # App-Regeln im Detail
-  github-rules.md           # GitHub / CI-Regeln im Detail
-  architecture-rules.md     # Architektur-Regeln im Detail
+claude/                     # Condensed rules for Claude Code
+  essential-rules.md        # ~80 lines -- insert into project CLAUDE.md
+  app-rules.md              # App rules in detail
+  github-rules.md           # GitHub / CI rules in detail
+  architecture-rules.md     # Architecture rules in detail
 
-reference/                  # Detaillierte Dokumentation zum Nachschlagen
+reference/                  # Detailed documentation for reference
   app-best-practices.md     # Security, Auth, API, DB, Monitoring, OWASP
   github-best-practices.md  # CI/CD, Linting, Testing, Docker, Code Review
-  architecture-best-practices.md  # Schichten, Patterns, Infra, 12-Factor
+  architecture-best-practices.md  # Layers, Patterns, Infra, 12-Factor
 
 docs/
-  skill-research-basis.md   # Akademische & Industrie-Quellen pro Skill
+  skill-research-basis.md   # Academic & industry sources per skill
 
 scripts/
-  validate-skills.sh        # Plugin-Struktur-Validator (CI + pre-commit)
+  validate-skills.sh        # Plugin structure validator (CI + pre-commit)
 ```
 
-## Plugin-Skills (24)
+## Plugin Skills (24)
 
 ```text
 DESIGN:  design-app, design-secure, design-api, design-data, design-migration,
@@ -43,100 +43,100 @@ TOOLS:   tool-debug, tool-test, tool-style, tool-a11y, tool-perf
 META:    meta-help, meta-install, meta-drift, meta-sync, meta-create-skill
 ```
 
-Navigationsmenue: `/dev:meta-help`
+Navigation menu: `/dev:meta-help`
 
-## Verwendung in Projekten
+## Usage in Projects
 
-**Plugin installieren:** `claude plugin install dev@gerald-dev-best-practices`
+**Install plugin:** `claude plugin install dev@gerald-dev-best-practices`
 
-**Nur Regeln (ohne Plugin):** `claude/essential-rules.md` in Projekt-CLAUDE.md kopieren, oder `/dev:meta-install` verwenden.
+**Rules only (without plugin):** Copy `claude/essential-rules.md` into project CLAUDE.md, or use `/dev:meta-install`.
 
-**Mehr Detail:** Sections aus `claude/app-rules.md`, `claude/github-rules.md`, `claude/architecture-rules.md` selektiv ergaenzen.
+**More detail:** Selectively add sections from `claude/app-rules.md`, `claude/github-rules.md`, `claude/architecture-rules.md`.
 
-## Pflege
+## Maintenance
 
-- `reference/` aktualisieren wenn sich Best Practices aendern
-- `claude/` synchron halten (nur Regeln, keine Erklaerungen)
-- Mirror aktualisieren nach Regel-Aenderungen: `cp claude/*.md plugins/dev/rules/`
-- Neuen Skill hinzufuegen: `/dev:meta-create-skill`
-- Quellen und akademische Basis: `docs/skill-research-basis.md`
+- Update `reference/` when best practices change
+- Keep `claude/` in sync (rules only, no explanations)
+- Update mirror after rule changes: `cp claude/*.md plugins/dev/rules/`
+- Add new skill: `/dev:meta-create-skill`
+- Sources and academic basis: `docs/skill-research-basis.md`
 
-<!-- DEV-BEST-PRACTICES:START — via /dev-best-practices:meta-install aktualisieren -->
-<!-- Version: essential-rules.md @ 2026-06-08 | Umfang: essential | Vorher: 2026-06-05 -->
+<!-- DEV-BEST-PRACTICES:START — update via /dev-best-practices:meta-install -->
+<!-- Version: essential-rules.md @ 2026-06-08 | Scope: essential | Previous: 2026-06-05 -->
 
 ## Dev Best Practices
 
 ### Security
 
-- Security Headers setzen: CSP (`default-src 'self'`), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
-- CSP-Strategie: Nonce-basiert mit `'strict-dynamic'`. `'unsafe-inline'` nur fuer `style-src`
-- Auth an 3 Schichten: Middleware → Route → **Data Access Layer** (wichtigste!)
-- Passwort: bcrypt (cost ≥ 12) / Argon2id, nie Plaintext. Rate Limiting auf Login
+- Set security headers: CSP (`default-src 'self'`), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
+- CSP strategy: Nonce-based with `'strict-dynamic'`. `'unsafe-inline'` only for `style-src`
+- Auth at 3 layers: Middleware → Route → **Data Access Layer** (most important!)
+- Password: bcrypt (cost ≥ 12) / Argon2id, never plaintext. Rate limiting on login
 - Sessions: httpOnly, secure, sameSite=Lax
-- Input validieren an System-Grenze: TS → Zod, Python → Pydantic
-- SQL: Immer Prepared Statements. Shell: Nie User-Input in Commands
-- DOM XSS: Kein `innerHTML` mit User-Daten. Trusted Types + DOMPurify bei dynamischem HTML
-- Keine Secrets in Error-Responses. Keine Secrets loggen
-- `.env` nie committen, `.env.example` committen. Env-Validierung beim App-Start (crasht sofort wenn Variable fehlt)
-- Security Assessment: `ruff-S`+`semgrep` (SAST), `pip-audit` (SCA), ASVS 5.0 als Pruefrahmen
+- Validate input at system boundary: TS → Zod, Python → Pydantic
+- SQL: Always prepared statements. Shell: Never user input in commands
+- DOM XSS: No `innerHTML` with user data. Trusted Types + DOMPurify for dynamic HTML
+- No secrets in error responses. Never log secrets
+- Never commit `.env`, do commit `.env.example`. Validate env vars at app start (crashes immediately if variable is missing)
+- Security assessment: `ruff-S`+`semgrep` (SAST), `pip-audit` (SCA), ASVS 5.0 as verification framework
 
-### API & Datenbank
+### API & Database
 
-- Einheitliches Error-Format: `{ error: { code, message, details } }`
-- Rate Limiting auf Middleware/Gateway-Level. Pagination fuer alle Listen
-- API-Typ: Intern → tRPC. Extern → REST
-- DB: Immer Migrations-Tool (nie manuell SQL auf Prod). Prepared Statements, Least Privilege User, TLS zum DB-Server
-- ORM-Wahl: Query Builder (Drizzle, SQLAlchemy Core) als Sweet Spot
-- Connection Pooling Pflicht. Serverless → externer Pooler
+- Uniform error format: `{ error: { code, message, details } }`
+- Rate limiting at middleware/gateway level. Pagination for all lists
+- API type: Internal → tRPC. External → REST
+- DB: Always use a migration tool (never manual SQL on prod). Prepared statements, least privilege user, TLS to DB server
+- ORM choice: Query builder (Drizzle, SQLAlchemy Core) as sweet spot
+- Connection pooling required. Serverless → external pooler
 
 ### Architecture
 
-- **Feature-basierte** Ordnerstruktur (nicht technisch)
-- Schichtung: Routes → Services → Data Access (2-3 Schichten reichen fuer Solo)
-- **Starte mit Monolith.** Microservices nur bei konkretem Grund
-- Monorepo fuer Full-Stack (Turborepo / pnpm Workspaces / uv Workspaces)
-- 12-Factor: Config in Env, Stateless Processes, Logs auf Stdout, Port Binding
-- Server Components als Default (React/Next.js). `"use client"` nur bei Interaktivitaet
-- Server State (TanStack Query) und Client State (useState/Zustand) nie mischen
+- **Feature-based** folder structure (not technical)
+- Layering: Routes → Services → Data Access (2-3 layers are enough for solo)
+- **Start with a monolith.** Microservices only for a concrete reason
+- Monorepo for full-stack (Turborepo / pnpm Workspaces / uv Workspaces)
+- 12-Factor: Config in env, stateless processes, logs to stdout, port binding
+- Server components as default (React/Next.js). `"use client"` only for interactivity
+- Never mix server state (TanStack Query) with client state (useState/Zustand)
 
 ### GitHub & CI/CD
 
-- Pre-commit Hooks Pflicht: gitleaks → ruff (Lint+Fix inkl. S-Regeln) → Format → Type Check
+- Pre-commit hooks required: gitleaks → ruff (lint+fix incl. S-rules) → format → type check
 - TS: ESLint Flat Config + Prettier + Husky. Python: Ruff + mypy + pre-commit
-- TS Package Manager: pnpm. Python: uv. Lockfiles immer committen
-- CI: Jeder PR durch Pipeline (Install → Lint → Type Check → Build/Test → gitleaks)
-- Branch Protection auf main: Require PR, Status Checks, No Force Push
-- Renovate (nicht Dependabot). devDeps patch Automerge, Major manuell. Dependabot Alerts aktivieren (Security-Meldungen)
-- PR-Groesse: < 400 LOC, darueber aufteilen
+- TS package manager: pnpm. Python: uv. Always commit lockfiles
+- CI: Every PR through pipeline (install → lint → type check → build/test → gitleaks)
+- Branch protection on main: Require PR, status checks, no force push
+- Renovate (not Dependabot). devDeps patch automerge, major manual. Enable Dependabot alerts (security notifications)
+- PR size: < 400 LOC, split above that
 
 ### Testing
 
-- TS: Vitest + Testing Library + MSW (API-Mocking) + Playwright (E2E). Python: pytest + Playwright
-- Prioritaet: 1) API Endpoints 2) Data Transformationen 3) E2E Smoke Test
-- Tests testen Verhalten, nicht Implementierung. Mocke nur an Systemgrenzen
-- Coverage: 70-80% Lines. Kritische Pfade (Auth, Payment) ~100%. 100% gesamt ist kein Ziel
+- TS: Vitest + Testing Library + MSW (API mocking) + Playwright (E2E). Python: pytest + Playwright
+- Priority: 1) API endpoints 2) data transformations 3) E2E smoke test
+- Tests test behavior, not implementation. Mock only at system boundaries
+- Coverage: 70-80% lines. Critical paths (auth, payment) ~100%. 100% overall is not the goal
 
 ### Docker & Deployment
 
-- Multi-Stage Build (Builder + Runner). Base Images mit Digest pinnen
-- Non-root User. HEALTHCHECK. `.dockerignore` pflegen
-- Ports nur auf `127.0.0.1` binden. Named Volumes fuer Prod
-- Reverse Proxy vor der App (Caddy / Nginx). Automatisches HTTPS
-- Health Checks: `/health` (Liveness) + `/ready` (Readiness)
-- Container-Scanning: Trivy (CRITICAL, HIGH, exit-code 1)
-- Feature Flags fuer Zero-Downtime: neues Verhalten hinter Flag → ausrollen → Flag entfernen. Kill Switch fuer sofortiges Rollback
+- Multi-stage build (builder + runner). Pin base images with digest
+- Non-root user. HEALTHCHECK. Maintain `.dockerignore`
+- Bind ports only to `127.0.0.1`. Named volumes for prod
+- Reverse proxy in front of the app (Caddy / Nginx). Automatic HTTPS
+- Health checks: `/health` (liveness) + `/ready` (readiness)
+- Container scanning: Trivy (CRITICAL, HIGH, exit-code 1)
+- Feature flags for zero-downtime: new behavior behind flag → roll out → remove flag. Kill switch for immediate rollback
 
 ### Monitoring & Logging
 
-- Structured Logging (JSON): TS → Pino, Python → structlog. Timestamps UTC
-- Error Tracking: Sentry. Uptime: UptimeRobot. Logs: Better Stack / Axiom
-- Alert-Schwellen: Error Rate > 1%, p95 > 2s, CPU/Memory > 80%
-- OpenTelemetry als Standard. Metrics/Traces erst bei Bedarf
+- Structured logging (JSON): TS → Pino, Python → structlog. Timestamps UTC
+- Error tracking: Sentry. Uptime: UptimeRobot. Logs: Better Stack / Axiom
+- Alert thresholds: error rate > 1%, p95 > 2s, CPU/memory > 80%
+- OpenTelemetry as standard. Metrics/traces only when needed
 
 ### Accessibility
 
-- Gesetzlich Pflicht (EU Accessibility Act, BFSG)
-- Semantisches HTML, Heading-Hierarchie, alt auf Bildern, Fokus-Styles nicht entfernen
-- Testen: axe-core + Lighthouse (automatisch), Tastatur + Screen Reader (manuell)
+- Legally required (EU Accessibility Act, BFSG)
+- Semantic HTML, heading hierarchy, alt on images, don't remove focus styles
+- Testing: axe-core + Lighthouse (automated), keyboard + screen reader (manual)
 
 <!-- DEV-BEST-PRACTICES:END -->

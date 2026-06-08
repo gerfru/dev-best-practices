@@ -1,9 +1,9 @@
 ---
-description: Navigationsmenü — zeigt alle verfügbaren Dev-Best-Practices Skills und startet den gewählten direkt.
-argument-hint: "[optional: Zahl 1-14 oder kurze Beschreibung was du brauchst]"
+description: Navigation menu — shows all available Dev Best Practices skills and starts the chosen one directly.
+argument-hint: "[optional: number 1-24 or brief description of what you need]"
 ---
 
-Zeige das Skill-Navigationsmenü und starte den gewählten Skill.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-help/SKILL.md`.
+Show the skill navigation menu and start the chosen skill.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-help/SKILL.md`.
 
-Kontext/Wahl: $ARGUMENTS
+Context/Choice: $ARGUMENTS

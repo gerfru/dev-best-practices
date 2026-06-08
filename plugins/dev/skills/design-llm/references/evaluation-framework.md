@@ -1,77 +1,77 @@
 # LLM Evaluation Framework
 
-## Eval-Typen
+## Eval Types
 
-| Typ | Wann | Wie |
+| Type | When | How |
 |---|---|---|
-| **Offline Eval** | Vor Deployment, bei jeder Änderung | Benchmark-Dataset, automatisch |
-| **Online Eval** | In Production | A/B-Test, User-Feedback, Logging |
-| **LLM-as-Judge** | Wenn kein Ground-Truth vorhanden | LLM bewertet LLM-Output (mit Skala) |
-| **Human Eval** | Kritische Entscheidungen, neue Aufgaben | Labeler-Bewertung (teuer, langsam) |
+| **Offline eval** | Before deployment, on every change | Benchmark dataset, automated |
+| **Online eval** | In production | A/B test, user feedback, logging |
+| **LLM-as-Judge** | When no ground truth is available | LLM evaluates LLM output (with scale) |
+| **Human eval** | Critical decisions, new tasks | Labeler assessment (expensive, slow) |
 
-**Grundregel (CMU 11-667):** Kein Deployment ohne Offline Evals. LLM-as-Judge nur mit menschlich validierter Referenz.
+**Ground rule (CMU 11-667):** No deployment without offline evals. LLM-as-Judge only with human-validated reference.
 
 ---
 
-## RAG-spezifische Metriken (RAGAS)
+## RAG-Specific Metrics (RAGAS)
 
-| Metrik | Was gemessen wird | Skala |
+| Metric | What is measured | Scale |
 |---|---|---|
-| **Faithfulness** | Antwort durch Retrieved Context belegt? | 0–1 (1 = vollständig belegbar) |
-| **Answer Relevancy** | Antwort relevant zur Frage? | 0–1 |
-| **Context Precision** | Wie viel des Retrieved Context ist relevant? | 0–1 |
-| **Context Recall** | Wird relevantes Wissen tatsächlich retrieved? | 0–1 (braucht Ground-Truth) |
+| **Faithfulness** | Is the answer supported by retrieved context? | 0–1 (1 = fully verifiable) |
+| **Answer Relevancy** | Is the answer relevant to the question? | 0–1 |
+| **Context Precision** | How much of the retrieved context is relevant? | 0–1 |
+| **Context Recall** | Is relevant knowledge actually retrieved? | 0–1 (requires ground truth) |
 
-**Tool:** [RAGAS](https://github.com/explodinggradients/ragas) — Open Source, integriert in LangChain/LlamaIndex.
+**Tool:** [RAGAS](https://github.com/explodinggradients/ragas) — open source, integrates with LangChain/LlamaIndex.
 
 ---
 
 ## LLM-as-Judge Patterns
 
-| Pattern | Skala | Prompt-Struktur |
+| Pattern | Scale | Prompt structure |
 |---|---|---|
-| **Pairwise Comparison** | A vs. B | "Welche Antwort ist besser: A oder B?" |
-| **Likert Scale** | 1–5 | "Bewerte auf einer Skala 1–5: Faithfulness / Relevanz / Vollständigkeit" |
-| **Reference-based** | Pass/Fail | "Enthält die Antwort alle Fakten aus der Referenz?" |
-| **G-Eval** | 0–1 | Schrittweise Evaluation mit Chain-of-Thought |
+| **Pairwise comparison** | A vs. B | "Which answer is better: A or B?" |
+| **Likert scale** | 1–5 | "Rate on a scale of 1–5: faithfulness / relevance / completeness" |
+| **Reference-based** | Pass/Fail | "Does the answer contain all facts from the reference?" |
+| **G-Eval** | 0–1 | Step-by-step evaluation with chain-of-thought |
 
-**Bias-Risiken:** Positions-Bias (A wird bevorzugt), Längen-Bias (längere Antwort gewinnt), Self-Enhancement (Modell bevorzugt eigene Outputs). Gegenmittel: Positionen tauschen, mehrere Judges, diverse Modelle.
+**Bias risks:** Position bias (A is preferred), length bias (longer answer wins), self-enhancement (model prefers its own outputs). Countermeasures: swap positions, multiple judges, diverse models.
 
 ---
 
-## Benchmark-Typen
+## Benchmark Types
 
-| Typ | Beispiele | Für |
+| Type | Examples | For |
 |---|---|---|
-| **Task-spezifisch** | HotpotQA, Natural Questions | RAG / QA-Systeme |
-| **Reasoning** | MMLU, HellaSwag, ARC | Allgemeine Reasoning-Fähigkeit |
-| **Code** | HumanEval, SWE-bench | Code-Generierung |
-| **Safety** | TruthfulQA, MT-Bench | Halluzination, Sicherheit |
-| **Domain-spezifisch** | Selbst erstellt | Produktions-Genauigkeit |
+| **Task-specific** | HotpotQA, Natural Questions | RAG / QA systems |
+| **Reasoning** | MMLU, HellaSwag, ARC | General reasoning capability |
+| **Code** | HumanEval, SWE-bench | Code generation |
+| **Safety** | TruthfulQA, MT-Bench | Hallucination, safety |
+| **Domain-specific** | Custom-built | Production accuracy |
 
-**Empfehlung:** Immer einen domänen-spezifischen Benchmark erstellen (50–200 Fragen mit Ground-Truth) — generische Benchmarks korrelieren oft nicht mit Produktions-Performance.
+**Recommendation:** Always create a domain-specific benchmark (50–200 questions with ground truth) — generic benchmarks often do not correlate with production performance.
 
 ---
 
-## Eval-Pipeline (Minimum für Production)
+## Eval Pipeline (Minimum for Production)
 
 ```text
-1. Golden Dataset anlegen (50+ Fragen + Ground-Truth-Antworten)
-2. Offline Eval bei jeder Modell-/Prompt-Änderung
-   → RAGAS Faithfulness + Answer Relevancy automatisch
-3. Regression Gate: neue Version nur deployen wenn Score ≥ Baseline − 3%
-4. Online: 10% der Queries per LLM-as-Judge bewerten
-5. User-Feedback tracken (👍/👎) → schlechte Queries ins Golden Dataset
+1. Create golden dataset (50+ questions + ground-truth answers)
+2. Offline eval on every model/prompt change
+   → RAGAS Faithfulness + Answer Relevancy automatically
+3. Regression gate: only deploy new version if score ≥ baseline − 3%
+4. Online: evaluate 10% of queries via LLM-as-Judge
+5. Track user feedback (thumbs up/down) → add poor queries to golden dataset
 ```
 
 ---
 
-## Referenzen
+## References
 
-| Konzept | Quelle |
+| Concept | Source |
 |---|---|
-| LLM-as-Judge / Synthetic Data | CMU 11-667 Lec 13 — "LLMs for evaluation: Synthetic data, simulation, AI-as-judge" |
+| LLM-as-Judge / synthetic data | CMU 11-667 Lec 13 — "LLMs for evaluation: Synthetic data, simulation, AI-as-judge" |
 | Benchmarking | Stanford CS224N Lec (Feb 10) — "Benchmarking and Evaluation" |
 | RAGAS | Explodinggradients (2023) — https://github.com/explodinggradients/ragas |
 | G-Eval | Liu et al. (2023) — arXiv:2303.16634 |
-| Eval in Production | Chip Huyen — "Designing ML Systems" Kap. 6 (Evaluation) |
+| Eval in production | Chip Huyen — "Designing ML Systems" Ch. 6 (Evaluation) |

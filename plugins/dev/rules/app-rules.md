@@ -1,13 +1,13 @@
 # App Rules
 
-Verbindliche Regeln fuer Web-Applikationen. Keine Theorie -- nur Entscheidungen.
-Detaillierte Erklaerungen: `../reference/app-best-practices.md`
+Binding rules for web applications. No theory -- decisions only.
+Detailed explanations: `../reference/app-best-practices.md`
 
 ---
 
 ## Security Headers
 
-Jede App MUSS diese Response-Headers setzen:
+Every app MUST set these response headers:
 
 - `Strict-Transport-Security`: `max-age=31536000; includeSubDomains`
 - `X-Content-Type-Options`: `nosniff`
@@ -15,185 +15,185 @@ Jede App MUSS diese Response-Headers setzen:
 - `Referrer-Policy`: `strict-origin-when-cross-origin`
 - `Permissions-Policy`: `camera=(), microphone=(), geolocation=(), payment=()`
 
-**CSP-Strategie:** Nonce-basiert mit `'strict-dynamic'` (Gold-Standard):
+**CSP strategy:** Nonce-based with `'strict-dynamic'` (gold standard):
 `Content-Security-Policy: default-src 'self'; script-src 'nonce-{RANDOM}' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`
 
-> Einfachere Variante (ohne Nonce, nur fuer Apps ohne dynamisch geladene Scripts):
+> Simpler variant (without nonce, only for apps without dynamically loaded scripts):
 > `script-src 'self'`
 
-CSP zuerst im `Report-Only` Modus testen.
+Test CSP in `Report-Only` mode first.
 
 ---
 
 ## Authentication & Authorization
 
-- **Defense in Depth:** Auth an 3 Schichten: Middleware → Route/Controller → Data Access Layer (wichtigste!)
-- **Fail Closed:** Bei Fehler Zugang verweigern
-- **Passwort:** bcrypt (cost ≥ 12) / scrypt / Argon2id, nie Plaintext, Timing-safe Vergleiche, Rate Limiting auf Login
-- **Sessions:** Session Cookies mit `httpOnly=true`, `secure=true`, `sameSite=Lax` (Standard-Empfehlung)
-- **JWT:** Nur wenn Statelessness wirklich noetig. Algorithm pinnen (`HS256`/`RS256`, `alg:none` ablehnen), Secret ≥ 256 bit, Refresh Token + Rotation bei Logout
-- **MFA:** TOTP oder WebAuthn (ASVS L2). Account Lockout nach ≥ 5 Fehlversuchen. Password-Reset: Einmal-Token, max. 15 min
-- **Kein eigenes Crypto** -- immer etablierte Libraries
+- **Defense in Depth:** Auth at 3 layers: Middleware → Route/Controller → Data Access Layer (most important!)
+- **Fail Closed:** Deny access on error
+- **Password:** bcrypt (cost ≥ 12) / scrypt / Argon2id, never plaintext, timing-safe comparisons, rate limiting on login
+- **Sessions:** Session cookies with `httpOnly=true`, `secure=true`, `sameSite=Lax` (standard recommendation)
+- **JWT:** Only when statelessness is truly needed. Pin algorithm (`HS256`/`RS256`, reject `alg:none`), secret ≥ 256 bit, refresh token + rotation on logout
+- **MFA:** TOTP or WebAuthn (ASVS L2). Account lockout after ≥ 5 failed attempts. Password reset: one-time token, max. 15 min
+- **No custom crypto** -- always use established libraries
 
 ---
 
-## Input-Validierung & Output-Encoding
+## Input Validation & Output Encoding
 
-- **Validiere an der System-Grenze** (API-Eingang): Typ, Format, Laenge, Wertebereich
-- **Schema-Validierung:** TypeScript → Zod, Python → Pydantic
-- **Output-Encoding:** Framework-Defaults nutzen. Kein `dangerouslySetInnerHTML` (React), kein `| safe` (Django)
-- **SQL:** Immer Prepared Statements / Parameterized Queries
-- **Shell:** Nie User-Input in Shell-Commands
-- **DOM XSS:** Kein `innerHTML`/`outerHTML` mit User-Daten. Trusted Types + DOMPurify bei dynamischem HTML-Rendering
+- **Validate at system boundary** (API entry): type, format, length, value range
+- **Schema validation:** TypeScript → Zod, Python → Pydantic
+- **Output encoding:** Use framework defaults. No `dangerouslySetInnerHTML` (React), no `| safe` (Django)
+- **SQL:** Always prepared statements / parameterized queries
+- **Shell:** Never user input in shell commands
+- **DOM XSS:** No `innerHTML`/`outerHTML` with user data. Trusted Types + DOMPurify for dynamic HTML rendering
 
 ---
 
 ## API Design
 
-- **Response-Format:** Einheitlich mit `{ error: { code, message, details } }` bei Fehlern
-- **Versionierung:** URL Path (`/api/v1/`)
-- **Rate Limiting:** Middleware/Gateway-Level (Fixed Window oder Token Bucket)
-- **Pagination:** Nie unbegrenzte Listen
-- **Idempotenz:** PUT/DELETE muessen wiederholbar sein
-- **API-Typ:** Internes API → tRPC. Externes/Public API → REST. Komplexe Datenmodelle → GraphQL
+- **Response format:** Uniform with `{ error: { code, message, details } }` on errors
+- **Versioning:** URL path (`/api/v1/`)
+- **Rate limiting:** Middleware/gateway level (fixed window or token bucket)
+- **Pagination:** Never unbounded lists
+- **Idempotency:** PUT/DELETE must be repeatable
+- **API type:** Internal API → tRPC. External/public API → REST. Complex data models → GraphQL
 
 ---
 
-## Datenbank
+## Database
 
-- **Migrationen:** Immer Migration-Tool (nie manuell SQL auf Prod). TS → Drizzle Kit / Prisma Migrate. Python → Alembic
-- **Migrations-Regeln:** Immer vorwaerts, idempotent (`IF NOT EXISTS`), kleine Schritte, in Staging testen
-- **ORM-Wahl:** Query Builder (Drizzle, SQLAlchemy Core) als Sweet Spot. ORM fuer Prototypen. Raw SQL nur fuer komplexe Queries
-- **Connection Pooling:** Pflicht. Serverless → externer Pooler (PgBouncer, Neon Pooler)
-- **Sicherheit:** Prepared Statements, Least Privilege DB User, TLS zum DB-Server, Credentials in Env Vars, Backups testen
-- **PostgreSQL:** `SCRAM-SHA-256` in `pg_hba.conf` (kein `md5`). pgAudit fuer Audit-Trails
+- **Migrations:** Always use a migration tool (never manual SQL on prod). TS → Drizzle Kit / Prisma Migrate. Python → Alembic
+- **Migration rules:** Always forward, idempotent (`IF NOT EXISTS`), small steps, test in staging
+- **ORM choice:** Query builder (Drizzle, SQLAlchemy Core) as sweet spot. ORM for prototypes. Raw SQL only for complex queries
+- **Connection pooling:** Required. Serverless → external pooler (PgBouncer, Neon Pooler)
+- **Security:** Prepared statements, least privilege DB user, TLS to DB server, credentials in env vars, test backups
+- **PostgreSQL:** `SCRAM-SHA-256` in `pg_hba.conf` (not `md5`). pgAudit for audit trails
 
 ---
 
 ## Error Handling & Monitoring
 
-- **Fail Fast:** Fehler sofort melden, nicht verschlucken
-- **Keine Secrets in Errors:** Stack Traces, DB-Queries, Pfade nie an Client
-- **Retry:** Exponentielles Backoff fuer transiente Fehler
-- **Monitoring-Minimum:** Sentry (Error Tracking), Better Stack/UptimeRobot (Uptime), Structured Logging
-- **Alert-Schwellen:** Error Rate > 1%, Response Time p95 > 2s, CPU/Memory > 80%
+- **Fail Fast:** Report errors immediately, don't swallow them
+- **No secrets in errors:** Never leak stack traces, DB queries, paths to client
+- **Retry:** Exponential backoff for transient errors
+- **Monitoring minimum:** Sentry (error tracking), Better Stack/UptimeRobot (uptime), structured logging
+- **Alert thresholds:** Error rate > 1%, response time p95 > 2s, CPU/memory > 80%
 
 ---
 
 ## Logging
 
-- **Strukturiert (JSON)**, Correlation ID pro Request, Timestamps in UTC
-- **Keine Secrets loggen** (API-Keys, Passwort, Tokens, PII)
+- **Structured (JSON)**, correlation ID per request, timestamps in UTC
+- **Never log secrets** (API keys, passwords, tokens, PII)
 - **Tools:** Node.js → Pino, Python → structlog
-- **Log Levels:** error (kaputt), warn (unerwartet), info (normaler Betrieb), debug (Entwicklung)
-- **Aggregation:** Better Stack (1GB/mo free) oder Axiom (500GB/mo free)
+- **Log levels:** error (broken), warn (unexpected), info (normal operation), debug (development)
+- **Aggregation:** Better Stack (1GB/mo free) or Axiom (500GB/mo free)
 
 ---
 
 ## Environment & Secrets
 
-- `.env` nie committen, `.env.example` committen
-- **Env-Validierung beim App-Start:** App crasht sofort wenn Variable fehlt (Zod / Pydantic)
-- **Secrets:** Lokal → `.env`. CI/CD → GitHub Secrets. Production → Vault / Secrets Manager
-- Secrets regelmaessig rotieren (alle 90 Tage oder bei Verdacht auf Kompromittierung sofort)
+- Never commit `.env`, do commit `.env.example`
+- **Validate env vars at app start:** App crashes immediately if variable is missing (Zod / Pydantic)
+- **Secrets:** Local → `.env`. CI/CD → GitHub Secrets. Production → Vault / Secrets Manager
+- Rotate secrets regularly (every 90 days or immediately upon suspected compromise)
 
 ---
 
 ## Caching
 
-- **HTTP:** Statische Assets → `Cache-Control: public, max-age=31536000, immutable`. API → `max-age=60, stale-while-revalidate=300`. Personalisiert → `private, no-cache`. Login/Mutations → `no-store`
-- **App-Level:** Redis fuer Key-Value. In-Memory (`lru-cache` / `cachetools`) fuer Hot Data
-- **Strategie:** Cache-Aside fuer Lese-lastige Apps. TTL-based als einfachster Ansatz
+- **HTTP:** Static assets → `Cache-Control: public, max-age=31536000, immutable`. API → `max-age=60, stale-while-revalidate=300`. Personalized → `private, no-cache`. Login/mutations → `no-store`
+- **App-level:** Redis for key-value. In-memory (`lru-cache` / `cachetools`) for hot data
+- **Strategy:** Cache-aside for read-heavy apps. TTL-based as simplest approach
 
 ---
 
 ## CORS
 
-- `Access-Control-Allow-Origin`: Explizite Domain(s), **nie `*` mit Credentials**
-- Preflight (OPTIONS) immer handeln
-- `Access-Control-Max-Age: 86400` (Preflight cachen)
+- `Access-Control-Allow-Origin`: Explicit domain(s), **never `*` with credentials**
+- Always handle preflight (OPTIONS)
+- `Access-Control-Max-Age: 86400` (cache preflight)
 
 ---
 
 ## File Uploads
 
-- Dateigroesse limitieren (z.B. max 10MB)
-- Dateityp via Magic Bytes validieren (nicht Extension)
-- Nie im Web-Root speichern, zufaelligen Dateinamen generieren
-- Separater Storage (S3/GCS statt lokales Filesystem)
+- Limit file size (e.g. max 10MB)
+- Validate file type via magic bytes (not extension)
+- Never store in web root, generate random filename
+- Separate storage (S3/GCS instead of local filesystem)
 
 ---
 
 ## Accessibility
 
-- **Gesetzlich Pflicht** (EU Accessibility Act seit Juni 2025, BFSG)
-- Semantisches HTML (`<nav>`, `<main>`, `<button>`), richtige Heading-Hierarchie
-- `alt` auf allen `<img>`, `aria-label` fuer Icon-Only Buttons
-- Fokus-Styles nicht entfernen (`:focus-visible`), Skip-to-Content Link
-- Farbe nie als einziger Informationstraeger
-- Testen: axe-core + Lighthouse (automatisch), Tastatur-Test + Screen Reader (manuell)
+- **Legally required** (EU Accessibility Act since June 2025, BFSG)
+- Semantic HTML (`<nav>`, `<main>`, `<button>`), correct heading hierarchy
+- `alt` on all `<img>`, `aria-label` for icon-only buttons
+- Don't remove focus styles (`:focus-visible`), skip-to-content link
+- Never use color as the sole information carrier
+- Testing: axe-core + Lighthouse (automated), keyboard test + screen reader (manual)
 
 ---
 
 ## Performance
 
 - **Core Web Vitals:** LCP < 2.5s, INP < 200ms, CLS < 0.1
-- **Backend:** DB-Indizes, N+1 vermeiden, Pagination, Async I/O, Connection Pooling, Response Compression
-- **Frontend:** Code Splitting (> 200KB), Lazy Loading, WebP/AVIF, Self-hosted Fonts mit `font-display: swap`
+- **Backend:** DB indexes, avoid N+1, pagination, async I/O, connection pooling, response compression
+- **Frontend:** Code splitting (> 200KB), lazy loading, WebP/AVIF, self-hosted fonts with `font-display: swap`
 
 ---
 
 ## Deployment
 
-- **Health Checks:** `/health` (Liveness) + `/ready` (Readiness)
-- **Zero-Downtime:** Rolling Update (minimal), Blue-Green (besser)
-- **Rollback:** Docker Tag Rollback oder Blue-Green Switch (Sekunden)
+- **Health checks:** `/health` (liveness) + `/ready` (readiness)
+- **Zero-downtime:** Rolling update (minimal), blue-green (better)
+- **Rollback:** Docker tag rollback or blue-green switch (seconds)
 
 ---
 
 ## Feature Flags
 
-- **Zweck:** Neues Verhalten hinter Flag verstecken → ausrollen → Flag entfernen. Entkoppelt Deploy von Release
-- **Kill Switch:** Jedes neue Feature braucht einen Deaktivierungs-Pfad fuer sofortiges Rollback ohne Redeploy
-- **Rollout-Reihenfolge:** `disabled → internal → canary (1%) → partial (10%) → full (100%)`
-- **Flag-Lebenszyklus:** Max. 1 Sprint aktiv halten, dann entfernen (verhindert Flag-Schulden)
-- **Tools:** GrowthBook (Open Source, Self-hosted), Unleash (Self-hosted), LaunchDarkly (SaaS)
-- **Nie fuer:** Dauerhafte Konfiguration oder A/B-Tests ohne Cleanup-Plan
+- **Purpose:** Hide new behavior behind a flag → roll out → remove flag. Decouples deploy from release
+- **Kill switch:** Every new feature needs a deactivation path for immediate rollback without redeploy
+- **Rollout order:** `disabled → internal → canary (1%) → partial (10%) → full (100%)`
+- **Flag lifecycle:** Keep active for max. 1 sprint, then remove (prevents flag debt)
+- **Tools:** GrowthBook (open source, self-hosted), Unleash (self-hosted), LaunchDarkly (SaaS)
+- **Never for:** Permanent configuration or A/B tests without a cleanup plan
 
 ---
 
 ## Observability
 
-- **Drei Saeulen:** Logs (was passierte) + Metrics (wie viel) + Traces (wo im System)
-- **OpenTelemetry** als herstellerunabhaengiger Standard
-- **Vier goldene Signale:** Latency, Traffic, Errors, Saturation
-- **Pragmatischer Start:** Sentry + Better Stack/Axiom + UptimeRobot. Metrics/Traces erst bei Bedarf
+- **Three pillars:** Logs (what happened) + metrics (how much) + traces (where in the system)
+- **OpenTelemetry** as vendor-independent standard
+- **Four golden signals:** Latency, traffic, errors, saturation
+- **Pragmatic start:** Sentry + Better Stack/Axiom + UptimeRobot. Metrics/traces only when needed
 
 ---
 
 ## Security Assessment
 
-- **Pruefrahmen:** OWASP ASVS 5.0 (Mai 2025). Level 1 fuer Solo/kleine Teams (~70 Requirements)
-- **SAST:** `ruff-S` (pre-commit) + `semgrep` (CI, cross-file Taint-Analyse)
-- **SCA:** `pip-audit` (Python). `pnpm audit` (Node). Nicht Safety (veraltet)
-- **SBOM:** `syft` (CycloneDX) bei Release-Build -- ISO 27001 / EU CRA
-- **Image-Scan:** `trivy` in CI — CRITICAL+HIGH → exit 1
-- **Threat Modeling:** STRIDE-GPT fuer neue Systeme/Features (einmalig, nicht pro PR)
-- **Rhythmus:** SAST+SCA pro PR → Image-Scan pro Build → STRIDE einmalig pro System
+- **Framework:** OWASP ASVS 5.0 (May 2025). Level 1 for solo/small teams (~70 requirements)
+- **SAST:** `ruff-S` (pre-commit) + `semgrep` (CI, cross-file taint analysis)
+- **SCA:** `pip-audit` (Python). `pnpm audit` (Node). Not Safety (outdated)
+- **SBOM:** `syft` (CycloneDX) on release build -- ISO 27001 / EU CRA
+- **Image scan:** `trivy` in CI — CRITICAL+HIGH → exit 1
+- **Threat modeling:** STRIDE-GPT for new systems/features (once, not per PR)
+- **Cadence:** SAST+SCA per PR → image scan per build → STRIDE once per system
 
 ---
 
-## OWASP Top 10 Kurzreferenz
+## OWASP Top 10 Quick Reference
 
-> Vollstaendiger Pruefrahmen: ASVS 5.0 (s.o.)
+> Full verification framework: ASVS 5.0 (see above)
 
-1. Broken Access Control → Auth am Data Access Layer, Deny by Default
-2. Cryptographic Failures → TLS everywhere, Secrets in Env Vars
-3. Injection → Prepared Statements, kein Shell-Exec mit User-Input
-4. Insecure Design → Threat Modeling, Defense in Depth
-5. Security Misconfiguration → Security Headers, keine Default-Credentials
+1. Broken Access Control → Auth at data access layer, deny by default
+2. Cryptographic Failures → TLS everywhere, secrets in env vars
+3. Injection → Prepared statements, no shell exec with user input
+4. Insecure Design → Threat modeling, defense in depth
+5. Security Misconfiguration → Security headers, no default credentials
 6. Vulnerable Components → Renovate, pip-audit / pnpm audit
-7. Auth Failures → MFA, Rate Limiting
-8. Data Integrity → CI/CD Security, signierte Artifacts
-9. Logging Failures → Structured Logging, Audit Trails
-10. SSRF → URL-Allowlists, kein User-Input in Server-Side Requests
+7. Auth Failures → MFA, rate limiting
+8. Data Integrity → CI/CD security, signed artifacts
+9. Logging Failures → Structured logging, audit trails
+10. SSRF → URL allowlists, no user input in server-side requests

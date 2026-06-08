@@ -1,39 +1,39 @@
-# DORA Metrics — Referenz
+# DORA Metrics — Reference
 
-Quelle: DORA State of DevOps Report 2024 (dora.dev). Empirisch validiert über 10+ Jahre und 36.000+ Befragte.
+Source: DORA State of DevOps Report 2024 (dora.dev). Empirically validated over 10+ years and 36,000+ respondents.
 
 ## 4 Key Metrics
 
 | Metric | Definition | Elite | High | Medium | Low |
 |---|---|---|---|---|---|
-| **Deployment Frequency** | Wie oft in Prod deployt | On-demand (mehrmals/Tag) | 1×/Tag – 1×/Woche | 1×/Woche – 1×/Monat | < 1×/Monat |
-| **Lead Time for Changes** | Commit → Prod | < 1h | 1 Tag – 1 Woche | 1 Woche – 1 Monat | > 6 Monate |
-| **Change Failure Rate** | % Deployments die Incident verursachen | 0–5% | 5–10% | 10–15% | > 15% |
-| **MTTR** | Zeit bis Wiederherstellung nach Incident | < 1h | < 1 Tag | < 1 Woche | > 6 Monate |
+| **Deployment Frequency** | How often deployed to Prod | On-demand (multiple times/day) | 1×/day – 1×/week | 1×/week – 1×/month | < 1×/month |
+| **Lead Time for Changes** | Commit → Prod | < 1h | 1 day – 1 week | 1 week – 1 month | > 6 months |
+| **Change Failure Rate** | % deployments causing an incident | 0–5% | 5–10% | 10–15% | > 15% |
+| **MTTR** | Time to restore after incident | < 1h | < 1 day | < 1 week | > 6 months |
 
 **Deployment Frequency + Lead Time** = Throughput (Speed)
 **CFR + MTTR** = Stability (Quality)
 
-Elite-Teams verbessern alle 4 gleichzeitig — kein Speed-vs-Stability-Tradeoff.
+Elite teams improve all 4 simultaneously — no speed-vs-stability trade-off.
 
 ---
 
-## Messung
+## Measurement
 
-| Metric | Datenquelle |
+| Metric | Data Source |
 |---|---|
-| Deployment Frequency | CI/CD-System: Anzahl Production-Deployments / Zeitraum |
-| Lead Time | Git: Commit-Timestamp → CD: Deploy-Timestamp |
-| Change Failure Rate | Incidents / Deployments (aus Incident-Tracking + CD-System) |
-| MTTR | Incident-Tracking: Created-at → Resolved-at |
+| Deployment Frequency | CI/CD system: number of production deployments / time period |
+| Lead Time | Git: commit timestamp → CD: deploy timestamp |
+| Change Failure Rate | Incidents / Deployments (from incident tracking + CD system) |
+| MTTR | Incident tracking: created-at → resolved-at |
 
 ---
 
 ## DORA Capabilities (2024 Report)
 
-Die 24 Capabilities die laut DORA-Forschung Performance vorhersagen:
+The 24 capabilities that DORA research shows predict performance:
 
-**Technische Practices:**
+**Technical Practices:**
 - Trunk-Based Development
 - Continuous Integration
 - Test Automation
@@ -56,16 +56,16 @@ Die 24 Capabilities die laut DORA-Forschung Performance vorhersagen:
 - Transformational Leadership
 - Well-being
 
-Vollständige Liste: dora.dev/research/
+Full list: dora.dev/research/
 
 ---
 
 ## Trunk-Based Development
 
-Kernprinzipien (aus "Accelerate", Kap. 4):
-- Alle Entwickler committen mindestens 1× täglich auf main/trunk
-- Feature Branches leben maximal 1–2 Tage
-- Feature Flags für unfertige Features, nicht Long-Lived Branches
-- CI läuft bei jedem Commit auf main
+Core principles (from "Accelerate", Ch. 4):
+- All developers commit at least 1× daily to main/trunk
+- Feature branches live at most 1–2 days
+- Feature flags for incomplete features, not long-lived branches
+- CI runs on every commit to main
 
-**Warum:** Long-Lived Branches = verzögertes Integration-Feedback = große Merge-Konflikte = seltene Deployments = niedrige DORA-Performance. Empirisch belegt.
+**Why:** Long-lived branches = delayed integration feedback = large merge conflicts = infrequent deployments = low DORA performance. Empirically proven.

@@ -1,11 +1,11 @@
 ---
-description: Repo-Wartung - prueft ob claude/*.md noch die Essenz von reference/*.md widerspiegelt und findet Drift zwischen Master- und Derived-Files.
+description: Repo maintenance - checks whether claude/*.md still reflects the essence of reference/*.md and finds drift between master and derived files.
 argument-hint: "[optional: app | github | architecture | essential]"
 ---
 
-Prüfe ob die kompakten Rule-Files unter claude/ noch mit den detaillierten reference/-Files
-übereinstimmen. Finde neue Sections, veraltete Regeln und Kondensierungs-Probleme.
+Check whether the compact rule files under claude/ still match the detailed reference/ files.
+Find new sections, outdated rules, and condensation problems.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-sync/SKILL.md`.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-sync/SKILL.md`.
 
-Fokus: $ARGUMENTS
+Focus: $ARGUMENTS

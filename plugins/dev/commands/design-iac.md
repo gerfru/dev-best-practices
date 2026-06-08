@@ -1,9 +1,9 @@
 ---
-description: Infrastructure as Code Design auf Basis von Kief Morris (O'Reilly 2021) und NTNU IIKG3005 — IaC-Prinzipien, Modul-Design, State Management, Drift Detection, GitOps.
-argument-hint: "[optional: Kontext, z.B. 'Terraform fuer AWS EKS Cluster' oder 'bestehende manuelle Infra unter IaC bringen']"
+description: Infrastructure as Code design based on Kief Morris (O'Reilly 2021) and NTNU IIKG3005 — IaC principles, module design, state management, drift detection, GitOps.
+argument-hint: "[optional: context, e.g. 'Terraform for AWS EKS cluster' or 'bring existing manual infra under IaC']"
 ---
 
-Designe eine Infrastructure-as-Code-Architektur.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-iac/SKILL.md`.
+Design an Infrastructure-as-Code architecture.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-iac/SKILL.md`.
 
-Kontext: $ARGUMENTS
+Context: $ARGUMENTS

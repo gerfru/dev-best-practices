@@ -1,12 +1,12 @@
 ---
-description: Prueft ob der Best-Practices-Block in der CLAUDE.md noch aktuell ist - zeigt fehlende, veraltete und neue Regeln seit dem letzten Install.
-argument-hint: "[optionaler Pfad zur CLAUDE.md]"
+description: Checks whether the best-practices block in CLAUDE.md is still current — shows missing, outdated, and new rules since the last install.
+argument-hint: "[optional path to CLAUDE.md]"
 ---
 
-Vergleiche den Dev-Best-Practices-Block in der CLAUDE.md dieses Projekts mit dem
-aktuellen Stand der Rule-Files. Zeige Delta: fehlende Sections, veraltete Regeln,
-Empfehlung für Update.
+Compare the dev-best-practices block in this project's CLAUDE.md with the
+current state of the rule files. Show delta: missing sections, outdated rules,
+recommendation for update.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-drift/SKILL.md`.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-drift/SKILL.md`.
 
-Zielpfad: $ARGUMENTS
+Target path: $ARGUMENTS

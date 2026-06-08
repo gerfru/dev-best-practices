@@ -1,11 +1,11 @@
 ---
-description: Strukturierter Migrations-Plan auf Basis von MIT 6.5840 und Fowler Patterns.
-argument-hint: "[Was soll migriert werden? Von was zu was?]"
+description: Structured migration plan based on MIT 6.5840 and Fowler Patterns.
+argument-hint: "[What should be migrated? From what to what?]"
 ---
 
-Erstelle einen strukturierten Migrations-Plan mit Phasen, Rollback-Strategie,
-Risikobewertung und messbaren Erfolgskriterien.
+Create a structured migration plan with phases, rollback strategy,
+risk assessment, and measurable success criteria.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-migration/SKILL.md`.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-migration/SKILL.md`.
 
 Migration: $ARGUMENTS

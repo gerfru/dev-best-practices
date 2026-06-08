@@ -1,58 +1,58 @@
-# Visual Design Grundlagen
+# Visual Design Fundamentals
 
-Color System, Typografie, Spacing und Platform Design Systems für Projekte
-ohne externes Design-System (MUI, shadcn, Carbon etc.).
+Color system, typography, spacing, and platform design systems for projects
+without an external design system (MUI, shadcn, Carbon etc.).
 
 ---
 
 ## Color System
 
-Drei Token-Ebenen — alle drei definieren:
+Three token levels — define all three:
 
-- **Primitive**: rohe Werte, kebab-case, Skala 50–950 (`color-blue-500: #3B82F6`)
-- **Semantic**: Intention statt Wert (`color-brand-primary`, `color-text-secondary`)
-- **Component**: komponentenspezifisch (`button-bg-hover`)
+- **Primitive**: raw values, kebab-case, scale 50–950 (`color-blue-500: #3B82F6`)
+- **Semantic**: intention over value (`color-brand-primary`, `color-text-secondary`)
+- **Component**: component-specific (`button-bg-hover`)
 
-Regel: Im Code immer Semantic Tokens verwenden, nie Primitive direkt.
+Rule: Always use semantic tokens in code, never primitive tokens directly.
 
-**WCAG Kontrast (Pflicht — #1 Accessibility-Fehler im Web):**
+**WCAG Contrast (required — #1 accessibility error on the web):**
 
-- Normaler Text: min. 4.5:1
-- Große Schrift (≥18px / ≥14px bold): min. 3:1
-- Prüfen: webaim.org/resources/contrastchecker
+- Normal text: min. 4.5:1
+- Large text (≥18px / ≥14px bold): min. 3:1
+- Check: webaim.org/resources/contrastchecker
 
 **Dark Mode:** CSS Custom Properties (`--color-surface`, `--color-text-primary`).
-Werte per `@media (prefers-color-scheme: dark)` oder `.dark`-Klasse überschreiben.
-Nie hardcodierte Hex-Werte im Dark-Mode-Pfad.
+Override values via `@media (prefers-color-scheme: dark)` or `.dark` class.
+Never hardcoded hex values in the dark mode path.
 
 ---
 
-## Typografie-Skala
+## Typography Scale
 
 - Body: min. 16px
-- Heading-Skala: Faktor 1.25–1.5x (z.B. 16 → 20 → 25 → 31px)
-- Line-height: 1.5x für Fließtext, 1.2x für Headings
-- Max. 2 Schriftfamilien
+- Heading scale: factor 1.25–1.5x (e.g. 16 → 20 → 25 → 31px)
+- Line height: 1.5x for body text, 1.2x for headings
+- Max. 2 font families
 
 ---
 
-## Spacing-System (8px-Grid)
+## Spacing System (8px grid)
 
 `space-1=4px, space-2=8px, space-3=12px, space-4=16px, space-6=24px, space-8=32px`
 
-Keine Einzelwerte außerhalb des Grids (kein `margin: 11px`).
+No individual values outside the grid (no `margin: 11px`).
 
 ---
 
 ## Platform Design System
 
-| Kontext | System | Referenz |
+| Context | System | Reference |
 |---------|--------|---------|
-| Android / Web (Google-Stil) | Material Design 3 | m3.material.io |
+| Android / Web (Google style) | Material Design 3 | m3.material.io |
 | iOS / macOS | Apple HIG | developer.apple.com/design/human-interface-guidelines |
 | Enterprise / B2B | IBM Carbon | carbondesignsystem.com |
-| Agnostisch / eigenes | Design Tokens + obige Grundlagen | — |
+| Agnostic / custom | Design Tokens + above fundamentals | — |
 
-**Material Design 3 Kernprinzipien:** Color Roles (Primary, Secondary, Surface, Outline) statt Hex-Werte; Elevation via Tonal Color, kein Box-Shadow-Spam; Shape-System für konsistente Eckenradien.
+**Material Design 3 core principles:** Color roles (Primary, Secondary, Surface, Outline) instead of hex values; elevation via tonal color, no box-shadow spam; shape system for consistent corner radii.
 
-**Apple HIG Kernprinzipien:** Clarity (Text lesbar, Icons präzise, kein Dekor-Spam); Deference (Inhalt im Fokus, UI tritt zurück); Depth (Layering kommuniziert Hierarchie).
+**Apple HIG core principles:** Clarity (text readable, icons precise, no decoration spam); Deference (content in focus, UI recedes); Depth (layering communicates hierarchy).

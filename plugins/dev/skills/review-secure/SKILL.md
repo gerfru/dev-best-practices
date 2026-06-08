@@ -1,5 +1,5 @@
 ---
-name: review-secure
+name: dev:review-secure
 description: >
   Security-focused code review skill grounded in TU Graz ISEC Major curriculum
   and top-university references (Stanford CS255/CS355, MIT 6.566/6.5610, CMU 15-414).
@@ -8,9 +8,7 @@ description: >
   for questions like "is this crypto correct?", "can you check my authentication?",
   "review my API", or "is this GDPR-compliant?". Covers all languages (C/C++, Python,
   Java, Go, Rust, JS/TS, and others) and evaluates Security, Code Quality, and
-  Compliance (EU AI Act, ISO 27001, DSGVO/GDPR). Deutsche Trigger: "ist mein Code
-  sicher?", "reviewe meine Authentifizierung", "prüfe meine API auf Sicherheit",
-  "GDPR-konform?", "Schwachstellen finden", "Krypto korrekt?". Always use this
+  Compliance (EU AI Act, ISO 27001, DSGVO/GDPR). Always use this
   skill for any security-relevant code review — do not rely on general knowledge alone.
 ---
 # ISEC Code Review Skill
@@ -133,16 +131,16 @@ Use `references/compliance-checks.md` for the specific control mapping.
 
 ---
 
-## Output — Report-Datei
+## Output — Report File
 
-Schreibe das vollständige Ergebnis nach `./review-secure-report.md`:
+Write the complete results to `./review-secure-report.md`:
 
 ```markdown
-# Security Code Review Report — [Kontext]
-Sprache: ... | Framework: ... | Datum: YYYY-MM-DD
+# Security Code Review Report — [Context]
+Language: ... | Framework: ... | Date: YYYY-MM-DD
 
-## Gesamtbewertung
-[🔴/🟠/🟡/🟢] — Ein-Satz-Begründung
+## Overall Assessment
+[🔴/🟠/🟡/🟢] — One-sentence rationale
 
 ## Findings
 ### 🔴 Critical (N)
@@ -150,14 +148,14 @@ Sprache: ... | Framework: ... | Datum: YYYY-MM-DD
 ### 🟡 Medium (N)
 ### 🔵 Low / ⚪ Info (N)
 
-## Statistik
+## Statistics
 | Severity | Security | Quality | Compliance |
 |----------|----------|---------|------------|
 | 🔴 Critical | N | N | N |
 | 🟠 High | N | N | N |
 | 🟡 Medium | N | N | N |
 
-## Top 3 Sofortmaßnahmen
+## Top 3 Immediate Actions
 1. ...
 2. ...
 3. ...
@@ -165,12 +163,12 @@ Sprache: ... | Framework: ... | Datum: YYYY-MM-DD
 
 ## Report Footer
 
-Jeder generierte Report endet mit:
+Every generated report ends with:
 
 ```markdown
 ---
-*Erstellt mit KI-Unterstützung (Claude Code + dev-best-practices Plugin).
-Findings sind zu verifizieren — kein Ersatz für manuelle Penetrationstests.*
+*Generated with AI assistance (Claude Code + dev-best-practices plugin).
+Findings should be verified — not a substitute for manual penetration testing.*
 ```
 
 ---

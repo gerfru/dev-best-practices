@@ -2,59 +2,59 @@
 
 ## Remote State Backends
 
-| Backend | Provider | Locking | Empfehlung |
+| Backend | Provider | Locking | Recommendation |
 |---|---|---|---|
-| S3 + DynamoDB | AWS | DynamoDB Table | Standard fuer AWS |
-| GCS + Firestore | GCP | Native GCS | Standard fuer GCP |
-| Azure Blob + Storage Lock | Azure | Lease-basiert | Standard fuer Azure |
-| Terraform Cloud / HCP Terraform | HashiCorp | Native | Cloud-agnostisch, Collaboration-Features |
-| GitLab Managed Terraform | GitLab | Native | Bei GitLab CI/CD |
+| S3 + DynamoDB | AWS | DynamoDB Table | Standard for AWS |
+| GCS + Firestore | GCP | Native GCS | Standard for GCP |
+| Azure Blob + Storage Lock | Azure | Lease-based | Standard for Azure |
+| Terraform Cloud / HCP Terraform | HashiCorp | Native | Cloud-agnostic, collaboration features |
+| GitLab Managed Terraform | GitLab | Native | For GitLab CI/CD |
 
-**Niemals lokaler State in Prod.** Lokaler State: nur fuer lokale Entwicklung und Tests.
+**Never local state in prod.** Local state: only for local development and tests.
 
 ---
 
-## State-Security
+## State Security
 
-| Massnahme | Warum |
+| Measure | Why |
 |---|---|
-| Encryption at rest aktivieren | State kann Secrets enthalten (Passwoerter, Keys) |
-| Encryption in transit (TLS) | State wird ueber Netzwerk uebertragen |
-| Least Privilege Zugriff | Nur CI/CD Pipeline und Admins duerfen State lesen/schreiben |
-| State-Locking | Verhindert parallele Applies (Race Conditions) |
-| State-Backup | Versionierung im Backend aktivieren (S3 Versioning, GCS) |
+| Enable encryption at rest | State can contain secrets (passwords, keys) |
+| Encryption in transit (TLS) | State is transmitted over the network |
+| Least privilege access | Only CI/CD pipeline and admins may read/write state |
+| State locking | Prevents parallel applies (race conditions) |
+| State backup | Enable versioning in backend (S3 Versioning, GCS) |
 
 ---
 
-## Workspace-Strategie
+## Workspace Strategy
 
-| Ansatz | Wann | Einschraenkung |
+| Approach | When | Limitation |
 |---|---|---|
-| **Workspace per Environment** | Gleicher Code, verschiedene Variablenwerte (dev/staging/prod) | Schlechte Isolation: ein Plan betrifft alle Envs |
-| **Separate State-Pfade** | Verschiedene `backend` Konfigurationen pro Env | Mehr Komplexitaet, aber saubere Isolation |
-| **Separate Repos** | Enterprise, strikte Isolation, verschiedene Teams pro Env | Hoechste Isolation, aber viel Overhead |
+| **Workspace per environment** | Same code, different variable values (dev/staging/prod) | Poor isolation: one plan affects all envs |
+| **Separate state paths** | Different `backend` configurations per env | More complexity, but clean isolation |
+| **Separate repos** | Enterprise, strict isolation, different teams per env | Highest isolation, but much overhead |
 
-Empfehlung fuer die meisten Teams: **Separate State-Pfade** (z.B. `s3://bucket/envs/prod/terraform.tfstate`).
+Recommendation for most teams: **Separate state paths** (e.g. `s3://bucket/envs/prod/terraform.tfstate`).
 
 ---
 
-## State-Drift Workflow
+## State Drift Workflow
 
 ```text
-1. terraform plan          → zeigt Drift zwischen State und tatsaechlicher Infra
-2. Entscheiden:
-   ├─ Drift gewollt?       → terraform apply (State an Realitaet anpassen)
-   └─ Drift ungewollt?     → manuelle Korrektur zuerst, dann apply
-3. Root Cause: wer hat manuell geaendert? → Prozess verbessern
-4. Drift-Detection automatisieren: plan im Schedule-Job, Alert bei Diff != 0
+1. terraform plan          → shows drift between state and actual infra
+2. Decide:
+   ├─ Drift intentional?   → terraform apply (align state to reality)
+   └─ Drift unintentional? → manual correction first, then apply
+3. Root cause: who made manual changes? → improve process
+4. Automate drift detection: plan in scheduled job, alert when diff != 0
 ```
 
 ---
 
-## Import vs. Neu Provisionieren
+## Import vs. Re-Provisioning
 
-| Situation | Empfehlung |
+| Situation | Recommendation |
 |---|---|
-| Bestehende Ressource soll unter IaC | `terraform import` — Ressource in State aufnehmen ohne Aenderung |
-| Ressource nach manueller Loeschung neu | Neu provisionieren via `apply` |
-| Migrationsprojekt: alles unter IaC bringen | Import-Strategie: eine Ressource nach der anderen, immer verifizieren |
+| Existing resource should be under IaC | `terraform import` — bring resource into state without change |
+| Resource after manual deletion | Re-provision via `apply` |
+| Migration project: bring everything under IaC | Import strategy: one resource at a time, always verify |

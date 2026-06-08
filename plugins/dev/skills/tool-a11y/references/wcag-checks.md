@@ -1,63 +1,63 @@
-# WCAG 2.2 — Kritische Success Criteria
+# WCAG 2.2 — Critical Success Criteria
 
-Fokus auf haeufigste Audit-Findings und alle 9 neuen WCAG 2.2 SC.
-Vollstaendige Liste: w3.org/TR/WCAG22
+Focus on most common audit findings and all 9 new WCAG 2.2 SC.
+Complete list: w3.org/TR/WCAG22
 
-## Perceivable (Wahrnehmbar)
+## Perceivable
 
-| SC | Titel | Level | Test-Methode |
+| SC | Title | Level | Test Method |
 |---|---|---|---|
-| 1.1.1 | Non-text Content (alt-Text) | A | axe-core + manuell |
-| 1.3.1 | Info and Relationships (semantisches HTML) | A | axe-core + manuell |
-| 1.3.4 | Orientation (kein erzwungenes Portrait/Landscape) | AA | Manuell |
-| 1.4.1 | Use of Color (nicht nur Farbe als Info) | A | Manuell |
-| 1.4.3 | Contrast Minimum (4.5:1 Text, 3:1 Large Text) | AA | axe-core |
-| 1.4.4 | Resize Text 200% ohne Verlust | AA | Manuell |
-| 1.4.10 | Reflow bei 320px (kein horizontales Scrollen) | AA | Manuell |
-| 1.4.11 | Non-text Contrast 3:1 (UI-Komponenten, Icons) | AA | axe-core |
-| 1.4.12 | Text Spacing (Zeilenabstand, Letter-Spacing anpassbar) | AA | Bookmarklet |
+| 1.1.1 | Non-text Content (alt text) | A | axe-core + manual |
+| 1.3.1 | Info and Relationships (semantic HTML) | A | axe-core + manual |
+| 1.3.4 | Orientation (no forced portrait/landscape) | AA | Manual |
+| 1.4.1 | Use of Color (not color alone as info) | A | Manual |
+| 1.4.3 | Contrast Minimum (4.5:1 text, 3:1 large text) | AA | axe-core |
+| 1.4.4 | Resize Text 200% without loss | AA | Manual |
+| 1.4.10 | Reflow at 320px (no horizontal scrolling) | AA | Manual |
+| 1.4.11 | Non-text Contrast 3:1 (UI components, icons) | AA | axe-core |
+| 1.4.12 | Text Spacing (line height, letter-spacing adjustable) | AA | Bookmarklet |
 
-## Operable (Bedienbar)
+## Operable
 
-| SC | Titel | Level | Test-Methode |
+| SC | Title | Level | Test Method |
 |---|---|---|---|
-| 2.1.1 | Keyboard (alles per Tastatur bedienbar) | A | Manuell |
-| 2.1.2 | No Keyboard Trap | A | Manuell |
-| 2.4.1 | Bypass Blocks (Skip-Link zu Main Content) | A | Manuell |
-| 2.4.3 | Focus Order (logische Tab-Reihenfolge) | A | Manuell |
-| 2.4.4 | Link Purpose (aus Text erkennbar) | A | axe-core + manuell |
-| 2.4.7 | Focus Visible (sichtbarer Fokus-Indikator) | AA | Manuell |
-| **2.4.11** | **Focus Not Obscured Minimum (Fokus nicht verdeckt)** | **AA** | **Manuell — NEU 2.2** |
-| **2.4.12** | **Focus Not Obscured Enhanced** | **AAA** | **Manuell — NEU 2.2** |
-| **2.4.13** | **Focus Appearance (Kontrast + Groesse des Fokus-Indikators)** | **AAA** | **Manuell — NEU 2.2** |
-| 2.5.3 | Label in Name (sichtbares Label im accessible Name) | A | axe-core |
-| **2.5.7** | **Dragging Movements (Alternative zu Drag & Drop)** | **AA** | **Manuell — NEU 2.2** |
-| **2.5.8** | **Target Size Minimum (24×24px Klickziel)** | **AA** | **Manuell — NEU 2.2** |
+| 2.1.1 | Keyboard (everything operable by keyboard) | A | Manual |
+| 2.1.2 | No Keyboard Trap | A | Manual |
+| 2.4.1 | Bypass Blocks (skip link to main content) | A | Manual |
+| 2.4.3 | Focus Order (logical tab order) | A | Manual |
+| 2.4.4 | Link Purpose (determinable from text) | A | axe-core + manual |
+| 2.4.7 | Focus Visible (visible focus indicator) | AA | Manual |
+| **2.4.11** | **Focus Not Obscured Minimum (focus not obscured)** | **AA** | **Manual — NEW 2.2** |
+| **2.4.12** | **Focus Not Obscured Enhanced** | **AAA** | **Manual — NEW 2.2** |
+| **2.4.13** | **Focus Appearance (contrast + size of focus indicator)** | **AAA** | **Manual — NEW 2.2** |
+| 2.5.3 | Label in Name (visible label in accessible name) | A | axe-core |
+| **2.5.7** | **Dragging Movements (alternative to drag & drop)** | **AA** | **Manual — NEW 2.2** |
+| **2.5.8** | **Target Size Minimum (24×24px click target)** | **AA** | **Manual — NEW 2.2** |
 
-## Understandable (Verstaendlich)
+## Understandable
 
-| SC | Titel | Level | Test-Methode |
+| SC | Title | Level | Test Method |
 |---|---|---|---|
-| 3.1.1 | Language of Page (lang-Attribut gesetzt) | A | axe-core |
-| 3.2.1 | On Focus (kein unerwarteter Context-Change) | A | Manuell |
-| 3.2.2 | On Input (kein unerwarteter Context-Change) | A | Manuell |
-| **3.2.6** | **Consistent Help (Hilfe immer an gleicher Stelle)** | **A** | **Manuell — NEU 2.2** |
-| 3.3.1 | Error Identification (Fehlermeldungen spezifisch) | A | Manuell |
-| 3.3.2 | Labels or Instructions (Formularfelder beschriftet) | A | axe-core + manuell |
-| **3.3.7** | **Redundant Entry (keine Doppeleingabe in gleichem Prozess)** | **A** | **Manuell — NEU 2.2** |
-| **3.3.8** | **Accessible Authentication Minimum (kein Gedaechtnis-Test)** | **AA** | **Manuell — NEU 2.2** |
-| **3.3.9** | **Accessible Authentication Enhanced** | **AAA** | **Manuell — NEU 2.2** |
+| 3.1.1 | Language of Page (lang attribute set) | A | axe-core |
+| 3.2.1 | On Focus (no unexpected context change) | A | Manual |
+| 3.2.2 | On Input (no unexpected context change) | A | Manual |
+| **3.2.6** | **Consistent Help (help always in same location)** | **A** | **Manual — NEW 2.2** |
+| 3.3.1 | Error Identification (specific error messages) | A | Manual |
+| 3.3.2 | Labels or Instructions (form fields labeled) | A | axe-core + manual |
+| **3.3.7** | **Redundant Entry (no duplicate entry in same process)** | **A** | **Manual — NEW 2.2** |
+| **3.3.8** | **Accessible Authentication Minimum (no memory test)** | **AA** | **Manual — NEW 2.2** |
+| **3.3.9** | **Accessible Authentication Enhanced** | **AAA** | **Manual — NEW 2.2** |
 
 ## Robust
 
-| SC | Titel | Level | Test-Methode |
+| SC | Title | Level | Test Method |
 |---|---|---|---|
-| 4.1.2 | Name, Role, Value (ARIA korrekt) | A | axe-core |
-| 4.1.3 | Status Messages (ARIA live regions) | AA | axe-core + manuell |
+| 4.1.2 | Name, Role, Value (ARIA correct) | A | axe-core |
+| 4.1.3 | Status Messages (ARIA live regions) | AA | axe-core + manual |
 
 ---
 
-## Automatisierte Tests finden ~30% aller Issues
+## Automated Tests Find ~30% of All Issues
 
-Die restlichen 70% erfordern manuelle Tests (Keyboard, Screen Reader).
-axe-core und Lighthouse pruefen nur was algorithmisch pruefbar ist.
+The remaining 70% require manual testing (keyboard, screen reader).
+axe-core and Lighthouse only check what is algorithmically verifiable.

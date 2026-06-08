@@ -1,11 +1,11 @@
 ---
-description: Datenmodell-Design und Review auf Basis von CMU 15-445 und Stanford CS245.
-argument-hint: "[Schema-Beschreibung, Design-Frage oder Performance-Problem]"
+description: Data model design and review based on CMU 15-445 and Stanford CS245.
+argument-hint: "[schema description, design question, or performance problem]"
 ---
 
-Entwirf oder reviewe ein Datenmodell. Pruefe Normalisierung, Indexstrategie,
-SQL vs. NoSQL Eignung und Event Sourcing / CQRS Patterns.
+Design or review a data model. Check normalization, index strategy,
+SQL vs. NoSQL suitability, and Event Sourcing / CQRS patterns.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-data/SKILL.md`.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/design-data/SKILL.md`.
 
-Datenmodell/Kontext: $ARGUMENTS
+Data model/Context: $ARGUMENTS

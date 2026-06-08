@@ -1,10 +1,10 @@
-# SLO Patterns — nach Service-Typ
+# SLO Patterns — by Service Type
 
-## Error Budget Rechner
+## Error Budget Calculator
 
 `Error Budget (min) = (1 − SLO) × 30 × 24 × 60`
 
-| SLO | Error Budget / 30 Tage |
+| SLO | Error Budget / 30 days |
 |---|---|
 | 99.0% | 432 min (7.2h) |
 | 99.5% | 216 min (3.6h) |
@@ -14,42 +14,42 @@
 
 ---
 
-## HTTP API (synchron)
+## HTTP API (synchronous)
 
-| SLI | SLO | Empfehlung |
+| SLI | SLO | Recommendation |
 |---|---|---|
-| Availability: % Requests mit Status < 500 | 99.9% | Standard für interne APIs |
-| Latency: % Requests < 200ms | 95% | p95-Ziel |
-| Latency: % Requests < 1000ms | 99% | absolutes Maximum |
-| Error Rate: % Requests mit Status 5xx | < 0.1% | direkt aus Availability ableitbar |
+| Availability: % requests with status < 500 | 99.9% | Standard for internal APIs |
+| Latency: % requests < 200ms | 95% | p95 target |
+| Latency: % requests < 1000ms | 99% | Absolute maximum |
+| Error rate: % requests with status 5xx | < 0.1% | Directly derivable from availability |
 
 ## Background Worker / Queue Consumer
 
-| SLI | SLO | Empfehlung |
+| SLI | SLO | Recommendation |
 |---|---|---|
-| Success Rate: % Jobs ohne Error abgeschlossen | 99.5% | toleriert gelegentliche Retries |
-| Throughput: Jobs/min ≥ Schwellwert | 95% in 5-min-Fenstern | Stau-Früherkennung |
-| Latency: % Jobs abgeschlossen in < X sec | 90% | je nach Criticality |
+| Success rate: % jobs completed without error | 99.5% | Tolerates occasional retries |
+| Throughput: jobs/min ≥ threshold | 95% in 5-min windows | Early queue backlog detection |
+| Latency: % jobs completed in < X sec | 90% | Depends on criticality |
 
 ## Batch Job
 
-| SLI | SLO | Empfehlung |
+| SLI | SLO | Recommendation |
 |---|---|---|
-| Completion: % Runs abgeschlossen in SLA-Fenster | 99% | z.B. Nacht-Batch bis 6 Uhr |
-| Freshness: Daten nicht älter als X Stunden | 99.5% | für Downstream-Abhängigkeiten |
-| Correctness: % Outputs validiert korrekt | 99.9% | wo prüfbar |
+| Completion: % runs completed within SLA window | 99% | e.g. nightly batch by 6am |
+| Freshness: data not older than X hours | 99.5% | For downstream dependencies |
+| Correctness: % outputs validated correct | 99.9% | Where verifiable |
 
 ## Stream Processing
 
-| SLI | SLO | Empfehlung |
+| SLI | SLO | Recommendation |
 |---|---|---|
-| Consumer Lag: < X Messages | 99% | verhindert Stau |
-| End-to-End Latency: Event → Output < X sec | 95% | |
-| Error Rate: % Events mit Processing-Fehler | < 0.5% | |
+| Consumer lag: < X messages | 99% | Prevents backlog |
+| End-to-end latency: event → output < X sec | 95% | |
+| Error rate: % events with processing error | < 0.5% | |
 
-## Datenbank (intern genutzt)
+## Database (internally used)
 
-| SLI | SLO | Empfehlung |
+| SLI | SLO | Recommendation |
 |---|---|---|
-| Query Latency p99 < X ms | 99% | z.B. < 50ms für OLTP |
-| Availability (Connection erfolreich) | 99.95% | höher als abhängige Services |
+| Query latency p99 < X ms | 99% | e.g. < 50ms for OLTP |
+| Availability (connection successful) | 99.95% | Higher than dependent services |

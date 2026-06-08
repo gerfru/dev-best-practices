@@ -1,26 +1,26 @@
 ---
-name: tool-style
-description: Stack-aware Frontend-Styling-Assistent. Erkennt automatisch das CSS-Framework, Design-System und Komponenten-Library, dann liefert konsistente, wartbare Styling-Entscheidungen und -Korrekturen. Enthält Visual Design Grundlagen (Farbe, Typografie, Spacing, Loading States) für Entwickler ohne Design-Hintergrund. Use this skill whenever the user has a frontend styling question, wants to fix visual inconsistencies, improve CSS architecture, work with a component library, or needs practical design guidance (colors, typography, dark mode, skeleton screens); triggert bei "Styling", "CSS", "Design System", "Komponente sieht falsch aus", "Theme", "responsive", "Tailwind", "SCSS", "Farben", "Color System", "Skeleton", "Loading State", UI-Fragen.
+name: dev:tool-style
+description: Stack-aware frontend styling assistant. Automatically detects the CSS framework, design system, and component library, then delivers consistent, maintainable styling decisions and fixes. Includes visual design fundamentals (color, typography, spacing, loading states) for developers without a design background. Use this skill whenever the user has a frontend styling question, wants to fix visual inconsistencies, improve CSS architecture, work with a component library, or needs practical design guidance (colors, typography, dark mode, skeleton screens); triggers for "styling", "CSS", "design system", "component looks wrong", "theme", "responsive", "Tailwind", "SCSS", "colors", "color system", "skeleton", "loading state", UI questions.
 ---
 
 # Styling (stack-aware)
 
-Analysiert zuerst welches CSS-System im Einsatz ist — dann liefert er Lösungen
-die in dieses System passen. Kein generisches CSS wenn Tailwind benutzt wird.
-Kein Tailwind-Vorschlag wenn SCSS-Modules im Einsatz sind.
+First analyzes which CSS system is in use — then delivers solutions
+that fit that system. No generic CSS when Tailwind is used.
+No Tailwind suggestion when SCSS Modules are in use.
 
-## Schritt 0 — Frontend-Stack & Design-System erkennen
+## Step 0 — Detect Frontend Stack & Design System
 
-Scanne automatisch:
+Scan automatically:
 
-**CSS-Ansatz erkennen:**
+**Detect CSS approach:**
 - `tailwind.config.*` → Tailwind CSS (v3 vs. v4?)
 - `*.module.css` / `*.module.scss` → CSS Modules
 - `styled-components` / `@emotion/` in package.json → CSS-in-JS
 - `*.scss` / `variables.scss` → SCSS/Sass
-- `styles/globals.css` + keine Modules → globales CSS
+- `styles/globals.css` + no modules → global CSS
 
-**Komponenten-Library:**
+**Component library:**
 - `@radix-ui/` → Radix UI (headless)
 - `shadcn/ui` / `components/ui/` → shadcn (Radix + Tailwind)
 - `@mui/material` → Material UI
@@ -29,133 +29,133 @@ Scanne automatisch:
 - `@mantine/` → Mantine
 - Kendo UI / Telerik → Enterprise Kendo
 
-**Design-Token-System:**
+**Design token system:**
 - CSS Custom Properties (`--color-primary`) in `globals.css`?
-- `tailwind.config` mit `theme.extend`?
-- Figma-Tokens / Style-Dictionary?
-- Design-Tokens in `tokens.json` / `design-tokens/`?
+- `tailwind.config` with `theme.extend`?
+- Figma Tokens / Style Dictionary?
+- Design tokens in `tokens.json` / `design-tokens/`?
 
 **Framework:**
-- Next.js App Router vs. Pages Router (unterschiedliche Styling-Grenzen)
+- Next.js App Router vs. Pages Router (different styling boundaries)
 - Vite + React vs. Remix vs. SvelteKit
 
-Falls kein Frontend vorhanden: kurz melden, kein Styling-Kontext vorhanden.
+If no frontend present: report briefly, no styling context available.
 
-## Schritt 0.5 — Visual Design Grundlagen (wenn kein Design-System vorgegeben)
+## Step 0.5 — Visual Design Fundamentals (when no design system is given)
 
-Nur anwenden wenn kein externes System (MUI, shadcn, Carbon etc.) den visuellen Rahmen vorgibt.
+Apply only when no external system (MUI, shadcn, Carbon etc.) defines the visual framework.
 
-Color System (3-Tier), Typografie-Skala, Spacing-Grid, Platform Design Systems: `references/design-tokens.md`
+Color system (3-tier), typography scale, spacing grid, platform design systems: `references/design-tokens.md`
 
-Loading States (Skeleton, Optimistic UI, Spinner): `references/visual-patterns.md`
+Loading states (skeleton, optimistic UI, spinner): `references/visual-patterns.md`
 
-## Schritt 1 — Aufgabe klassifizieren
+## Step 1 — Classify the Task
 
-**Visuelles Problem beheben:**
-Lies die betroffene Komponente, identifiziere den Styling-Konflikt.
-Häufige Ursachen je nach Stack:
+**Fix a visual problem:**
+Read the affected component, identify the styling conflict.
+Common causes by stack:
 
 *Tailwind:*
-- Class-Reihenfolge Konflikt (letztes `cn()` gewinnt)
-- Purge/Safelist fehlt für dynamisch gebaute Klassen
-- Dark-Mode-Klassen (`dark:`) ohne `darkMode: 'class'` in Config
-- Tailwind v3 vs. v4 API-Unterschiede (v4: `@import "tailwindcss"`, neue Utility-Namen)
+- Class order conflict (last `cn()` wins)
+- Purge/safelist missing for dynamically built classes
+- Dark mode classes (`dark:`) without `darkMode: 'class'` in config
+- Tailwind v3 vs. v4 API differences (v4: `@import "tailwindcss"`, new utility names)
 
 *CSS Modules:*
-- `:global()` vs. lokaler Scope unklar
-- Kompilierter Klassenname vs. erwarteter Name
-- Cascade-Konflikt mit globalen Styles
+- `:global()` vs. local scope unclear
+- Compiled class name vs. expected name
+- Cascade conflict with global styles
 
 *CSS-in-JS (Emotion/SC):*
-- SSR-Hydration-Mismatch (Klassen-IDs unterschiedlich)
-- Theme-Context nicht verfügbar
-- `css` vs. `styled` in Server Components (Next.js App Router → inkompatibel!)
+- SSR hydration mismatch (class IDs differ)
+- Theme context unavailable
+- `css` vs. `styled` in Server Components (Next.js App Router → incompatible!)
 
-*Komponenten-Library-Override:*
-- MUI: `sx` prop vs. `styled()` vs. theme override — welche Ebene?
-- shadcn: Klassen direkt in der Komponente überschreiben vs. `cn()` verwenden
-- Radix: `asChild` Pattern für Styling-Delegation
+*Component library override:*
+- MUI: `sx` prop vs. `styled()` vs. theme override — which level?
+- shadcn: override classes directly in component vs. use `cn()`
+- Radix: `asChild` pattern for styling delegation
 
-**CSS-Architektur verbessern:**
-Bewertet das vorhandene System auf:
-- Design-Token-Konsistenz (hardcodierte Werte statt Tokens?)
-- Responsive-Strategie (mobile-first? Breakpoints konsistent?)
-- Dark-Mode-Implementierung (CSS Custom Properties empfohlen)
-- Bundle-Size (ungenutzte CSS-Regeln, PurgeCSS-Konfiguration)
+**Improve CSS architecture:**
+Evaluate the existing system for:
+- Design token consistency (hardcoded values instead of tokens?)
+- Responsive strategy (mobile-first? breakpoints consistent?)
+- Dark mode implementation (CSS Custom Properties recommended)
+- Bundle size (unused CSS rules, PurgeCSS configuration)
 
-**Komponente neu stylen:**
-Schreibt Styling im vorhandenen System-Stil:
-- Nutzt vorhandene Tokens/Variablen statt neue einzuführen
-- Folgt vorhandenen Naming-Konventionen
-- Responsive nach vorhandenem Breakpoint-System
+**Restyle a component:**
+Write styling in the existing system style:
+- Use existing tokens/variables instead of introducing new ones
+- Follow existing naming conventions
+- Responsive using the existing breakpoint system
 
-## Schritt 2 — Lösung erarbeiten
+## Step 2 — Develop Solution
 
-**Design-Token-First-Prinzip:**
-Vor jedem Styling-Vorschlag prüfen: Gibt es einen vorhandenen Token der passt?
-→ Token verwenden, keinen neuen Wert einführen.
+**Design-token-first principle:**
+Before every styling suggestion check: is there an existing token that fits?
+→ Use the token, do not introduce a new value.
 
-**Konsistenz-Check:**
-Ähnliche Komponenten im Projekt suchen — gleiche Muster verwenden, keine neuen erfinden.
+**Consistency check:**
+Look for similar components in the project — use the same patterns, do not invent new ones.
 
-**Responsive-Strategie:**
-- Mobile-First (min-width) außer das Projekt nutzt bereits Desktop-First (max-width)
-- Vorhandene Breakpoints aus Config/Tokens verwenden
+**Responsive strategy:**
+- Mobile-first (min-width) unless the project already uses desktop-first (max-width)
+- Use existing breakpoints from config/tokens
 
-**Stack-spezifische Best Practices:**
+**Stack-specific best practices:**
 
 *Tailwind + shadcn:*
 ```tsx
-// Gut: cn() für konditionelle Klassen
+// Good: cn() for conditional classes
 className={cn("base-classes", condition && "conditional-class", className)}
 
-// Schlecht: String-Interpolation
+// Bad: string interpolation
 className={`base-classes ${condition ? 'class-a' : ''}`}
 ```
 
 *CSS Modules + SCSS:*
 ```scss
-// Gut: Composition für Varianten
+// Good: composition for variants
 .button { composes: base from './base.module.scss'; }
 
-// Gut: CSS Custom Properties für Theming
+// Good: CSS Custom Properties for theming
 .card { background: var(--color-surface); }
 ```
 
-*MUI Theme Override (nie inline sx für globale Muster):*
+*MUI Theme Override (never inline sx for global patterns):*
 ```ts
-// Gut: Theme-Level Override
+// Good: theme-level override
 components: { MuiButton: { styleOverrides: { root: { borderRadius: 8 } } } }
 ```
 
 ### Anti-Slop Check
 
-Bevor eine Komponente als fertig gilt: `references/visual-patterns.md`
+Before a component is considered finished: `references/visual-patterns.md`
 
-## Schritt 3 — Ausgabe
+## Step 3 — Output
 
 ```text
-## Styling-Analyse: [Kontext]
+## Styling Analysis: [Context]
 
-**Stack:** [CSS-System] + [Komponenten-Library falls vorhanden]
-**Design-Token-System:** [vorhanden/nicht vorhanden/teilweise]
+**Stack:** [CSS system] + [component library if present]
+**Design Token System:** [present/not present/partial]
 
-### Problem / Aufgabe
-[Was das Ziel ist, was aktuell falsch/inkonsistent ist]
+### Problem / Task
+[What the goal is, what is currently wrong/inconsistent]
 
-### Lösung
-[Code-Snippet im richtigen System-Stil]
+### Solution
+[Code snippet in the correct system style]
 
-### Warum so
-[Kurze Begründung — warum dieser Ansatz für diesen Stack]
+### Why this approach
+[Brief rationale — why this approach for this stack]
 
-### Konsistenz-Hinweis
-[Falls ähnliche Komponenten im Projekt bereits einen anderen Weg gehen]
+### Consistency Note
+[If similar components in the project already take a different approach]
 ```
 
-## Regeln
-- Kein Stack-Wechsel vorschlagen (Tailwind durch SCSS ersetzen etc.) außer der Nutzer fragt explizit.
-- Keine neuen Design-Tokens einführen wenn vorhandene passen.
-- CSS-in-JS (Emotion, Styled Components) in Next.js App Router explizit als problematisch markieren — Server Components sind inkompatibel.
-- Keine `!important` Lösung außer als letzter Ausweg mit Erklärung warum.
-- Automatisch in Dateien schreiben nur wenn der Nutzer es explizit verlangt.
+## Rules
+- Do not suggest switching stacks (replacing Tailwind with SCSS etc.) unless the user explicitly asks.
+- Do not introduce new design tokens when existing ones fit.
+- CSS-in-JS (Emotion, Styled Components) in Next.js App Router explicitly mark as problematic — Server Components are incompatible.
+- No `!important` solution except as a last resort with explanation why.
+- Auto-write to files only when the user explicitly requests it.

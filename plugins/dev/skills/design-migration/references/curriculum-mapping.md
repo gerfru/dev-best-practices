@@ -11,8 +11,8 @@
 | CAP theorem | [MIT 6.5840 — Consistency](https://pdos.csail.mit.edu/6.824/) |
 | Saga pattern | [Richardson: Saga Pattern](https://microservices.io/patterns/data/saga.html) |
 | Event sourcing migration | [Fowler: EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html) |
-| Schema Evolution (Forward/Backward Compatibility) | Kleppmann "Designing Data-Intensive Applications", Kap. 4: Encoding and Evolution |
-| Dual-Write Pattern und Risiken | Kleppmann DDIA, Kap. 11: Stream Processing — Dual-Write Problem |
-| Change Data Capture (CDC) | Kleppmann DDIA, Kap. 11: The Log as a Data Structure |
-| Avro / Protobuf Schema Registry | Kleppmann DDIA, Kap. 4: Avro Schema Evolution |
-| Event-Driven Migration (Outbox Pattern) | Kleppmann DDIA, Kap. 11 + Microservices.io: Transactional Outbox |
+| Schema Evolution (Forward/Backward Compatibility) | Kleppmann "Designing Data-Intensive Applications", Ch. 4: Encoding and Evolution |
+| Dual-Write Pattern and risks | Kleppmann DDIA, Ch. 11: Stream Processing — Dual-Write Problem |
+| Change Data Capture (CDC) | Kleppmann DDIA, Ch. 11: The Log as a Data Structure |
+| Avro / Protobuf Schema Registry | Kleppmann DDIA, Ch. 4: Avro Schema Evolution |
+| Event-Driven Migration (Outbox Pattern) | Kleppmann DDIA, Ch. 11 + Microservices.io: Transactional Outbox |

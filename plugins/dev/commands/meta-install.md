@@ -1,11 +1,11 @@
 ---
-description: Installiert oder aktualisiert Dev-Best-Practices-Regeln in der CLAUDE.md. Erkennt automatisch ob Erstinstallation oder Update noetig ist. Flags: --essential (default), --full, --update, --section <name>.
+description: Installs or updates dev best practices rules in CLAUDE.md. Automatically detects whether initial installation or update is needed. Flags: --essential (default), --full, --update, --section <name>.
 argument-hint: "[--essential | --full | --update | --section <security|cicd|architecture>]"
 ---
 
-Füge die Dev-Best-Practices-Regeln in die CLAUDE.md dieses Projekts ein.
-Bestehender Projektkontext wird nicht überschrieben.
+Add the dev best practices rules to this project's CLAUDE.md.
+Existing project context will not be overwritten.
 
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-install/SKILL.md`.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/meta-install/SKILL.md`.
 
-Optionen: $ARGUMENTS
+Options: $ARGUMENTS

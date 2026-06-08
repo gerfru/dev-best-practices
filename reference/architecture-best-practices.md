@@ -1,15 +1,15 @@
 # Full-Stack Architecture Best Practices
 
-Referenz für Projekt-Architektur, Schichtenmodelle und Infrastruktur-Patterns (Stand: März 2026).
-Sprachunabhängig wo möglich, mit konkreten Beispielen für TypeScript/Node.js und Python.
+Reference for project architecture, layering models, and infrastructure patterns (as of March 2026).
+Language-agnostic where possible, with concrete examples for TypeScript/Node.js and Python.
 
 ---
 
-## 1. Projekt-Struktur
+## 1. Project Structure
 
-### Grundprinzip: Feature-basiert statt technisch
+### Core Principle: Feature-Based Instead of Technical
 
-**Schlecht (technisch gruppiert):**
+**Bad (technically grouped):**
 
 ```text
 src/
@@ -27,9 +27,9 @@ src/
     product.ts
 ```
 
-Problem: Um ein Feature zu verstehen, muss man zwischen 5+ Ordnern hin- und herspringen.
+Problem: To understand a feature, you have to jump between 5+ folders.
 
-**Besser (feature-basiert / Colocation):**
+**Better (feature-based / colocation):**
 
 ```text
 src/
@@ -45,57 +45,57 @@ src/
       order.controller.ts
       order.test.ts
   shared/
-    lib/         # Utilities die überall gebraucht werden
-    middleware/   # Auth, Logging, Error Handling
-    types/       # Gemeinsame Types/Interfaces
+    lib/         # Utilities needed everywhere
+    middleware/   # Auth, logging, error handling
+    types/       # Common types/interfaces
 ```
 
-Vorteil: Alles was zu einem Feature gehört, ist beisammen. Einfacher zu verstehen, einfacher zu löschen.
+Advantage: Everything belonging to a feature is together. Easier to understand, easier to delete.
 
-### Next.js App Router Struktur
+### Next.js App Router Structure
 
 ```text
 src/
   app/                    # Routing (App Router)
-    (auth)/               # Route Groups (kein URL-Segment)
+    (auth)/               # Route groups (no URL segment)
       login/page.tsx
       register/page.tsx
-    api/                  # API Routes
+    api/                  # API routes
       monitor/route.ts
       health/route.ts
     layout.tsx
     page.tsx
-  components/             # UI-Komponenten
-    ui/                   # Generische (Button, Card, Modal)
-    features/             # Feature-spezifische Komponenten
-  lib/                    # Business Logic, Utilities
-    services/             # Externe API-Calls, LLM-Integration
-    storage.ts            # Data Access Layer
-    schemas.ts            # Zod Schemas
-    types.ts              # TypeScript Types
-  hooks/                  # Custom React Hooks
+  components/             # UI components
+    ui/                   # Generic (Button, Card, Modal)
+    features/             # Feature-specific components
+  lib/                    # Business logic, utilities
+    services/             # External API calls, LLM integration
+    storage.ts            # Data access layer
+    schemas.ts            # Zod schemas
+    types.ts              # TypeScript types
+  hooks/                  # Custom React hooks
 ```
 
-### Python (FastAPI) Struktur
+### Python (FastAPI) Structure
 
 ```text
 src/
   app/
-    main.py               # App-Entry, ASGI Config
+    main.py               # App entry, ASGI config
     config.py              # Settings (Pydantic BaseSettings)
-    dependencies.py        # Dependency Injection
+    dependencies.py        # Dependency injection
   features/
     user/
-      router.py            # API Endpoints
-      service.py           # Business Logic
-      models.py            # SQLAlchemy/Pydantic Models
-      schemas.py           # Request/Response Schemas
+      router.py            # API endpoints
+      service.py           # Business logic
+      models.py            # SQLAlchemy/Pydantic models
+      schemas.py           # Request/response schemas
     order/
       ...
   shared/
-    middleware/            # Auth, CORS, Error Handling
-    database.py            # DB Connection, Session
-    exceptions.py          # Custom Exceptions
+    middleware/            # Auth, CORS, error handling
+    database.py            # DB connection, session
+    exceptions.py          # Custom exceptions
 tests/
   features/
     user/
@@ -105,7 +105,7 @@ tests/
 
 ### Barrel Exports (`index.ts`)
 
-Barrel Exports vereinfachen Imports:
+Barrel exports simplify imports:
 
 ```typescript
 // src/lib/index.ts
@@ -113,58 +113,58 @@ export { sanitizeUrl, stripCiteTags } from "./types";
 export { monitorResponseSchema } from "./schemas";
 export { saveData, loadData } from "./storage";
 
-// Nutzung:
+// Usage:
 import { sanitizeUrl, monitorResponseSchema, saveData } from "@/lib";
 ```
 
-**Wann Barrel Exports:** Für `lib/`, `components/`, `shared/` – Ordner die von außen importiert werden.
-**Wann nicht:** Für Feature-Ordner die nur intern genutzt werden (vermeidet Circular Dependencies).
+**When to use barrel exports:** For `lib/`, `components/`, `shared/` – folders imported from outside.
+**When not:** For feature folders used only internally (avoids circular dependencies).
 
 ---
 
-## 2. Schichtenmodell (Layered Architecture)
+## 2. Layering Model (Layered Architecture)
 
-### Die 4 Schichten
+### The 4 Layers
 
 ```text
 ┌─────────────────────────────────────┐
-│  Presentation Layer                 │  UI, API Routes, Controllers
-│  (was der User sieht)              │
+│  Presentation Layer                 │  UI, API routes, controllers
+│  (what the user sees)              │
 ├─────────────────────────────────────┤
-│  Application Layer                  │  Use Cases, Orchestration
-│  (was die App tut)                 │
+│  Application Layer                  │  Use cases, orchestration
+│  (what the app does)               │
 ├─────────────────────────────────────┤
-│  Domain Layer                       │  Business Logic, Regeln
-│  (was die Geschäftslogik sagt)     │  Keine Abhängigkeiten nach außen!
+│  Domain Layer                       │  Business logic, rules
+│  (what the business logic says)    │  No external dependencies!
 ├─────────────────────────────────────┤
-│  Infrastructure Layer               │  DB, APIs, File System, Email
-│  (wie es technisch passiert)       │
+│  Infrastructure Layer               │  DB, APIs, file system, email
+│  (how it happens technically)      │
 └─────────────────────────────────────┘
 ```
 
 ### Dependency Rule
 
-**Abhängigkeiten zeigen nur nach innen/unten:**
+**Dependencies point inward/downward only:**
 
 ```text
 Presentation → Application → Domain ← Infrastructure
                                 ↑
-                        Domain kennt KEINE
-                        konkrete DB/API
+                        Domain knows NO
+                        concrete DB/API
 ```
 
-Die Domain-Schicht definiert Interfaces, die Infrastructure-Schicht implementiert sie (Dependency Inversion).
+The domain layer defines interfaces, the infrastructure layer implements them (dependency inversion).
 
-### Praxis-Beispiel
+### Practical Example
 
 ```typescript
-// Domain Layer – kennt keine DB, keine API
+// Domain layer – knows no DB, no API
 interface NewsRepository {
   save(news: NewsItem[]): Promise<void>;
   findRecent(limit: number): Promise<NewsItem[]>;
 }
 
-// Application Layer – orchestriert
+// Application layer – orchestrates
 class RefreshNewsUseCase {
   constructor(
     private newsRepo: NewsRepository,
@@ -178,7 +178,7 @@ class RefreshNewsUseCase {
   }
 }
 
-// Infrastructure Layer – konkrete Implementierung
+// Infrastructure layer – concrete implementation
 class FileNewsRepository implements NewsRepository {
   async save(news: NewsItem[]): Promise<void> {
     await fs.writeFile("data/news.json", JSON.stringify(news));
@@ -190,23 +190,23 @@ class FileNewsRepository implements NewsRepository {
 }
 ```
 
-### Wann welches Level an Schichtung?
+### When Which Level of Layering?
 
-| Projektgröße | Empfehlung |
+| Project size | Recommendation |
 |-------------|-----------|
-| **Kleines Projekt / Prototyp** | 2 Schichten reichen: Routes → Service/Logic |
-| **Mittleres Projekt** | 3 Schichten: Routes → Service → Data Access |
-| **Großes Projekt / Team** | Vollständige Layered/Clean Architecture |
+| **Small project / prototype** | 2 layers are enough: Routes → Service/Logic |
+| **Medium project** | 3 layers: Routes → Service → Data Access |
+| **Large project / team** | Full layered/clean architecture |
 
-**Wichtig:** Over-Engineering vermeiden. Ein Solo-Projekt braucht keine 4 Abstraktionsschichten. Starte einfach, refactore wenn es wächst.
+**Important:** Avoid over-engineering. A solo project doesn't need 4 abstraction layers. Start simple, refactor as it grows.
 
 ---
 
 ## 3. Clean Architecture / Hexagonal Architecture
 
-### Grundidee
+### Core Idea
 
-Die Business-Logik (Domain) ist der Kern und hat **keine Abhängigkeit** zu Frameworks, Datenbanken oder externen Services. Alles Externe ist austauschbar.
+The business logic (domain) is the core and has **no dependency** on frameworks, databases, or external services. Everything external is replaceable.
 
 ```text
                     ┌─────────────────┐
@@ -238,83 +238,83 @@ Die Business-Logik (Domain) ist der Kern und hat **keine Abhängigkeit** zu Fram
 
 ### Ports & Adapters (Hexagonal)
 
-- **Port** = Interface das die Domain definiert (z.B. `NewsRepository`)
-- **Adapter** = Konkrete Implementierung (z.B. `PostgresNewsRepository`, `FileNewsRepository`)
+- **Port** = Interface defined by the domain (e.g. `NewsRepository`)
+- **Adapter** = Concrete implementation (e.g. `PostgresNewsRepository`, `FileNewsRepository`)
 
-Vorteil: Du kannst die DB wechseln ohne Business-Logik anzufassen. Du kannst Tests schreiben ohne echte DB.
+Advantage: You can change the DB without touching business logic. You can write tests without a real DB.
 
-### Wann Clean Architecture?
+### When Clean Architecture?
 
-| Situation | Empfehlung |
+| Situation | Recommendation |
 |-----------|-----------|
-| Prototyp / MVP | Nein – zu viel Overhead |
-| Solo-Projekt < 10K LOC | Nein – einfache Schichtung reicht |
-| Team-Projekt > 10K LOC | Ja – Struktur zahlt sich aus |
-| Langlebiges Produkt | Ja – Austauschbarkeit wichtig |
-| Microservice | Ja – klare Grenzen nötig |
+| Prototype / MVP | No – too much overhead |
+| Solo project < 10K LOC | No – simple layering is enough |
+| Team project > 10K LOC | Yes – structure pays off |
+| Long-lived product | Yes – replaceability important |
+| Microservice | Yes – clear boundaries needed |
 
 ---
 
 ## 4. Monolith vs. Microservices
 
-### Vergleich
+### Comparison
 
-| Aspekt | Monolith | Microservices |
+| Aspect | Monolith | Microservices |
 |--------|----------|--------------|
-| **Komplexität** | Niedrig (ein Deployment) | Hoch (Netzwerk, Service Discovery, etc.) |
-| **Deployment** | Einfach (ein Artifact) | Komplex (viele unabhängige Deployments) |
-| **Skalierung** | Vertikal (größere Maschine) | Horizontal (mehr Instanzen pro Service) |
-| **Daten-Konsistenz** | Einfach (eine DB) | Komplex (Distributed Transactions) |
-| **Team-Autonomie** | Schwieriger bei großen Teams | Services = Team-Grenzen |
-| **Debugging** | Stack Trace in einem Prozess | Distributed Tracing nötig |
-| **Latenz** | Funktionsaufrufe (Nanosekunden) | Netzwerk-Calls (Millisekunden) |
+| **Complexity** | Low (one deployment) | High (network, service discovery, etc.) |
+| **Deployment** | Simple (one artifact) | Complex (many independent deployments) |
+| **Scaling** | Vertical (larger machine) | Horizontal (more instances per service) |
+| **Data consistency** | Simple (one DB) | Complex (distributed transactions) |
+| **Team autonomy** | Harder with large teams | Services = team boundaries |
+| **Debugging** | Stack trace in one process | Distributed tracing needed |
+| **Latency** | Function calls (nanoseconds) | Network calls (milliseconds) |
 
-### Die richtige Wahl
+### The Right Choice
 
 ```text
-                    Starte hier
+                    Start here
                         │
                         ▼
               ┌─────────────────────┐
               │     MONOLITH        │
-              │  (gut strukturiert) │
+              │  (well structured)  │
               └──────────┬──────────┘
                          │
-              Wächst das Team?
-              Brauchen Teile andere
-              Skalierung/Technologie?
+              Is the team growing?
+              Do parts need different
+              scaling/technology?
                          │
-                    Ja   │   Nein
+                    Yes  │   No
                     ▼    │    ▼
-           ┌─────────┐  │  Bleib beim
-           │ Modular  │  │  Monolith
+           ┌─────────┐  │  Stay with
+           │ Modular  │  │  monolith
            │Monolith  │  │
            └────┬─────┘  │
                 │        │
-           Einzelne Module
-           müssen unabhängig
-           deployt werden?
+           Individual modules
+           need to be deployed
+           independently?
                 │
-           Ja   │
+           Yes  │
            ▼    │
      ┌──────────┐
-     │ Extrahiere│
-     │ einzelne  │
-     │ Services  │
+     │ Extract   │
+     │ individual│
+     │ services  │
      └──────────┘
 ```
 
-**Faustregel:** Starte IMMER mit einem Monolith. Extrahiere Services erst wenn du einen konkreten Grund hast (nicht präventiv).
+**Rule of thumb:** ALWAYS start with a monolith. Extract services only when you have a concrete reason (not preventively).
 
-### Der Modulare Monolith (bester Kompromiss)
+### The Modular Monolith (Best Compromise)
 
-Monolith mit klaren Modul-Grenzen. Jedes Modul hat:
-- Eigene Domain-Logik
-- Eigenes Data Model
-- Klare API (Exports) nach außen
-- Kommunikation über definierte Interfaces (nicht direkte DB-Zugriffe)
+Monolith with clear module boundaries. Each module has:
+- Own domain logic
+- Own data model
+- Clear API (exports) outward
+- Communication through defined interfaces (not direct DB access)
 
-Kann später zu Microservices aufgespalten werden, weil die Grenzen schon gezogen sind.
+Can later be split into microservices because boundaries are already drawn.
 
 ```text
 ┌─────────────────────────────────────────────┐
@@ -328,7 +328,7 @@ Kann später zu Microservices aufgespalten werden, weil die Grenzen schon gezoge
 │  │ └──────┘ │ │ └──────┘ │ │ └──────┘ │   │
 │  └──────────┘ └──────────┘ └──────────┘   │
 │         ↕              ↕            ↕       │
-│     Kommunikation nur über definierte APIs  │
+│     Communication only through defined APIs  │
 └─────────────────────────────────────────────┘
 ```
 
@@ -336,60 +336,60 @@ Kann später zu Microservices aufgespalten werden, weil die Grenzen schon gezoge
 
 ## 5. Monorepo vs. Polyrepo
 
-### Vergleich
+### Comparison
 
-| Aspekt | Monorepo | Polyrepo |
+| Aspect | Monorepo | Polyrepo |
 |--------|----------|----------|
-| **Code Sharing** | Einfach (lokale Imports) | Packages publishen nötig |
-| **Atomic Changes** | Ein Commit ändert Frontend + Backend + Shared | Mehrere PRs über Repos |
-| **CI/CD** | Komplexer (was hat sich geändert?) | Einfach (jedes Repo = ein Build) |
-| **Tooling** | Braucht spezielle Tools (Turborepo, Nx, Pants) | Standard Git reicht |
-| **Onboarding** | Ein Repo klonen, alles da | Welche Repos brauche ich? |
-| **Git Performance** | Kann bei Millionen Files langsam werden | Kein Problem |
+| **Code sharing** | Easy (local imports) | Need to publish packages |
+| **Atomic changes** | One commit changes frontend + backend + shared | Multiple PRs across repos |
+| **CI/CD** | More complex (what changed?) | Simple (each repo = one build) |
+| **Tooling** | Needs special tools (Turborepo, Nx, Pants) | Standard git is enough |
+| **Onboarding** | Clone one repo, everything there | Which repos do I need? |
+| **Git performance** | Can be slow with millions of files | No problem |
 
 ### Monorepo Tools
 
-| Tool | Sprache | Stärke |
+| Tool | Language | Strength |
 |------|---------|--------|
-| **Turborepo** | TypeScript/Node | Einfach, schnell, Vercel-backed |
-| **Nx** | TypeScript/Node (+ polyglot) | Feature-reich, Dependency Graph, Plugins |
-| **pnpm Workspaces** | Node | Built-in, kein Extra-Tool |
-| **Pants** | Python (+ polyglot) | Inkrementelle Builds, Caching |
-| **uv Workspaces** | Python | Neu (2025+), natives Monorepo-Support |
+| **Turborepo** | TypeScript/Node | Simple, fast, Vercel-backed |
+| **Nx** | TypeScript/Node (+ polyglot) | Feature-rich, dependency graph, plugins |
+| **pnpm Workspaces** | Node | Built-in, no extra tool |
+| **Pants** | Python (+ polyglot) | Incremental builds, caching |
+| **uv Workspaces** | Python | New (2025+), native monorepo support |
 
-### Empfehlung
+### Recommendation
 
-| Situation | Empfehlung |
+| Situation | Recommendation |
 |-----------|-----------|
-| Solo-Projekt | Monorepo (Turborepo/pnpm Workspaces) |
-| Full-Stack App (Frontend + Backend + Shared) | Monorepo |
-| Unabhängige Services, verschiedene Teams | Polyrepo |
-| Mixed Languages (TS + Python + Go) | Polyrepo (oder Nx/Pants) |
+| Solo project | Monorepo (Turborepo/pnpm Workspaces) |
+| Full-stack app (frontend + backend + shared) | Monorepo |
+| Independent services, different teams | Polyrepo |
+| Mixed languages (TS + Python + Go) | Polyrepo (or Nx/Pants) |
 
-### Monorepo Struktur (Turborepo)
+### Monorepo Structure (Turborepo)
 
 ```text
 my-project/
   apps/
-    web/              # Next.js Frontend
+    web/              # Next.js frontend
       package.json
-    api/              # Express/Fastify Backend
+    api/              # Express/Fastify backend
       package.json
   packages/
-    shared/           # Geteilte Types, Utils
+    shared/           # Shared types, utils
       package.json
-    ui/               # Design System / Komponenten
+    ui/               # Design system / components
       package.json
-    config/           # Shared ESLint, TS, Tailwind Config
+    config/           # Shared ESLint, TS, Tailwind config
       package.json
-  turbo.json          # Build Pipeline
+  turbo.json          # Build pipeline
   package.json        # Root
-  pnpm-workspace.yaml # Workspace Definition
+  pnpm-workspace.yaml # Workspace definition
 ```
 
 ---
 
-## 6. Backend-Architektur Patterns
+## 6. Backend Architecture Patterns
 
 ### MVC (Model-View-Controller)
 
@@ -399,25 +399,25 @@ Request → Controller → Model → Database
             View → Response
 ```
 
-Klassisch, einfach, gut für CRUD-Apps. Wird schnell unübersichtlich bei komplexer Business-Logik.
+Classic, simple, good for CRUD apps. Gets messy quickly with complex business logic.
 
 ### Service Layer Pattern
 
 ```text
 Request → Controller → Service → Repository → Database
                           ↓
-                    Business Logic
+                    Business logic
 ```
 
-Controller: HTTP-Handling (Request parsing, Response formatting).
-Service: Business-Logik (Validierung, Orchestration, Regeln).
-Repository: Daten-Zugriff (Queries, CRUD).
+Controller: HTTP handling (request parsing, response formatting).
+Service: Business logic (validation, orchestration, rules).
+Repository: Data access (queries, CRUD).
 
-**Der wichtigste Schritt von MVC:** Business-Logik aus dem Controller in Services extrahieren.
+**The most important step from MVC:** Extract business logic from controllers into services.
 
 ### CQRS (Command Query Responsibility Segregation)
 
-Lese- und Schreib-Operationen trennen:
+Separate read and write operations:
 
 ```text
 ┌──────────┐     ┌─────────────┐     ┌──────────┐
@@ -427,13 +427,13 @@ Lese- und Schreib-Operationen trennen:
 
 ┌──────────┐     ┌─────────────┐     ┌──────────┐
 │  Query    │────▶│ Read Model  │────▶│ Read DB  │
-│  (Read)   │     │(denormalized│     │(optimiert│
-└──────────┘     │  für Reads) │     │für Query)│
+│  (Read)   │     │(denormalized│     │(optimized│
+└──────────┘     │  for reads) │     │for query)│
                   └─────────────┘     └──────────┘
 ```
 
-**Wann CQRS:** Lese-Zugriffe >> Schreib-Zugriffe, verschiedene Optimierungen nötig.
-**Wann nicht:** Einfache CRUD-Apps (Overkill).
+**When CQRS:** Read access >> write access, different optimizations needed.
+**When not:** Simple CRUD apps (overkill).
 
 ### Event-Driven Architecture
 
@@ -443,80 +443,80 @@ Service A ──publishes──▶ Event Bus ──subscribes──▶ Service B
                               └──subscribes──▶ Service C
 ```
 
-**Wann:** Lose Kopplung zwischen Services, asynchrone Verarbeitung, Audit Trails.
+**When:** Loose coupling between services, asynchronous processing, audit trails.
 **Tools:** RabbitMQ, Apache Kafka, Redis Streams, AWS SQS/SNS.
 
 ---
 
-## 7. Frontend-Architektur Patterns
+## 7. Frontend Architecture Patterns
 
 ### Component Architecture
 
 ```text
 ┌─────────────────────────────────┐
-│  Pages / Routes                 │  URL → welche Seite?
+│  Pages / Routes                 │  URL → which page?
 ├─────────────────────────────────┤
-│  Feature Components             │  Geschäftslogik-Komponenten
-│  (Dashboard, UserProfile)       │  (fetchen Daten, haben State)
+│  Feature Components             │  Business logic components
+│  (Dashboard, UserProfile)       │  (fetch data, have state)
 ├─────────────────────────────────┤
-│  UI Components                  │  Reine Darstellung
-│  (Button, Card, Modal)          │  (Props rein, UI raus)
+│  UI Components                  │  Pure presentation
+│  (Button, Card, Modal)          │  (props in, UI out)
 ├─────────────────────────────────┤
-│  Hooks / State Management       │  Shared Logic
-│  (useAuth, useMonitorData)      │  (Daten-Fetching, State)
+│  Hooks / State Management       │  Shared logic
+│  (useAuth, useMonitorData)      │  (data fetching, state)
 ├─────────────────────────────────┤
-│  Utils / Lib                    │  Pure Functions
-│  (formatDate, sanitizeUrl)      │  (kein State, kein UI)
+│  Utils / Lib                    │  Pure functions
+│  (formatDate, sanitizeUrl)      │  (no state, no UI)
 └─────────────────────────────────┘
 ```
 
 ### Server Components vs. Client Components (React/Next.js)
 
-| Typ | Rendert | Kann | Kann nicht |
+| Type | Renders | Can | Cannot |
 |-----|---------|------|-----------|
-| **Server Component** | Auf dem Server | DB-Zugriff, async/await, Secrets lesen | useState, useEffect, Event Handlers |
-| **Client Component** | Im Browser | Interaktivität, Browser APIs | Direkt auf DB/Secrets zugreifen |
+| **Server component** | On the server | DB access, async/await, read secrets | useState, useEffect, event handlers |
+| **Client component** | In browser | Interactivity, browser APIs | Directly access DB/secrets |
 
-**Faustregel:** Default ist Server Component. Nur `"use client"` hinzufügen wenn Interaktivität nötig ist.
+**Rule of thumb:** Default is server component. Only add `"use client"` when interactivity is needed.
 
 ```text
-// Gut: Server Component holt Daten, Client Component zeigt interaktiven Teil
+// Good: Server component fetches data, client component shows interactive part
 // page.tsx (Server)
 async function DashboardPage() {
-  const data = await loadMonitorData();  // Server-only, direkt DB-Zugriff
+  const data = await loadMonitorData();  // Server-only, direct DB access
   return <Dashboard initialData={data} />;
 }
 
 // Dashboard.tsx (Client – "use client")
 function Dashboard({ initialData }) {
   const [data, setData] = useState(initialData);
-  // ... Interaktivität
+  // ... interactivity
 }
 ```
 
-### State Management – Entscheidungsbaum
+### State Management – Decision Tree
 
 ```text
-Brauchst du geteilten State?
+Do you need shared state?
     │
-    ├── Nein → useState / useReducer (lokal)
+    ├── No → useState / useReducer (local)
     │
-    └── Ja → Wie viele Konsumenten?
+    └── Yes → How many consumers?
               │
-              ├── 2-3 nahe Komponenten → Props drilling / Composition
+              ├── 2-3 close components → Props drilling / composition
               │
-              ├── Viele Komponenten → React Context
+              ├── Many components → React Context
               │
-              └── Komplexer State mit vielen Updates?
+              └── Complex state with many updates?
                     │
-                    ├── Ja → Zustand (leichtgewichtig) oder Redux Toolkit
+                    ├── Yes → Zustand (lightweight) or Redux Toolkit
                     │
-                    └── Server State? → TanStack Query / SWR
+                    └── Server state? → TanStack Query / SWR
 ```
 
-**Server State** (Daten vom Backend) ≠ **Client State** (UI-Zustand). Mische sie nicht:
-- **Server State:** TanStack Query, SWR, oder Next.js Server Components
-- **Client State:** useState, Zustand, Redux Toolkit
+**Server state** (data from backend) ≠ **client state** (UI state). Don't mix them:
+- **Server state:** TanStack Query, SWR, or Next.js server components
+- **Client state:** useState, Zustand, Redux Toolkit
 
 ---
 
@@ -524,21 +524,21 @@ Brauchst du geteilten State?
 
 ### Server-Side vs. Client-Side
 
-| Pattern | Wann | Tool |
+| Pattern | When | Tool |
 |---------|------|------|
-| **SSR (Server-Side Rendering)** | SEO wichtig, initialer Load schnell | Next.js Server Components |
-| **SSG (Static Site Generation)** | Inhalt ändert sich selten | Next.js `generateStaticParams()` |
-| **ISR (Incremental Static Regen.)** | Statisch + periodisch aktualisiert | Next.js `revalidate` |
-| **CSR (Client-Side Rendering)** | Hinter Login, Dashboard-Apps | TanStack Query, SWR |
-| **Streaming** | Lange Queries, Progressive Loading | React Suspense + Streaming SSR |
+| **SSR (Server-Side Rendering)** | SEO important, fast initial load | Next.js server components |
+| **SSG (Static Site Generation)** | Content changes rarely | Next.js `generateStaticParams()` |
+| **ISR (Incremental Static Regen.)** | Static + periodically updated | Next.js `revalidate` |
+| **CSR (Client-Side Rendering)** | Behind login, dashboard apps | TanStack Query, SWR |
+| **Streaming** | Long queries, progressive loading | React Suspense + streaming SSR |
 
-### API-Call Patterns
+### API Call Patterns
 
-**Deduplizierung:** Mehrere Komponenten fetchen die gleichen Daten → nur ein Request.
+**Deduplication:** Multiple components fetching the same data → only one request.
 
 ```typescript
-// TanStack Query dedupliziert automatisch:
-// Beide Hooks machen nur EINEN API-Call
+// TanStack Query deduplicates automatically:
+// Both hooks make only ONE API call
 function ComponentA() {
   const { data } = useQuery({ queryKey: ["monitor"], queryFn: fetchMonitor });
 }
@@ -547,44 +547,44 @@ function ComponentB() {
 }
 ```
 
-**Optimistic Updates:** UI sofort updaten, API-Call im Hintergrund.
+**Optimistic updates:** Update UI immediately, API call in background.
 
 ```typescript
-// User klickt "Löschen" → Item verschwindet sofort
-// API-Call läuft parallel
-// Bei Fehler: Rollback auf vorherigen Zustand
+// User clicks "Delete" → item disappears immediately
+// API call runs in parallel
+// On error: rollback to previous state
 ```
 
-**Stale-While-Revalidate:** Gecachte Daten sofort anzeigen, im Hintergrund frische holen.
+**Stale-While-Revalidate:** Show cached data immediately, fetch fresh in background.
 
 ---
 
-## 9. Docker Architektur
+## 9. Docker Architecture
 
 ### Single-Container App
 
-Für einfache Apps (wie der News Monitor):
+For simple apps (like the news monitor):
 
 ```text
 ┌─────────────────────┐
 │    Cloudflare        │
 │    Tunnel / Nginx    │
-│    (Reverse Proxy)   │
+│    (Reverse proxy)   │
 └──────────┬──────────┘
            │ :3000
 ┌──────────▼──────────┐
-│    App Container     │
+│    App container     │
 │    (Next.js /        │
 │     FastAPI)         │
 │    ┌───────────────┐ │
-│    │ /app/data     │ │ ← Docker Volume
+│    │ /app/data     │ │ ← Docker volume
 │    └───────────────┘ │
 └─────────────────────┘
 ```
 
 ### Multi-Container App (docker-compose)
 
-Für Apps mit DB, Cache, Background Workers:
+For apps with DB, cache, background workers:
 
 ```text
 ┌──────────────────────────────────────────┐
@@ -603,14 +603,14 @@ Für Apps mit DB, Cache, Background Workers:
 └──────────────────────────────────────────┘
 ```
 
-**`docker-compose.yml` (Referenz):**
+**`docker-compose.yml` (reference):**
 
 ```yaml
 services:
   app:
     build: .
     ports:
-      - "127.0.0.1:3000:3000"  # Nur localhost!
+      - "127.0.0.1:3000:3000"  # Localhost only!
     env_file: .env
     depends_on:
       db:
@@ -663,72 +663,72 @@ volumes:
 
 ```text
 ┌─────────────────────────────────────────────┐
-│          Docker Network (bridge)            │
+│          Docker network (bridge)            │
 │                                             │
-│  app ──────── db        Intern: Hostname    │
-│    │          │         (app kann "db:5432" │
-│    └──────── redis       erreichen)         │
+│  app ──────── db        Internal: hostname  │
+│    │          │         (app can reach      │
+│    └──────── redis       "db:5432")         │
 │                                             │
-│  Extern: Nur app:3000 via Port-Mapping      │
+│  External: Only app:3000 via port mapping   │
 └─────────────────────────────────────────────┘
 ```
 
-- Container kommunizieren über **Service-Namen** (nicht IPs): `postgres://db:5432/myapp`
-- Nur explizit gemappte Ports sind von außen erreichbar
-- `127.0.0.1:3000:3000` bindet nur an localhost (nicht ans Internet)
-- Default: Alle Services im gleichen `docker-compose.yml` teilen ein Netzwerk
+- Containers communicate via **service names** (not IPs): `postgres://db:5432/myapp`
+- Only explicitly mapped ports are reachable from outside
+- `127.0.0.1:3000:3000` binds only to localhost (not to the internet)
+- Default: All services in the same `docker-compose.yml` share a network
 
 ### Docker Volumes: Bind Mount vs. Named Volume
 
-| Typ | Syntax | Wann |
+| Type | Syntax | When |
 |-----|--------|------|
-| **Named Volume** | `volumes: [pg-data:/var/lib/...]` | Produktion (Docker verwaltet) |
-| **Bind Mount** | `volumes: [./data:/app/data]` | Entwicklung (Live-Reload, einfacher Zugriff) |
-| **tmpfs** | `tmpfs: /tmp` | Temporäre Daten (verschwindet bei Neustart) |
+| **Named volume** | `volumes: [pg-data:/var/lib/...]` | Production (Docker manages) |
+| **Bind mount** | `volumes: [./data:/app/data]` | Development (live reload, easy access) |
+| **tmpfs** | `tmpfs: /tmp` | Temporary data (disappears on restart) |
 
-**Wichtig:** Named Volumes überleben `docker compose down`. Nur `docker compose down -v` löscht sie.
+**Important:** Named volumes survive `docker compose down`. Only `docker compose down -v` deletes them.
 
 ---
 
 ## 10. Reverse Proxy & SSL
 
-### Warum ein Reverse Proxy?
+### Why a Reverse Proxy?
 
 ```text
 Internet                   Server
    │
    │    ┌──────────────┐
-   ├───▶│ Reverse Proxy│    - SSL Termination
-   │    │ (Nginx /     │    - Rate Limiting
-   │    │  Caddy /     │    - Static File Serving
+   ├───▶│ Reverse proxy│    - SSL termination
+   │    │ (Nginx /     │    - Rate limiting
+   │    │  Caddy /     │    - Static file serving
    │    │  Cloudflare) │    - Compression
    │    └──────┬───────┘    - Caching
-   │           │             - Security Headers
+   │           │             - Security headers
    │    ┌──────▼───────┐
-   │    │  App (:3000) │    - Nur Business Logic
+   │    │  App (:3000) │    - Business logic only
    │    └──────────────┘
 ```
 
-### Optionen
+### Options
 
-| Tool | Stärke | Best für |
+| Tool | Strength | Best for |
 |------|--------|---------|
-| **Caddy** | Automatisches HTTPS (Let's Encrypt), einfachste Config | Kleine/mittlere Apps |
-| **Nginx** | Performant, flexibel, Industriestandard | Alles |
-| **Traefik** | Docker-native, automatische Service-Discovery | Docker/K8s Umgebungen |
-| **Cloudflare Tunnel** | Kein offener Port nötig, DDoS-Schutz | Wenn kein Public IP gewünscht |
+| **Caddy** | Automatic HTTPS (Let's Encrypt), simplest config | Small/medium apps |
+| **Nginx** | Performant, flexible, industry standard | Everything |
+| **Traefik** | Docker-native, automatic service discovery | Docker/K8s environments |
+| **Cloudflare Tunnel** | No open port needed, DDoS protection | When no public IP desired |
 
-### Caddy (einfachstes Setup)
+### Caddy (Simplest Setup)
 
 ```text
-# Caddyfile – das ist ALLES was du brauchst
+# Caddyfile – this is ALL you need
 myapp.example.com {
     reverse_proxy app:3000
 }
-# HTTPS wird automatisch konfiguriert (Let's Encrypt)
+# HTTPS is automatically configured (Let's Encrypt)
 ```
 
-### Nginx (Referenz-Config)
+### Nginx (Reference Config)
 
 ```nginx
 server {
@@ -738,7 +738,7 @@ server {
     ssl_certificate /etc/letsencrypt/live/myapp/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/myapp/privkey.pem;
 
-    # Security Headers
+    # Security headers
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
@@ -752,7 +752,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # Static Files (optional, wenn App eigene Static Files hat)
+    # Static files (optional, if app has own static files)
     location /_next/static/ {
         proxy_pass http://app:3000;
         expires 1y;
@@ -760,7 +760,7 @@ server {
     }
 }
 
-# HTTP → HTTPS Redirect
+# HTTP → HTTPS redirect
 server {
     listen 80;
     server_name myapp.example.com;
@@ -770,81 +770,81 @@ server {
 
 ---
 
-## 11. Environment-Strategien
+## 11. Environment Strategies
 
 ### Minimum: Dev + Production (2-Tier)
 
-Für Solo-Projekte und kleine Teams reicht oft ein 2-Tier-Setup:
+For solo projects and small teams, a 2-tier setup is often enough:
 
-| Aspekt | Development | Production |
+| Aspect | Development | Production |
 |--------|------------|------------|
-| **Datenbank** | Lokal (Docker) oder SQLite | Echte Daten |
-| **External APIs** | Mocks / Sandbox | Live |
-| **Debug Mode** | An | **Aus** |
-| **Logging Level** | debug | info/warn |
-| **SSL** | Optional (localhost) | Ja |
-| **Secrets** | `.env` lokal | CI/CD Secrets / Vault |
-| **Error Detail** | Stack Traces | Generische Meldung |
+| **Database** | Local (Docker) or SQLite | Real data |
+| **External APIs** | Mocks / sandbox | Live |
+| **Debug mode** | On | **Off** |
+| **Logging level** | debug | info/warn |
+| **SSL** | Optional (localhost) | Yes |
+| **Secrets** | `.env` local | CI/CD secrets / Vault |
+| **Error detail** | Stack traces | Generic message |
 
-**Das reicht wenn:**
-- Solo-Entwickler oder kleines Team (1-3 Personen)
-- Kein Kunden-facing SLA (interne Tools, Side Projects)
-- Deployments sind schnell revertbar (Docker, Vercel, etc.)
-- Gute Test-Coverage als Sicherheitsnetz
+**This is enough when:**
+- Solo developer or small team (1-3 people)
+- No customer-facing SLA (internal tools, side projects)
+- Deployments are quickly revertable (Docker, Vercel, etc.)
+- Good test coverage as safety net
 
-**Empfohlene Absicherung ohne Staging:**
-- CI Pipeline mit Tests + Linting (ersetzt manuelles Staging-Testing)
-- Docker-Image lokal testen bevor man deployed (`docker compose up` mit Prod-Config)
-- Feature Flags für riskante Changes (schrittweise aktivieren)
-- Health Checks + Rollback-Strategie im Deployment
+**Recommended protection without staging:**
+- CI pipeline with tests + linting (replaces manual staging testing)
+- Test Docker image locally before deploying (`docker compose up` with prod config)
+- Feature flags for risky changes (gradual activation)
+- Health checks + rollback strategy in deployment
 
 ### Level Up: Dev + Staging + Production (3-Tier)
 
-Staging wird sinnvoll wenn:
-- **Mehrere Entwickler** gleichzeitig deployen
-- **Externe Abhängigkeiten** (Payment APIs, Third-Party Webhooks) getestet werden müssen
-- **Datenbank-Migrationen** komplex sind und vor Prod validiert werden sollten
-- **Kunden/Stakeholder** vor Release testen wollen (UAT)
-- **Compliance-Anforderungen** eine Pre-Production-Validierung verlangen
+Staging becomes useful when:
+- **Multiple developers** deploy simultaneously
+- **External dependencies** (payment APIs, third-party webhooks) need to be tested
+- **Database migrations** are complex and should be validated before prod
+- **Customers/stakeholders** want to test before release (UAT)
+- **Compliance requirements** demand pre-production validation
 
-| Aspekt | Development | Staging | Production |
+| Aspect | Development | Staging | Production |
 |--------|------------|---------|------------|
-| **Datenbank** | Lokal (Docker) oder SQLite | Kopie von Prod (anonymisiert!) | Echte Daten |
-| **External APIs** | Mocks / Sandbox | Sandbox / eingeschränkt | Live |
-| **Debug Mode** | An | An | **Aus** |
-| **Logging Level** | debug | info | info/warn |
-| **SSL** | Optional (localhost) | Ja | Ja |
-| **Secrets** | `.env` lokal | CI/CD Secrets | Vault / Secret Manager |
-| **Error Detail** | Stack Traces | Stack Traces | Generische Meldung |
+| **Database** | Local (Docker) or SQLite | Copy of prod (anonymized!) | Real data |
+| **External APIs** | Mocks / sandbox | Sandbox / restricted | Live |
+| **Debug mode** | On | On | **Off** |
+| **Logging level** | debug | info | info/warn |
+| **SSL** | Optional (localhost) | Yes | Yes |
+| **Secrets** | `.env` local | CI/CD secrets | Vault / Secret Manager |
+| **Error detail** | Stack traces | Stack traces | Generic message |
 
 ### Docker Compose Overrides
 
 ```text
-docker-compose.yml           # Base Config (Production-ready)
-docker-compose.override.yml  # Dev Overrides (auto-geladen)
-docker-compose.prod.yml      # Production Overrides
+docker-compose.yml           # Base config (production-ready)
+docker-compose.override.yml  # Dev overrides (auto-loaded)
+docker-compose.prod.yml      # Production overrides
 ```
 
 ```yaml
-# docker-compose.override.yml (Entwicklung)
+# docker-compose.override.yml (development)
 services:
   app:
     build:
-      target: builder    # Dev Stage statt Production Stage
+      target: builder    # Dev stage instead of production stage
     volumes:
-      - .:/app           # Live-Reload via Bind Mount
-      - /app/node_modules # Node Modules nicht überschreiben
+      - .:/app           # Live reload via bind mount
+      - /app/node_modules # Don't override node modules
     environment:
       - NODE_ENV=development
     ports:
-      - "3000:3000"      # Direkt erreichbar (kein localhost-only)
+      - "3000:3000"      # Directly reachable (no localhost-only)
 ```
 
 ```bash
-# Entwicklung (lädt automatisch docker-compose.override.yml)
+# Development (automatically loads docker-compose.override.yml)
 docker compose up
 
-# Production (ignoriert override, lädt prod)
+# Production (ignores override, loads prod)
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
@@ -852,252 +852,252 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ## 12. API Gateway Pattern
 
-### Wann brauche ich ein API Gateway?
+### When Do I Need an API Gateway?
 
 ```text
-Ohne Gateway:                    Mit Gateway:
+Without gateway:                 With gateway:
 Client → Service A               Client → Gateway → Service A
 Client → Service B                                → Service B
 Client → Service C                                → Service C
-(Client kennt alle Services)     (Client kennt nur Gateway)
+(Client knows all services)     (Client knows only gateway)
 ```
 
-### Was ein Gateway macht
+### What a Gateway Does
 
-| Feature | Beschreibung |
+| Feature | Description |
 |---------|-------------|
 | **Routing** | `/api/users` → User Service, `/api/orders` → Order Service |
-| **Auth** | Token-Validierung einmal zentral |
-| **Rate Limiting** | Pro Client/API-Key |
-| **Request Transform** | Headers hinzufügen, Bodys transformieren |
-| **Response Aggregation** | Mehrere Service-Calls zu einer Response kombinieren |
-| **Circuit Breaking** | Failing Service temporär deaktivieren |
+| **Auth** | Token validation centrally once |
+| **Rate limiting** | Per client/API key |
+| **Request transform** | Add headers, transform bodies |
+| **Response aggregation** | Combine multiple service calls into one response |
+| **Circuit breaking** | Temporarily disable failing service |
 
 ### Tools
 
-| Tool | Typ | Best für |
+| Tool | Type | Best for |
 |------|-----|---------|
-| **Nginx / Caddy** | Reverse Proxy mit Routing | Einfache Cases |
-| **Kong** | Full API Gateway | Enterprise |
-| **Traefik** | Docker-native Gateway | Container-Umgebungen |
-| **Next.js API Routes** | Built-in | Full-Stack Next.js Apps |
-| **tRPC** | Type-safe Gateway | TypeScript Monorepos |
+| **Nginx / Caddy** | Reverse proxy with routing | Simple cases |
+| **Kong** | Full API gateway | Enterprise |
+| **Traefik** | Docker-native gateway | Container environments |
+| **Next.js API Routes** | Built-in | Full-stack Next.js apps |
+| **tRPC** | Type-safe gateway | TypeScript monorepos |
 
 ---
 
 ## 13. Twelve-Factor App
 
-Die [12 Faktoren](https://12factor.net/) – Grundprinzipien für moderne Apps:
+The [12 factors](https://12factor.net/) – core principles for modern apps:
 
-| # | Faktor | Regel | Praxis |
+| # | Factor | Rule | Practice |
 |---|--------|-------|--------|
-| 1 | **Codebase** | Ein Repo, viele Deploys | Git + Branch pro Env |
-| 2 | **Dependencies** | Explizit deklariert | `package.json` / `pyproject.toml` + Lockfile |
-| 3 | **Config** | In Environment, nicht im Code | `.env` + Env Vars |
-| 4 | **Backing Services** | Als angehängte Ressourcen | DB-URL als Env Var, nicht hardcoded |
-| 5 | **Build, Release, Run** | Strikt getrennt | CI baut → Image releast → Container läuft |
-| 6 | **Processes** | Stateless, Share-Nothing | Kein lokaler State (Session in Redis, nicht in Memory) |
-| 7 | **Port Binding** | App bindet eigenen Port | `PORT=3000` als Env Var |
-| 8 | **Concurrency** | Skalierung über Prozesse | Mehrere Container, nicht Threads |
-| 9 | **Disposability** | Schnell starten, graceful stoppen | SIGTERM Handling, Health Checks |
-| 10 | **Dev/Prod Parity** | Environments angleichen | Docker macht Dev ≈ Prod |
-| 11 | **Logs** | Als Event-Streams | Stdout/Stderr, nicht in Dateien |
-| 12 | **Admin Processes** | Einmalige Tasks als eigene Prozesse | Migrations als eigener Container/Command |
+| 1 | **Codebase** | One repo, many deploys | Git + branch per env |
+| 2 | **Dependencies** | Explicitly declared | `package.json` / `pyproject.toml` + lockfile |
+| 3 | **Config** | In environment, not in code | `.env` + env vars |
+| 4 | **Backing services** | As attached resources | DB URL as env var, not hardcoded |
+| 5 | **Build, release, run** | Strictly separated | CI builds → image released → container runs |
+| 6 | **Processes** | Stateless, share-nothing | No local state (sessions in Redis, not in memory) |
+| 7 | **Port binding** | App binds own port | `PORT=3000` as env var |
+| 8 | **Concurrency** | Scale via processes | Multiple containers, not threads |
+| 9 | **Disposability** | Fast start, graceful stop | SIGTERM handling, health checks |
+| 10 | **Dev/prod parity** | Align environments | Docker makes dev ≈ prod |
+| 11 | **Logs** | As event streams | Stdout/stderr, not in files |
+| 12 | **Admin processes** | One-time tasks as separate processes | Migrations as separate container/command |
 
 ---
 
-## 14. Testing-Strategie
+## 14. Testing Strategy
 
-### Die Test-Pyramide
+### The Test Pyramid
 
 ```text
-         ╱  E2E  ╲          Wenige, langsam, teuer
-        ╱─────────╲         Testen: ganze User Flows
-       ╱Integration╲        Mittelviele, mittelschnell
-      ╱─────────────╲       Testen: Zusammenspiel mehrerer Module
-     ╱     Unit      ╲      Viele, schnell, günstig
-    ╱─────────────────╲     Testen: einzelne Funktionen/Klassen
+         ╱  E2E  ╲          Few, slow, expensive
+        ╱─────────╲         Test: entire user flows
+       ╱Integration╲        Medium, medium speed
+      ╱─────────────╲       Test: interaction of multiple modules
+     ╱     Unit      ╲      Many, fast, cheap
+    ╱─────────────────╲     Test: individual functions/classes
 ```
 
-**Die Pyramide ist ein Leitfaden, kein Gesetz.** Das Verhältnis hängt vom Projekttyp ab:
+**The pyramid is a guide, not a law.** The ratio depends on project type:
 
-| Projekttyp | Schwerpunkt | Warum |
+| Project type | Focus | Why |
 |------------|------------|-------|
-| **Library / Utility** | Viele Unit-Tests | Klar definierte Ein-/Ausgaben |
-| **API / Backend** | Viele Integration-Tests | Zusammenspiel von Routes, DB, Auth |
-| **UI-lastige App** | Mehr E2E, weniger Unit | User-Interaktion ist das Entscheidende |
-| **CRUD App** | Wenig Unit, viel Integration/E2E | Wenig Logik, viel Zusammenspiel |
+| **Library / utility** | Many unit tests | Clearly defined inputs/outputs |
+| **API / backend** | Many integration tests | Interplay of routes, DB, auth |
+| **UI-heavy app** | More E2E, fewer unit | User interaction is what matters |
+| **CRUD app** | Few unit, lots of integration/E2E | Little logic, lots of interplay |
 
-### Was auf welcher Ebene testen
+### What to Test at Each Level
 
-| Ebene | Was testen | Was NICHT testen |
+| Level | What to test | What NOT to test |
 |-------|-----------|-----------------|
-| **Unit** | Pure Functions, Berechnungen, Validierung, Transformer, Utilities | Framework-Code, DB-Queries, HTTP-Calls |
-| **Integration** | API Routes end-to-end, DB-Operationen, Service-Zusammenspiel, Auth-Flows | UI-Rendering, Browser-Verhalten |
-| **E2E** | Kritische User Journeys (Signup, Checkout, Core-Feature), Cross-Browser | Alles was Unit/Integration abdeckt |
+| **Unit** | Pure functions, calculations, validation, transformers, utilities | Framework code, DB queries, HTTP calls |
+| **Integration** | API routes end-to-end, DB operations, service interplay, auth flows | UI rendering, browser behavior |
+| **E2E** | Critical user journeys (signup, checkout, core feature), cross-browser | Everything unit/integration covers |
 
-### Testing-Regeln
+### Testing Rules
 
-| Regel | Warum |
+| Rule | Why |
 |-------|-------|
-| **Tests testen Verhalten, nicht Implementierung** | Refactoring darf Tests nicht brechen |
-| **Arrange → Act → Assert** (AAA) | Klare Struktur, lesbarer Test |
-| **Ein Konzept pro Test** | Test-Name beschreibt was getestet wird |
-| **Keine Test-Interdependenz** | Tests müssen in beliebiger Reihenfolge laufen |
-| **Test-Daten im Test definieren** | Kein Hidden State aus anderen Dateien |
-| **Keine Logik im Test** | Kein if/else, Loops, oder Berechnungen in Tests |
+| **Tests test behavior, not implementation** | Refactoring must not break tests |
+| **Arrange → Act → Assert** (AAA) | Clear structure, readable test |
+| **One concept per test** | Test name describes what is being tested |
+| **No test interdependence** | Tests must run in any order |
+| **Define test data in the test** | No hidden state from other files |
+| **No logic in test** | No if/else, loops, or calculations in tests |
 
-### Mocking-Strategie
+### Mocking Strategy
 
-| Regel | Erklärung |
+| Rule | Explanation |
 |-------|-----------|
-| **Mocke an Systemgrenzen** | HTTP-Calls, DB, Filesystem, externe APIs |
-| **Mocke nicht die eigene Logik** | Interne Funktionen nicht mocken → sonst testet man nichts |
-| **Bevorzuge Fakes über Mocks** | In-Memory-DB statt DB-Mock, MSW statt fetch-Mock |
-| **Mock so wenig wie möglich** | Je mehr Mocks, desto weniger Aussagekraft |
+| **Mock at system boundaries** | HTTP calls, DB, filesystem, external APIs |
+| **Don't mock your own logic** | Internal functions not mocked → otherwise you test nothing |
+| **Prefer fakes over mocks** | In-memory DB instead of DB mock, MSW instead of fetch mock |
+| **Mock as little as possible** | More mocks = less meaningful |
 
-**Tools für Mocking:**
+**Mocking tools:**
 
-| Sprache | HTTP Mocking | DB | Allgemein |
+| Language | HTTP mocking | DB | General |
 |---------|-------------|-----|-----------|
-| TypeScript | **MSW** (Mock Service Worker) | In-Memory SQLite / Testcontainers | `vi.mock()` (Vitest) |
+| TypeScript | **MSW** (Mock Service Worker) | In-memory SQLite / Testcontainers | `vi.mock()` (Vitest) |
 | Python | **respx** / httpx MockTransport | SQLite in-memory / Testcontainers | `unittest.mock` / `pytest-mock` |
 
-### Test-Daten
+### Test Data
 
-| Ansatz | Wann |
+| Approach | When |
 |--------|------|
-| **Fixtures im Test** | Einfache Daten, direkt im Test-File |
-| **Factory Functions** | Wiederkehrende Objekte (`createUser({ name: "Test" })`) |
-| **Builder Pattern** | Komplexe Objekte mit vielen Optionen |
-| **Seeding Scripts** | E2E-Tests die echte DB brauchen |
+| **Fixtures in test** | Simple data, directly in test file |
+| **Factory functions** | Recurring objects (`createUser({ name: "Test" })`) |
+| **Builder pattern** | Complex objects with many options |
+| **Seeding scripts** | E2E tests that need a real DB |
 
 ### Coverage
 
-| Metrik | Zielwert | Kommentar |
+| Metric | Target | Comment |
 |--------|----------|-----------|
-| **Line Coverage** | 70-80% | Mehr ist nice-to-have, nicht Pflicht |
-| **Branch Coverage** | 60-70% | Wichtiger als Line Coverage |
-| **Kritische Pfade** | ~100% | Auth, Payment, Datenverlust-Szenarien |
+| **Line coverage** | 70-80% | More is nice-to-have, not required |
+| **Branch coverage** | 60-70% | More important than line coverage |
+| **Critical paths** | ~100% | Auth, payment, data loss scenarios |
 
-**100% Coverage ist kein Ziel.** Es führt zu Test-Bloat und falscher Sicherheit. Besser: kritische Pfade gut testen, Triviales weglassen.
+**100% coverage is not the goal.** It leads to test bloat and false confidence. Better: test critical paths thoroughly, skip trivial code.
 
-### Wann Tests schreiben
+### When to Write Tests
 
-| Ansatz | Wann sinnvoll |
+| Approach | When useful |
 |--------|--------------|
-| **Test-First (TDD)** | Bug-Fixing (reproduziere Bug als Test, dann fixen), komplexe Logik |
-| **Test-After** | UI-Code, Prototypen, explorative Phase |
-| **Test-During** | Guter Kompromiss: Feature + Test in derselben PR |
+| **Test-First (TDD)** | Bug fixing (reproduce bug as test, then fix), complex logic |
+| **Test-After** | UI code, prototypes, exploratory phase |
+| **Test-During** | Good compromise: feature + test in the same PR |
 
-**Pragmatischer Ansatz:** Test-During als Default. TDD für Bugs und komplexe Logik. Bei Prototypen: gar nicht, aber nachholen vor Production.
+**Pragmatic approach:** Test-during as default. TDD for bugs and complex logic. For prototypes: skip, but catch up before production.
 
 ---
 
-## 15. API-Dokumentation
+## 15. API Documentation
 
 ### API-First vs. Code-First
 
-| Ansatz | Workflow | Vorteil | Nachteil |
+| Approach | Workflow | Advantage | Disadvantage |
 |--------|----------|---------|----------|
-| **API-First** | Schema schreiben → Code generieren | Frontend/Backend parallel, klarer Contract | Mehr Upfront-Aufwand |
-| **Code-First** | Code schreiben → Doku generieren | Schneller Start, immer aktuell | Doku ist Nebenprodukt, oft unvollständig |
+| **API-First** | Write schema → generate code | Frontend/backend in parallel, clear contract | More upfront effort |
+| **Code-First** | Write code → generate docs | Faster start, always current | Docs are a byproduct, often incomplete |
 
-**Empfehlung:** Code-First für Solo/Kleine Teams. API-First wenn Frontend/Backend getrennte Teams sind.
+**Recommendation:** Code-first for solo/small teams. API-first when frontend/backend are separate teams.
 
 ### OpenAPI / Swagger
 
-Der de-facto Standard für REST-API-Dokumentation. Maschinenlesbares JSON/YAML-Schema das automatisch generiert werden kann.
+The de-facto standard for REST API documentation. Machine-readable JSON/YAML schema that can be automatically generated.
 
-**[TS/Node] Automatische Generierung:**
+**[TS/Node] Automatic generation:**
 
-| Tool | Ansatz | Best für |
+| Tool | Approach | Best for |
 |------|--------|---------|
-| **next-swagger-doc** | Decorators in API Routes | Next.js API Routes |
-| **tsoa** | Controller mit Decorators → OpenAPI | Express / Koa |
-| **Hono OpenAPI** | Schema-basiert (Zod) | Hono Framework |
-| **tRPC Panel** | Auto-generierte UI aus tRPC Router | tRPC APIs (kein OpenAPI nötig) |
-| **Scalar** | Modernes UI für OpenAPI Specs | Ersatz für Swagger UI |
+| **next-swagger-doc** | Decorators in API routes | Next.js API routes |
+| **tsoa** | Controllers with decorators → OpenAPI | Express / Koa |
+| **Hono OpenAPI** | Schema-based (Zod) | Hono framework |
+| **tRPC Panel** | Auto-generated UI from tRPC router | tRPC APIs (no OpenAPI needed) |
+| **Scalar** | Modern UI for OpenAPI specs | Replacement for Swagger UI |
 
-**[Python] Automatische Generierung:**
+**[Python] Automatic generation:**
 
-| Tool | Ansatz | Best für |
+| Tool | Approach | Best for |
 |------|--------|---------|
-| **FastAPI** | Automatisch aus Type Hints + Pydantic | FastAPI (built-in unter `/docs`) |
-| **drf-spectacular** | Automatisch aus Serializers | Django REST Framework |
-| **Connexion** | API-First: OpenAPI Spec → Code | Flask / ASGI |
+| **FastAPI** | Automatic from type hints + Pydantic | FastAPI (built-in at `/docs`) |
+| **drf-spectacular** | Automatic from serializers | Django REST Framework |
+| **Connexion** | API-first: OpenAPI spec → code | Flask / ASGI |
 
-**FastAPI ist hier der Gold-Standard** – Doku wird automatisch aus dem Code generiert und ist immer aktuell.
+**FastAPI is the gold standard here** – docs are automatically generated from code and always current.
 
-### Was dokumentieren
+### What to Document
 
-| Element | Pflicht | Beispiel |
+| Element | Required | Example |
 |---------|---------|---------|
-| **Endpoint URL + Methode** | Ja | `POST /api/v1/users` |
-| **Request Body Schema** | Ja | JSON-Schema mit Typen und Validierung |
-| **Response Schema** (pro Status Code) | Ja | 200, 400, 401, 404, 500 |
-| **Auth-Anforderungen** | Ja | `Bearer Token`, `API Key`, `Cookie` |
-| **Rate Limits** | Ja (wenn vorhanden) | `100 req/min` |
-| **Beispiel Request/Response** | Empfohlen | Konkretes JSON-Beispiel |
-| **Changelog / Breaking Changes** | Empfohlen | Versionshistorie |
+| **Endpoint URL + method** | Yes | `POST /api/v1/users` |
+| **Request body schema** | Yes | JSON schema with types and validation |
+| **Response schema** (per status code) | Yes | 200, 400, 401, 404, 500 |
+| **Auth requirements** | Yes | `Bearer Token`, `API Key`, `Cookie` |
+| **Rate limits** | Yes (if present) | `100 req/min` |
+| **Example request/response** | Recommended | Concrete JSON example |
+| **Changelog / breaking changes** | Recommended | Version history |
 
-### Versionierung
+### Versioning
 
-| Strategie | Wie | Pro | Contra |
+| Strategy | How | Pro | Con |
 |-----------|-----|-----|--------|
-| **URL Path** | `/api/v1/users` | Einfach, explizit | URL-Änderung |
-| **Header** | `Accept: application/vnd.api+json;version=2` | URL bleibt gleich | Weniger sichtbar |
-| **Query Param** | `/api/users?version=2` | Einfach | Unüblich, Cache-Probleme |
+| **URL path** | `/api/v1/users` | Simple, explicit | URL change |
+| **Header** | `Accept: application/vnd.api+json;version=2` | URL stays the same | Less visible |
+| **Query param** | `/api/users?version=2` | Simple | Uncommon, cache issues |
 
-**Empfehlung:** URL Path (`/api/v1/`) für öffentliche APIs. Interne APIs: oft keine Versionierung nötig.
+**Recommendation:** URL path (`/api/v1/`) for public APIs. Internal APIs: often no versioning needed.
 
-### Tools für API-Testing und Doku
+### Tools for API Testing and Docs
 
-| Tool | Typ | Kosten |
+| Tool | Type | Cost |
 |------|-----|--------|
-| **Scalar** | Moderne API-Doku UI (OpenAPI) | Open Source |
-| **Bruno** | API Client (Git-friendly, kein Account) | Open Source |
-| **Hoppscotch** | API Client (Web-basiert) | Open Source |
-| **Postman** | API Client + Doku | Free Tier |
+| **Scalar** | Modern API docs UI (OpenAPI) | Open source |
+| **Bruno** | API client (Git-friendly, no account) | Open source |
+| **Hoppscotch** | API client (web-based) | Open source |
+| **Postman** | API client + docs | Free tier |
 
 ---
 
 ## 16. Background Jobs & Task Queues
 
-### Wann brauche ich Background Jobs?
+### When Do I Need Background Jobs?
 
-| Szenario | Warum nicht im Request? |
+| Scenario | Why not in request? |
 |----------|----------------------|
-| **E-Mail versenden** | Langsam, darf Request nicht blockieren |
-| **PDF/Report generieren** | CPU-intensiv, dauert Sekunden bis Minuten |
-| **Externe API aufrufen** | Retry bei Failure, Rate Limits |
-| **Daten importieren/exportieren** | Große Datenmengen, lange Laufzeit |
-| **Scheduled Tasks** (Cron) | Regelmäßige Cleanup-, Sync-, Report-Jobs |
+| **Send email** | Slow, must not block request |
+| **Generate PDF/report** | CPU-intensive, takes seconds to minutes |
+| **Call external API** | Retry on failure, rate limits |
+| **Import/export data** | Large data volumes, long runtime |
+| **Scheduled tasks** (cron) | Regular cleanup, sync, report jobs |
 
-### Architektur
+### Architecture
 
 ```text
-User Request → API → Queue (Redis/DB) → Worker → Job erledigt
+User request → API → Queue (Redis/DB) → Worker → Job done
                  ↑                          │
-                 └── Response: "Job queued"  └── Optional: Webhook/Notification
+                 └── Response: "Job queued"  └── Optional: Webhook/notification
 ```
 
-**Grundprinzip:** Request nimmt Job entgegen und antwortet sofort. Worker verarbeitet asynchron.
+**Core principle:** Request accepts job and responds immediately. Worker processes asynchronously.
 
 ### Tools
 
-| Sprache | Tool | Backend | Best für |
+| Language | Tool | Backend | Best for |
 |---------|------|---------|---------|
-| TypeScript | **BullMQ** | Redis | Standard-Wahl für Node.js |
-| TypeScript | **Trigger.dev** | Cloud/Self-hosted | Serverless Background Jobs |
-| Python | **Celery** | Redis / RabbitMQ | Standard-Wahl für Python |
-| Python | **Dramatiq** | Redis / RabbitMQ | Einfachere Alternative zu Celery |
+| TypeScript | **BullMQ** | Redis | Standard choice for Node.js |
+| TypeScript | **Trigger.dev** | Cloud/self-hosted | Serverless background jobs |
+| Python | **Celery** | Redis / RabbitMQ | Standard choice for Python |
+| Python | **Dramatiq** | Redis / RabbitMQ | Simpler alternative to Celery |
 | Python | **ARQ** | Redis | Async-native, lightweight |
-| Sprachunabhängig | **Temporal** | Self-hosted | Komplexe Workflows, Orchestration |
+| Language-agnostic | **Temporal** | Self-hosted | Complex workflows, orchestration |
 
-### Einfachste Lösung: Cron + Script
+### Simplest Solution: Cron + Script
 
-Nicht jeder Job braucht eine Queue. Für einfache Scheduled Tasks reicht oft:
+Not every job needs a queue. For simple scheduled tasks this is often enough:
 
 ```yaml
 # docker-compose.yml
@@ -1105,7 +1105,7 @@ services:
   app:
     image: myapp
 
-  # Einfacher Cron-Job als eigener Container
+  # Simple cron job as separate container
   cron:
     image: myapp
     command: >
@@ -1115,62 +1115,62 @@ services:
       done"
 ```
 
-Oder systemd Timer, GitHub Actions Scheduled Workflows, oder ein einfacher `setInterval()` im Prozess.
+Or systemd timer, GitHub Actions scheduled workflows, or a simple `setInterval()` in the process.
 
 ### Retry & Error Handling
 
-| Pattern | Beschreibung |
+| Pattern | Description |
 |---------|-------------|
-| **Exponential Backoff** | 1s → 2s → 4s → 8s → ... (verhindert Thundering Herd) |
-| **Max Retries** | Nach N Fehlversuchen aufgeben (z.B. 3-5) |
-| **Dead Letter Queue** | Fehlgeschlagene Jobs separat speichern zur Analyse |
-| **Idempotenz** | Job muss mehrfach ausführbar sein ohne Seiteneffekte |
+| **Exponential backoff** | 1s → 2s → 4s → 8s → ... (prevents thundering herd) |
+| **Max retries** | Give up after N failed attempts (e.g. 3-5) |
+| **Dead letter queue** | Store failed jobs separately for analysis |
+| **Idempotency** | Job must be executable multiple times without side effects |
 
 ---
 
-## Checkliste: Architektur-Entscheidungen
+## Checklist: Architecture Decisions
 
-### Vor dem Start
+### Before Starting
 
-- [ ] Monolith oder Microservices? → **Starte mit Monolith**
-- [ ] Monorepo oder Polyrepo? → **Monorepo für Full-Stack**
-- [ ] Rendering: SSR / SSG / CSR? → **SSR Default, CSR für Dashboards**
-- [ ] API: REST / tRPC / GraphQL? → **tRPC intern, REST extern**
-- [ ] DB: SQL / NoSQL / File-based? → **PostgreSQL als sichere Wahl**
-- [ ] State Management? → **Server State (TanStack Query) + lokaler State (useState)**
+- [ ] Monolith or microservices? → **Start with monolith**
+- [ ] Monorepo or polyrepo? → **Monorepo for full-stack**
+- [ ] Rendering: SSR / SSG / CSR? → **SSR default, CSR for dashboards**
+- [ ] API: REST / tRPC / GraphQL? → **tRPC internal, REST external**
+- [ ] DB: SQL / NoSQL / file-based? → **PostgreSQL as safe default**
+- [ ] State management? → **Server state (TanStack Query) + local state (useState)**
 
-### Strukturierung
+### Structuring
 
-- [ ] Feature-basierte Ordnerstruktur (nicht technisch)
-- [ ] Klare Schichtung: Routes → Services → Data Access
-- [ ] Domain-Logik frei von Framework-Abhängigkeiten
-- [ ] Shared Code in eigene Packages/Module
-- [ ] Barrel Exports für saubere Import-Pfade
+- [ ] Feature-based folder structure (not technical)
+- [ ] Clear layering: routes → services → data access
+- [ ] Domain logic free of framework dependencies
+- [ ] Shared code in separate packages/modules
+- [ ] Barrel exports for clean import paths
 
 ### Docker / Deployment
 
-- [ ] Multi-Stage Dockerfile (Builder + Runner)
-- [ ] docker-compose für lokale Entwicklung
-- [ ] Named Volumes für persistente Daten
-- [ ] Health Checks für alle Services
-- [ ] Resource Limits (Memory, CPU)
-- [ ] Log-Rotation konfiguriert
-- [ ] Reverse Proxy vor der App (Caddy / Nginx / Cloudflare)
-- [ ] SSL/TLS konfiguriert
+- [ ] Multi-stage Dockerfile (builder + runner)
+- [ ] docker-compose for local development
+- [ ] Named volumes for persistent data
+- [ ] Health checks for all services
+- [ ] Resource limits (memory, CPU)
+- [ ] Log rotation configured
+- [ ] Reverse proxy in front of app (Caddy / Nginx / Cloudflare)
+- [ ] SSL/TLS configured
 
-### Skalierbarkeit (wenn nötig)
+### Scalability (when needed)
 
-- [ ] Stateless Design (kein In-Memory State)
-- [ ] Sessions in Redis/DB (nicht im Prozess)
-- [ ] Connection Pooling für DB
-- [ ] Cache-Layer (Redis) für häufige Queries
-- [ ] Background Jobs in eigene Worker extrahieren
+- [ ] Stateless design (no in-memory state)
+- [ ] Sessions in Redis/DB (not in process)
+- [ ] Connection pooling for DB
+- [ ] Cache layer (Redis) for frequent queries
+- [ ] Background jobs extracted to separate workers
 
 ---
 
-## Referenzen
+## References
 
-- [12-Factor App](https://12factor.net/) – Die Grundprinzipien
+- [12-Factor App](https://12factor.net/) – The core principles
 - [Clean Architecture (Uncle Bob)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Patterns of Enterprise Application Architecture (Fowler)](https://martinfowler.com/eaaCatalog/)
 - [Turborepo Docs](https://turbo.build/repo/docs)
@@ -1179,8 +1179,8 @@ Oder systemd Timer, GitHub Actions Scheduled Workflows, oder ein einfacher `setI
 - [Nginx Beginner's Guide](https://nginx.org/en/docs/beginners_guide.html)
 - [Next.js App Router Architecture](https://nextjs.org/docs/app)
 - [FastAPI Project Structure](https://fastapi.tiangolo.com/tutorial/)
-- [OpenAPI Specification](https://spec.openapis.org/oas/latest.html) – Der API-Doku Standard
-- [Scalar API Reference](https://github.com/scalar/scalar) – Modernes OpenAPI UI
-- [BullMQ Docs](https://docs.bullmq.io/) – Node.js Task Queue
-- [Celery Docs](https://docs.celeryq.dev/) – Python Task Queue
-- [Temporal Docs](https://docs.temporal.io/) – Workflow Orchestration
+- [OpenAPI Specification](https://spec.openapis.org/oas/latest.html) – The API docs standard
+- [Scalar API Reference](https://github.com/scalar/scalar) – Modern OpenAPI UI
+- [BullMQ Docs](https://docs.bullmq.io/) – Node.js task queue
+- [Celery Docs](https://docs.celeryq.dev/) – Python task queue
+- [Temporal Docs](https://docs.temporal.io/) – Workflow orchestration

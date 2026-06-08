@@ -1,49 +1,49 @@
 # LLM System Failure Patterns
 
-## Häufige Architektur-Fehler
+## Common Architecture Failures
 
-| Pattern | Symptom | Severity | Lösung |
+| Pattern | Symptom | Severity | Solution |
 |---|---|---|---|
-| **Eval-less Deployment** | Keine Metriken, Bugs werden erst von Usern gemeldet | CRITICAL | Golden Dataset + RAGAS vor Deployment |
-| **No Guardrails** | Modell antwortet auf Out-of-scope Queries, PII-Leak möglich | HIGH | Topik-Guard, Input/Output-Filter |
-| **Context Stuffing** | Gesamtes Dokument in Kontext → Lost-in-the-middle, hohe Kosten | HIGH | RAG mit Chunking + Retrieval |
-| **Prompting statt RAG** | Modell halluziniert proprietäres Wissen | HIGH | RAG für externe Wissensquellen |
-| **Fine-tune statt RAG** | Wissen veraltet, Retraining teuer | MEDIUM | RAG für zeitkritische Daten |
-| **Kein Semantic Caching** | Identische Queries × Token-Kosten | MEDIUM | Redis + Embedding-Similarity Cache |
-| **Monolithischer Agent** | Ein Prompt für alles → unzuverlässig, nicht debugbar | MEDIUM | Spezialisierte Sub-Agents + Supervisor |
-| **Kein LLM-Tracing** | Production-Bugs nicht reproduzierbar | MEDIUM | Langfuse / Helicone / LangSmith |
-| **Magic Chunk Size** | 512 Tokens willkürlich gewählt, nie evaluiert | LOW | Chunk-Größe per Retrieval-Recall evaluieren |
-| **Single-Model Eval** | LLM-as-Judge mit eigenem Modell → Self-Enhancement Bias | LOW | Diverse Judges, Positionen rotieren |
+| **Eval-less Deployment** | No metrics; bugs are only reported by users | CRITICAL | Golden dataset + RAGAS before deployment |
+| **No Guardrails** | Model responds to out-of-scope queries; PII leak possible | HIGH | Topic guard, input/output filter |
+| **Context Stuffing** | Entire document in context → lost-in-the-middle, high cost | HIGH | RAG with chunking + retrieval |
+| **Prompting instead of RAG** | Model hallucinates proprietary knowledge | HIGH | RAG for external knowledge sources |
+| **Fine-tune instead of RAG** | Knowledge becomes stale; retraining is expensive | MEDIUM | RAG for time-sensitive data |
+| **No Semantic Caching** | Identical queries × token costs | MEDIUM | Redis + embedding similarity cache |
+| **Monolithic Agent** | One prompt for everything → unreliable, not debuggable | MEDIUM | Specialized sub-agents + supervisor |
+| **No LLM Tracing** | Production bugs not reproducible | MEDIUM | Langfuse / Helicone / LangSmith |
+| **Magic Chunk Size** | 512 tokens chosen arbitrarily, never evaluated | LOW | Evaluate chunk size via retrieval recall |
+| **Single-Model Eval** | LLM-as-judge with own model → self-enhancement bias | LOW | Diverse judges, rotate positions |
 
 ---
 
-## RAG-spezifische Failure-Patterns
+## RAG-Specific Failure Patterns
 
-| Pattern | Beschreibung | Severity |
+| Pattern | Description | Severity |
 |---|---|---|
-| **Retrieval Failure** | Richtiger Kontext nicht retrieved → Faithfulness ↓ | HIGH |
-| **Chunk Boundary Problem** | Antwort liegt auf Chunk-Grenze → unvollständiger Kontext | MEDIUM |
-| **Stale Index** | Vector Store nicht aktualisiert → veraltete Antworten | MEDIUM |
-| **Over-Retrieval** | Top-50 Chunks retrieved, Kontext zu groß → Lost-in-the-middle | MEDIUM |
-| **Embedding Mismatch** | Indexierung mit Modell A, Query mit Modell B | HIGH |
+| **Retrieval Failure** | Correct context not retrieved → faithfulness ↓ | HIGH |
+| **Chunk Boundary Problem** | Answer lies on a chunk boundary → incomplete context | MEDIUM |
+| **Stale Index** | Vector store not updated → outdated answers | MEDIUM |
+| **Over-Retrieval** | Top-50 chunks retrieved; context too large → lost-in-the-middle | MEDIUM |
+| **Embedding Mismatch** | Indexing with model A, querying with model B | HIGH |
 
 ---
 
-## Agent-spezifische Failure-Patterns
+## Agent-Specific Failure Patterns
 
-| Pattern | Beschreibung | Severity |
+| Pattern | Description | Severity |
 |---|---|---|
-| **Infinite Loop** | Agent ruft Tools endlos auf, kein Abbruch | CRITICAL |
-| **Tool Misuse** | Agent nutzt falsches Tool für Aufgabe | HIGH |
-| **State Corruption** | Working Memory inkonsistent nach Tool-Fehler | HIGH |
-| **Halluzinierter Tool-Call** | Agent "erfindet" Tool-Parameter | HIGH |
-| **Excessive Agency** | Agent führt irreversible Aktionen ohne Bestätigung aus | CRITICAL |
+| **Infinite Loop** | Agent calls tools endlessly; no termination | CRITICAL |
+| **Tool Misuse** | Agent uses the wrong tool for the task | HIGH |
+| **State Corruption** | Working memory inconsistent after tool failure | HIGH |
+| **Hallucinated Tool Call** | Agent "invents" tool parameters | HIGH |
+| **Excessive Agency** | Agent executes irreversible actions without confirmation | CRITICAL |
 
 ---
 
-## Referenzen
+## References
 
-| Failure-Typ | Quelle |
+| Failure Type | Source |
 |---|---|
 | LLM Harms in Applications | CMU 11-667 Lec (Mar 10) — "Harms caused by LLM applications" |
 | Attacking LLM Applications | CMU 11-667 Lec (Mar 12) — "Attacking LLMs and LLM applications" |

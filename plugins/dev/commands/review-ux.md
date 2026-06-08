@@ -1,9 +1,9 @@
 ---
-description: UX-Audit gegen Microsoft HAX, Google PAIR, CHI 2024 und Nielsen Norman Group — AI Anti-Patterns, Dark Patterns, Trust Design.
-argument-hint: "[optional: Kontext, z.B. 'Chat-Interface Screenshot' oder 'Onboarding-Flow beschreiben']"
+description: UX audit against Microsoft HAX, Google PAIR, CHI 2024, and Nielsen Norman Group — AI anti-patterns, dark patterns, trust design.
+argument-hint: "[optional: context, e.g. 'chat interface screenshot' or 'describe onboarding flow']"
 ---
 
-Fuehre einen UX-Audit eines bestehenden Produkts, Features oder Designs durch.
-Folge exakt der Workflow-Definition in `${CLAUDE_PLUGIN_ROOT}/skills/review-ux/SKILL.md`.
+Conduct a UX audit of an existing product, feature, or design.
+Follow exactly the workflow definition in `${CLAUDE_PLUGIN_ROOT}/skills/review-ux/SKILL.md`.
 
-Kontext: $ARGUMENTS
+Context: $ARGUMENTS

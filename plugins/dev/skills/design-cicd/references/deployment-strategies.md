@@ -1,55 +1,55 @@
-# Deployment-Strategien — Vergleich
+# Deployment Strategies — Comparison
 
-| Strategie | Beschreibung | Downtime | Rollback | Infra-Kosten | Risiko |
+| Strategy | Description | Downtime | Rollback | Infra Cost | Risk |
 |---|---|---|---|---|---|
-| **Recreate** | Alte Version stoppen, neue starten | Ja | Neues Deployment | 1× | Hoch |
-| **Rolling Update** | Instanzen schrittweise ersetzen | Nein | Rollout stoppen / rückwärts | 1× | Mittel |
-| **Blue-Green** | Zwei parallele Envs, Traffic-Switch | Nein | Traffic zurückschalten | 2× | Niedrig |
-| **Canary** | % Traffic auf neue Version, schrittweise erhöhen | Nein | Traffic auf 0% | 1.x× | Niedrig |
-| **Feature Flags** | Code deployed, Feature per Flag aktiviert | Nein | Flag deaktivieren | 1× | Minimal |
-| **Shadow** | Prod-Traffic auf neue Version spiegeln (kein User-Impact) | Nein | Kein Traffic-Impact | 1.x× | Keins |
+| **Recreate** | Stop old version, start new | Yes | New deployment | 1× | High |
+| **Rolling Update** | Replace instances incrementally | No | Stop rollout / reverse | 1× | Medium |
+| **Blue-Green** | Two parallel envs, traffic switch | No | Switch traffic back | 2× | Low |
+| **Canary** | % traffic to new version, increase gradually | No | Traffic to 0% | 1.x× | Low |
+| **Feature Flags** | Code deployed, feature activated via flag | No | Disable flag | 1× | Minimal |
+| **Shadow** | Mirror prod traffic to new version (no user impact) | No | No traffic impact | 1.x× | None |
 
 ---
 
-## Entscheidungsbaum
+## Decision Tree
 
 ```text
-Kann es Downtime geben?
-├─ Ja → Recreate (nur für Non-Prod / Low-Traffic)
-└─ Nein:
-   Neue Version + alte Version API-kompatibel?
-   ├─ Unsicher / Breaking Change → Feature Flag
-   └─ Kompatibel:
-      Brauche ich granulares Rollout-Feedback?
-      ├─ Ja → Canary (mit Metrics-Gate)
-      └─ Nein:
-         Reicht schnelles Rollback via Traffic-Switch?
-         ├─ Ja → Blue-Green
-         └─ Nein → Rolling Update
+Can there be downtime?
+├─ Yes → Recreate (Non-Prod / Low-Traffic only)
+└─ No:
+   Is new version + old version API-compatible?
+   ├─ Uncertain / Breaking Change → Feature Flag
+   └─ Compatible:
+      Do I need granular rollout feedback?
+      ├─ Yes → Canary (with metrics gate)
+      └─ No:
+         Is fast rollback via traffic switch sufficient?
+         ├─ Yes → Blue-Green
+         └─ No → Rolling Update
 ```
 
 ---
 
-## Feature Flags — Entscheidung
+## Feature Flags — Decision
 
-**Verwende Feature Flags wenn:**
-- Neues Feature unsicher ob production-stable
-- Breaking Change an bestehender API (beide Versionen parallel betreiben)
-- A/B-Test oder graduelle Einführung nach User-Segmenten
-- Kill-Switch für sofortiges Rollback ohne Deployment nötig
+**Use Feature Flags when:**
+- New feature is uncertain whether production-stable
+- Breaking change to existing API (run both versions in parallel)
+- A/B test or gradual rollout by user segment
+- Kill switch needed for immediate rollback without deployment
 
-**Nicht verwenden wenn:**
-- Rein technische Refactorings ohne Behavior-Change
-- Feature ist bereits vollständig getestet und stabil
-- Zu viele Flags akkumulieren sich (Tech-Debt: Flags löschen nach Rollout)
+**Do not use when:**
+- Purely technical refactorings without behavior change
+- Feature is already fully tested and stable
+- Too many flags accumulate (tech debt: delete flags after rollout)
 
 ---
 
-## Canary Release — Rollout-Plan
+## Canary Release — Rollout Plan
 
-| Phase | Traffic % | Warte auf | Abbruch wenn |
+| Phase | Traffic % | Wait for | Abort if |
 |---|---|---|---|
-| 1 | 1% | 30 min, Error Rate stabil | Error Rate > Baseline + 0.1% |
-| 2 | 10% | 1h, Latenz stabil | p95 Latenz > Baseline + 20% |
-| 3 | 50% | 2h, DORA Metriken stabil | CFR steigt |
+| 1 | 1% | 30 min, error rate stable | Error rate > baseline + 0.1% |
+| 2 | 10% | 1h, latency stable | p95 latency > baseline + 20% |
+| 3 | 50% | 2h, DORA metrics stable | CFR increases |
 | 4 | 100% | — | — |

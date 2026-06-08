@@ -1,113 +1,113 @@
 ---
-name: tool-debug
-description: Stack-aware Debugging-Assistent. Analysiert einen Fehler oder ein unerwartetes Verhalten, erkennt automatisch Stack/Framework und liefert einen strukturierten Root-Cause-Plan mit konkreten Fix-Vorschlägen. Use this skill whenever the user reports a bug, error message, unexpected behavior, or asks "why does X not work"; triggert bei "Fehler", "Error", "funktioniert nicht", "debug", "warum gibt es X", Stack Trace oder unerwartete Ausgaben.
+name: dev:tool-debug
+description: Stack-aware debugging assistant. Analyzes an error or unexpected behavior, automatically detects the stack/framework, and delivers a structured root-cause plan with concrete fix suggestions. Use this skill whenever the user reports a bug, error message, unexpected behavior, or asks "why does X not work"; triggers for "error", "bug", "not working", "debug", "why does X happen", stack traces, or unexpected output.
 ---
 
 # Debug (stack-aware)
 
-Analysiert einen Fehler kontextbewusst: erkennt zuerst den Stack, dann den Fehler-Typ,
-dann die wahrscheinlichste Ursache. Keine generischen Checklisten — nur was für diesen
-Stack und diesen Fehler relevant ist.
+Analyzes an error with context awareness: first detects the stack, then the error type,
+then the most likely cause. No generic checklists — only what is relevant for this
+stack and this error.
 
-## Schritt 0 — Kontext & Stack erkennen
+## Step 0 — Detect Context & Stack
 
-Scanne das Projekt automatisch (nie raten, nie annehmen):
+Scan the project automatically (never guess, never assume):
 
-**Sprache & Runtime:**
-- `package.json` → Node.js/TypeScript, Framework (Next.js, Express, Fastify, NestJS …)
-- `pyproject.toml` / `requirements.txt` → Python, Framework (FastAPI, Django, Flask …)
+**Language & Runtime:**
+- `package.json` → Node.js/TypeScript, framework (Next.js, Express, Fastify, NestJS …)
+- `pyproject.toml` / `requirements.txt` → Python, framework (FastAPI, Django, Flask …)
 - `go.mod` → Go
 - `Cargo.toml` → Rust
 - `pom.xml` / `build.gradle` → Java/Kotlin
 
-**Deployment & Infrastruktur:**
-- `Dockerfile` / `docker-compose.yml` → Container-Kontext, Netzwerk-Aliase, Volumes
-- `.github/workflows/` → CI-Pipeline, Build-Schritte
-- `CLAUDE.md` des Projekts → dokumentierte Ausnahmen, bekannte Probleme
+**Deployment & Infrastructure:**
+- `Dockerfile` / `docker-compose.yml` → container context, network aliases, volumes
+- `.github/workflows/` → CI pipeline, build steps
+- Project `CLAUDE.md` → documented exceptions, known issues
 
-**Fehler-Kontext vom Nutzer erfassen:**
-- Fehlermeldung / Stack Trace (falls nicht gegeben: einmal nachfragen)
-- Wann tritt er auf (Start / Laufzeit / Build / Test)?
-- Reproduzierbar oder intermittierend?
-- Was hat sich zuletzt geändert?
+**Gather error context from the user:**
+- Error message / stack trace (if not provided: ask once)
+- When does it occur (startup / runtime / build / test)?
+- Reproducible or intermittent?
+- What changed recently?
 
-## Schritt 1 — Fehler klassifizieren
+## Step 1 — Classify the Error
 
-Ordne den Fehler einer Kategorie zu und passe die Analyse an:
+Assign the error to a category and adapt the analysis:
 
-| Kategorie | Typische Ursachen | Wo suchen |
+| Category | Typical causes | Where to look |
 |---|---|---|
-| **Import / Dependency** | falsche Version, fehlender Peer-Dep, zirkulärer Import | package.json / lock file, Import-Reihenfolge |
-| **Konfiguration** | fehlende Env-Var, falscher Pfad, Type Mismatch in Config | .env, config-Files, Startup-Logs |
-| **Netzwerk / API** | falscher Port, CORS, Auth-Header fehlt, Timeout | Docker-Netzwerk, Proxy-Config, Request-Headers |
-| **Datenbank** | Migration nicht gelaufen, Connection Pool erschöpft, Query-Fehler | Migration-History, Connection-String, Query-Logs |
-| **Async / Concurrency** | Race Condition, unbehandeltes Promise, Deadlock | Event Loop, async/await Kette, Locking |
-| **Type / Schema** | Nullpointer, Schema-Mismatch, falsches Format | Typen, Validierung (Zod/Pydantic), Serialisierung |
-| **Build / Compile** | Transpile-Fehler, fehlende Typen, Tree-Shaking | tsconfig, Bundler-Config, Import-Pfade |
-| **Umgebungsunterschied** | "funktioniert lokal" → Container/CI anders | Env-Vars, Node/Python-Version, Pfad-Trennzeichen |
+| **Import / Dependency** | Wrong version, missing peer dep, circular import | package.json / lock file, import order |
+| **Configuration** | Missing env var, wrong path, type mismatch in config | .env, config files, startup logs |
+| **Network / API** | Wrong port, CORS, missing auth header, timeout | Docker network, proxy config, request headers |
+| **Database** | Migration not run, connection pool exhausted, query error | Migration history, connection string, query logs |
+| **Async / Concurrency** | Race condition, unhandled promise, deadlock | Event loop, async/await chain, locking |
+| **Type / Schema** | Null pointer, schema mismatch, wrong format | Types, validation (Zod/Pydantic), serialization |
+| **Build / Compile** | Transpile error, missing types, tree-shaking | tsconfig, bundler config, import paths |
+| **Environment difference** | "works locally" → container/CI differs | Env vars, Node/Python version, path separators |
 
-## Schritt 2 — Root-Cause-Analyse
+## Step 2 — Root Cause Analysis
 
-1. **Lese die relevanten Dateien** (nicht alle — nur die, die zur Fehler-Kategorie passen)
-2. **Trace den Fehler-Pfad** von der Fehlermeldung rückwärts durch die Aufrufkette
-3. **Prüfe die häufigsten Ursachen** für diesen Stack + diese Kategorie
-4. **Formuliere 1-3 Hypothesen** mit Konfidenz (hoch/mittel/niedrig) und Begründung
+1. **Read the relevant files** (not all — only those matching the error category)
+2. **Trace the error path** from the error message backward through the call chain
+3. **Check the most common causes** for this stack + this category
+4. **Formulate 1–3 hypotheses** with confidence (high/medium/low) and rationale
 
-Stack-spezifische Checks (nur wenn relevant):
+Stack-specific checks (only when relevant):
 
 **Next.js / React:**
-- Server vs. Client Component Grenze verletzt?
-- `use client` / `use server` Direktive korrekt?
-- Hydration-Mismatch (Server-/Client-Render unterschiedlich)?
-- `.env.local` vs. `.env.production` — Variable exposed?
+- Server vs. client component boundary violated?
+- `use client` / `use server` directive correct?
+- Hydration mismatch (server/client render different)?
+- `.env.local` vs. `.env.production` — variable exposed?
 
 **FastAPI / Python:**
-- Pydantic-Schema-Mismatch (v1 vs. v2 API)?
-- Async-Fehler: `await` fehlt, sync-Funktion in async-Kontext?
-- Dependency Injection fehlgeschlagen (`Depends()`)?
-- CORS-Middleware Reihenfolge falsch?
+- Pydantic schema mismatch (v1 vs. v2 API)?
+- Async error: missing `await`, sync function in async context?
+- Dependency injection failed (`Depends()`)?
+- CORS middleware order wrong?
 
 **Docker / Container:**
-- Service-Name im Compose-Netzwerk falsch referenziert?
-- Volume-Mount überschreibt kompilierte Artefakte?
-- Health-Check blockiert Startup-Reihenfolge?
-- Port 0.0.0.0 vs. 127.0.0.1 (nur im Container erreichbar)?
+- Service name in Compose network incorrectly referenced?
+- Volume mount overwrites compiled artifacts?
+- Health check blocking startup order?
+- Port 0.0.0.0 vs. 127.0.0.1 (only reachable inside container)?
 
-**Datenbank (Postgres/SQLite/…):**
-- Migration-Stand prüfen (welche Migrations sind gelaufen?)
-- Connection-String in Container vs. lokal unterschiedlich?
-- N+1 Query oder fehlendes Index bei Timeout?
+**Database (Postgres/SQLite/…):**
+- Check migration status (which migrations have run?)
+- Connection string different in container vs. local?
+- N+1 query or missing index on timeout?
 
-## Schritt 3 — Ausgabe
+## Step 3 — Output
 
-Strukturierter Report:
+Structured report:
 
 ```text
-## Fehler-Analyse: [kurzer Titel]
+## Error Analysis: [short title]
 
-**Stack:** [erkannter Stack]
-**Kategorie:** [Fehler-Typ]
-**Konfidenz:** [hoch/mittel/niedrig]
+**Stack:** [detected stack]
+**Category:** [error type]
+**Confidence:** [high/medium/low]
 
-### Root Cause (wahrscheinlichste Ursache)
-[1-3 Sätze, was schief läuft und warum]
+### Root Cause (most likely cause)
+[1–3 sentences: what is going wrong and why]
 
-### Betroffene Dateien
-- [Datei:Zeile] — [was dort falsch ist]
+### Affected Files
+- [file:line] — [what is wrong there]
 
 ### Fix
-[konkreter Fix mit Code-Snippet wenn möglich]
+[concrete fix with code snippet where possible]
 
-### Verifikation
-[Wie prüft man, dass der Fix funktioniert hat?]
+### Verification
+[How to confirm the fix worked]
 
-### Falls der Fix nicht hilft
-[Nächste Hypothese + was dann zu prüfen ist]
+### If the fix doesn't help
+[Next hypothesis + what to check then]
 ```
 
-## Regeln
-- Keine Checklisten-Abarbeitung. Nur was für diesen Fehler relevant ist.
-- Keine Fix-Varianten anbieten wenn eine klar dominiert — direkt empfehlen.
-- Wenn der Fehler nicht eindeutig lokalisierbar: zwei gezielte Diagnose-Schritte vorschlagen,
-  nicht alle möglichen Ursachen aufzählen.
-- Automatisch fixen nur wenn der Nutzer es explizit verlangt.
+## Rules
+- No checklist-based approach. Only what is relevant for this error.
+- Do not offer multiple fix variants when one clearly dominates — recommend directly.
+- If the error cannot be clearly localized: suggest two targeted diagnostic steps,
+  do not enumerate all possible causes.
+- Auto-fix only when the user explicitly requests it.

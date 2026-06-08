@@ -1,14 +1,14 @@
 ---
-name: design-llm
+name: dev:design-llm
 description: >
-  LLM-System-Design auf Basis von Stanford CS224N (Yang/Choi), CMU 11-667
-  (Savelka/Kim) und Chip Huyen "Designing ML Systems". Use this skill whenever
+  LLM system design grounded in Stanford CS224N (Yang/Choi), CMU 11-667
+  (Savelka/Kim) and Chip Huyen "Designing ML Systems". Use this skill whenever
   the user needs to design an LLM-powered feature or system from scratch.
   Triggers: "RAG architecture", "should I fine-tune", "how do I build an agent",
   "prompt engineering strategy", "LLM guardrails", "evaluation strategy for LLM",
   "token budget", "hallucination handling", "inference optimization",
-  "wie baue ich einen LLM-Workflow", "LLM in meine App einbauen",
-  "welches LLM-Pattern", "RAG oder Fine-tuning". Covers: integration pattern
+  "how do I build an LLM workflow", "integrate LLM into my app",
+  "which LLM pattern", "RAG or fine-tuning". Covers: integration pattern
   selection (Prompting/RAG/Fine-tune/Agent), RAG architecture, evaluation design,
   production concerns (guardrails, cost, latency, observability).
   Always use this skill for LLM architecture decisions.
@@ -34,147 +34,147 @@ Understand the bottleneck before choosing the pattern.
 
 ---
 
-## Step 0 — System-Kontext klären
+## Step 0 — Clarify System Context
 
-Vor dem Design etablieren:
+Establish before designing:
 
-1. **Was wird gebaut?** (Chatbot / Dokumenten-Q&A / Code-Assistent / Agent / Klassifikation)
-2. **Wissens-Bottleneck oder Verhaltens-Bottleneck?**
-   - Wissen fehlt (aktuelle Docs, proprietäre DB) → RAG
-   - Verhalten muss konsistent angepasst sein (Stil, Format, Domänen-Vokabular) → Fine-tune
-3. **Latenz-Budget?** (< 1s → kein multi-hop Agent / kein großes Modell ohne Caching)
-4. **Kosten-Budget?** (Token-Kosten × erwartete Volume)
-5. **Offline-Fähigkeit nötig?** (On-premise, GDPR-kritisch)
-6. **Welche Daten existieren?** (Menge, Format, Qualität für RAG-Index oder Fine-tune)
+1. **What is being built?** (Chatbot / Document Q&A / Code assistant / Agent / Classification)
+2. **Knowledge bottleneck or behavior bottleneck?**
+   - Knowledge missing (current docs, proprietary DB) → RAG
+   - Behavior must be consistently adapted (style, format, domain vocabulary) → Fine-tune
+3. **Latency budget?** (< 1s → no multi-hop agent / no large model without caching)
+4. **Cost budget?** (token costs × expected volume)
+5. **Offline capability needed?** (on-premise, GDPR-critical)
+6. **What data exists?** (quantity, format, quality for RAG index or fine-tune)
 
 ---
 
-## Step 1 — Integration-Pattern entscheiden
+## Step 1 — Decide Integration Pattern
 
-Lade `references/integration-patterns.md` — vollständige Entscheidungsmatrix.
+Load `references/integration-patterns.md` — complete decision matrix.
 
-**Schnellentscheidung:**
+**Quick decision:**
 
 ```text
-Wissens-Bottleneck?  → RAG
-Verhaltens-Bottleneck + >500 Beispiele?  → Fine-tune
-Mehrere Schritte / externe Aktionen?  → Agent
-Sonst:  → Prompting-only (starte immer hier)
+Knowledge bottleneck?  → RAG
+Behavior bottleneck + >500 examples?  → Fine-tune
+Multiple steps / external actions?  → Agent
+Otherwise:  → Prompting-only (always start here)
 ```
 
-Kombinationen sind häufig: RAG + Prompting, Agent + RAG.
+Combinations are common: RAG + Prompting, Agent + RAG.
 
 ---
 
-## Step 2 — Architektur entwerfen
+## Step 2 — Design Architecture
 
-### Bei RAG: Lade `references/rag-architecture.md`
+### For RAG: Load `references/rag-architecture.md`
 
-Entscheidungen dokumentieren:
-- **Chunking-Strategie:** Größe + Overlap + Methode
-- **Embedding-Modell:** Lokal (offline) oder API (Online)
-- **Retrieval-Methode:** Dense / Sparse / Hybrid + Reranker
-- **Vector Store:** Qdrant / Weaviate / Pinecone / pgvector
-- **Context-Budget:** Wieviele Chunks × Chunk-Größe ≤ Context-Window
+Document decisions:
+- **Chunking strategy:** Size + overlap + method
+- **Embedding model:** Local (offline) or API (online)
+- **Retrieval method:** Dense / Sparse / Hybrid + reranker
+- **Vector store:** Qdrant / Weaviate / Pinecone / pgvector
+- **Context budget:** How many chunks × chunk size ≤ context window
 
-### Bei Fine-tuning
-- **Methode:** Full Fine-tune / LoRA / QLoRA / Prompt-Tuning
-  - LoRA: Standard für Production (wenig GPU-Speicher, schnell)
-  - Full Fine-tune: nur wenn LoRA nicht ausreicht + Budget vorhanden
-- **Daten-Minimum:** ≥ 500 Beispiele (Instruction-Format: prompt + completion)
-- **Eval vor Training:** Baseline mit Prompting messen — ist Fine-tuning wirklich nötig?
+### For Fine-tuning
+- **Method:** Full fine-tune / LoRA / QLoRA / Prompt-Tuning
+  - LoRA: Standard for production (low GPU memory, fast)
+  - Full fine-tune: only if LoRA is insufficient + budget available
+- **Data minimum:** ≥ 500 examples (instruction format: prompt + completion)
+- **Eval before training:** Measure baseline with prompting — is fine-tuning really needed?
 
-### Bei Agent
-- **Architektur:** ReAct / Plan-and-Execute / Multi-Agent (Supervisor + Specialists)
-- **Tools definieren:** Welche externen Aktionen? (Search, Code, API, DB)
-- **Loop-Control:** Max-Steps, Abbruchbedingung, Fallback bei Tool-Fehler
-- **Zustand:** Wo wird Agent-State gespeichert? (Conversation history, working memory)
+### For Agent
+- **Architecture:** ReAct / Plan-and-Execute / Multi-Agent (Supervisor + Specialists)
+- **Define tools:** Which external actions? (Search, Code, API, DB)
+- **Loop control:** Max steps, termination condition, fallback on tool failure
+- **State:** Where is agent state stored? (Conversation history, working memory)
 
-### Modell-Wahl (alle Patterns)
+### Model Selection (all patterns)
 
-| Anforderung | Empfehlung |
+| Requirement | Recommendation |
 |---|---|
-| Höchste Qualität, API | Claude Sonnet 4+ / GPT-4o |
-| Kosten-optimiert, API | Claude Haiku / GPT-4o-mini |
-| Offline / On-premise | Llama 3.1 8B–70B / Mistral 7B |
-| Embedding (Offline) | bge-large-en-v1.5 / multilingual-e5-large |
+| Highest quality, API | Claude Sonnet 4+ / GPT-4o |
+| Cost-optimized, API | Claude Haiku / GPT-4o-mini |
+| Offline / on-premise | Llama 3.1 8B–70B / Mistral 7B |
+| Embedding (offline) | bge-large-en-v1.5 / multilingual-e5-large |
 
 ---
 
-## Step 3 — Evaluation-Strategie planen
+## Step 3 — Plan Evaluation Strategy
 
-Lade `references/evaluation-framework.md` — RAGAS, LLM-as-Judge, Benchmark-Typen.
+Load `references/evaluation-framework.md` — RAGAS, LLM-as-Judge, benchmark types.
 
-**Minimum vor Deployment:**
+**Minimum before deployment:**
 
-1. **Golden Dataset anlegen** (50+ Fragen + Ground-Truth — domänen-spezifisch!)
-2. **RAG:** RAGAS Faithfulness + Answer Relevancy automatisch messen
-3. **Regression Gate:** neue Version nur deployen wenn Score ≥ Baseline − 3%
-4. **LLM-as-Judge** für subjektive Qualität (Bias beachten: positions- und längen-bias)
+1. **Create golden dataset** (50+ questions + ground truth — domain-specific!)
+2. **RAG:** Measure RAGAS Faithfulness + Answer Relevancy automatically
+3. **Regression gate:** Only deploy new version if score ≥ baseline − 3%
+4. **LLM-as-Judge** for subjective quality (watch for bias: position bias and length bias)
 
-*Kein Deployment ohne Offline Evals.* — CMU 11-667
+*No deployment without offline evals.* — CMU 11-667
 
 ---
 
-## Step 4 — Production-Entscheidungen
+## Step 4 — Production Decisions
 
 ### Guardrails
-- **Input:** Prompt-Injection-Detection, PII-Filtering (presidio / AWS Comprehend)
-- **Output:** Halluzinations-Check (Faithfulness-Score < Threshold → Fallback-Response)
-- **Topik-Guard:** Out-of-scope Queries erkennen und ablehnen (Classifier oder LLM-Prompt)
+- **Input:** Prompt injection detection, PII filtering (presidio / AWS Comprehend)
+- **Output:** Hallucination check (faithfulness score < threshold → fallback response)
+- **Topic guard:** Detect and reject out-of-scope queries (classifier or LLM prompt)
 
 ### Cost & Latency
-- **Prompt-Caching:** Wiederverwendbare System-Prompts cachen (Anthropic / OpenAI support)
-- **Semantic Caching:** Ähnliche Queries → gleiche Antwort (Redis + Embedding-Similarity)
-- **Streaming:** Token-by-Token für bessere perceived latency
-- **Model Routing:** Einfache Queries → kleines Modell, komplexe → großes Modell
+- **Prompt caching:** Cache reusable system prompts (Anthropic / OpenAI support)
+- **Semantic caching:** Similar queries → same answer (Redis + embedding similarity)
+- **Streaming:** Token-by-token for better perceived latency
+- **Model routing:** Simple queries → small model, complex → large model
 
 ### Observability
-- Jeden LLM-Call loggen: Prompt, Response, Latenz, Token-Count, Model
-- **LLM-Tracing:** LangSmith / Helicone / Langfuse (open-source)
-- Alert bei: Error Rate > 2%, Latenz p95 > 5s, Token-Cost/Day > Budget
+- Log every LLM call: prompt, response, latency, token count, model
+- **LLM tracing:** LangSmith / Helicone / Langfuse (open-source)
+- Alert on: error rate > 2%, latency p95 > 5s, token cost/day > budget
 
 ---
 
-## Output — Design-Datei
+## Output — Design File
 
-Schreibe das Ergebnis nach `./design-llm.md`:
+Write the result to `./design-llm.md`:
 
 ```markdown
-# LLM System Design: [Kontext/Feature-Name]
-Pattern: RAG / Fine-tune / Agent / Prompting | Datum: YYYY-MM-DD
+# LLM System Design: [Context/Feature Name]
+Pattern: RAG / Fine-tune / Agent / Prompting | Date: YYYY-MM-DD
 
-## Entscheidungen
-| Entscheidung | Wahl | Begründung | Referenz |
+## Decisions
+| Decision | Choice | Rationale | Reference |
 |---|---|---|---|
 
-## Architektur-Überblick
-[Datenfluss: Input → Retrieval/Tool → Context → LLM → Output]
+## Architecture Overview
+[Data flow: Input → Retrieval/Tool → Context → LLM → Output]
 
-## Evaluation-Strategie
-- Golden Dataset: X Fragen, Quelle: ...
-- Metriken: Faithfulness ≥ 0.8, Relevancy ≥ 0.75
-- Regression Gate: ≥ Baseline − 3%
+## Evaluation Strategy
+- Golden dataset: X questions, source: ...
+- Metrics: Faithfulness ≥ 0.8, Relevancy ≥ 0.75
+- Regression gate: ≥ baseline − 3%
 
 ## Guardrails
-[Input-Filter, Output-Check, Topik-Guard]
+[Input filter, output check, topic guard]
 
-## Cost- & Latency-Budget
-- Erwartete Volume: X Requests/Tag
-- Token-Budget: ~X Tokens/Request × Kosten/1M = X EUR/Monat
+## Cost & Latency Budget
+- Expected volume: X requests/day
+- Token budget: ~X tokens/request × cost/1M = X EUR/month
 
-## Annahmen & offene Punkte
+## Assumptions & Open Questions
 
 ---
-## ✅ Setup-Todo
-- [ ] Embedding-Modell wählen + lokales Setup oder API
-- [ ] Vector Store aufsetzen
-- [ ] Golden Dataset anlegen (min. 50 Fragen)
-- [ ] RAGAS Eval-Pipeline einrichten
-- [ ] LLM-Tracing (Langfuse / Helicone) einrichten
-- [ ] Guardrails implementieren
+## Setup Todo
+- [ ] Choose embedding model + local setup or API
+- [ ] Set up vector store
+- [ ] Create golden dataset (min. 50 questions)
+- [ ] Set up RAGAS eval pipeline
+- [ ] Set up LLM tracing (Langfuse / Helicone)
+- [ ] Implement guardrails
 
-## 📋 Nächste Schritte (priorisiert)
+## Next Steps (prioritized)
 1. ...
 ```
 
@@ -182,7 +182,7 @@ Pattern: RAG / Fine-tune / Agent / Prompting | Datum: YYYY-MM-DD
 
 ## Reference Files
 
-- `references/integration-patterns.md` — RAG vs Fine-tune vs Prompting vs Agent Entscheidungsmatrix
-- `references/rag-architecture.md` — RAG-Varianten, Chunking, Retrieval, Reranking, Embedding-Modelle
-- `references/evaluation-framework.md` — RAGAS, LLM-as-Judge, Benchmark-Typen, Eval-Pipeline
-- `references/curriculum-mapping.md` — Concept → Stanford CS224N / CMU 11-667 / Berkeley / MIT Lecture-Links
+- `references/integration-patterns.md` — RAG vs Fine-tune vs Prompting vs Agent decision matrix
+- `references/rag-architecture.md` — RAG variants, chunking, retrieval, reranking, embedding models
+- `references/evaluation-framework.md` — RAGAS, LLM-as-Judge, benchmark types, eval pipeline
+- `references/curriculum-mapping.md` — Concept → Stanford CS224N / CMU 11-667 / Berkeley / MIT lecture links

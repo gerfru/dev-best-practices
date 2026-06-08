@@ -1,10 +1,10 @@
 ---
-description: Vollstaendiges App-Audit gegen die Dev-Best-Practices-Regeln (6 Achsen, parallele Subagenten).
-argument-hint: "[optionaler Pfad zum Eingrenzen]"
+description: Complete app audit against the dev best practices rules (6 axes, parallel subagents).
+argument-hint: "[optional path to narrow scope]"
 ---
 
-Fuehre das App-Evaluierungs-Audit aus. Maszstab sind die Regel-Files unter
+Run the app evaluation audit. The standard is the rule files under
 `${CLAUDE_PLUGIN_ROOT}/rules/` (essential-rules.md, app-rules.md, github-rules.md,
-architecture-rules.md). Folge exakt der Workflow-Definition in
+architecture-rules.md). Follow exactly the workflow definition in
 `${CLAUDE_PLUGIN_ROOT}/skills/review-app/SKILL.md`.
-Scope auf diesen Pfad eingrenzen, falls angegeben: $ARGUMENTS
+Narrow scope to this path if provided: $ARGUMENTS

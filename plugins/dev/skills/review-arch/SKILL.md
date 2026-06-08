@@ -1,5 +1,5 @@
 ---
-name: review-arch
+name: dev:review-arch
 description: >
   Architecture review skill grounded in CMU 17-633 (Architectures for Software
   Systems, Prof. David Garlan) and Martin Fowler's architectural patterns.
@@ -9,10 +9,8 @@ description: >
   "can you find coupling problems", "what anti-patterns do you see", "should we
   refactor this", "we need an ADR for this decision". Covers: coupling & cohesion
   analysis, architectural style identification, anti-pattern detection, quality
-  attribute assessment, tech debt mapping, and ADR recommendations. Deutsche Trigger:
-  "reviewe meine Architektur", "unser System ist schwer zu ändern", "wir haben
-  technische Schulden", "finde Kopplungsprobleme", "welche Anti-Pattern siehst du",
-  "wir brauchen einen ADR". Always use this skill for any architectural review —
+  attribute assessment, tech debt mapping, and ADR recommendations.
+  Always use this skill for any architectural review —
   do not rely on general knowledge alone.
 ---
 # Architecture Review Skill
@@ -138,16 +136,16 @@ might question "why did they do it this way?" That's an ADR moment.
 
 ---
 
-## Output — Report-Datei
+## Output — Report File
 
-Schreibe das vollständige Ergebnis nach `./review-arch-report.md`:
+Write the complete result to `./review-arch-report.md`:
 
 ```markdown
-# Architecture Review Report — [Systemname]
-Stack: ... | Scope: ... | Datum: YYYY-MM-DD
+# Architecture Review Report — [System Name]
+Stack: ... | Scope: ... | Date: YYYY-MM-DD
 
-## Gesamtbewertung
-[🔴/🟠/🟡/🟢] — Ein-Satz-Begründung
+## Overall Assessment
+[🔴/🟠/🟡/🟢] — One-sentence rationale
 
 ## Findings
 ### 🔴 Critical (N)
@@ -155,25 +153,25 @@ Stack: ... | Scope: ... | Datum: YYYY-MM-DD
 ### 🟡 Medium (N)
 ### 🔵 Low / ⚪ Info (N)
 
-## Statistik
-| Severity | Anzahl |
-|----------|--------|
+## Statistics
+| Severity | Count |
+|----------|-------|
 | 🔴 Critical | N |
 | 🟠 High | N |
 | 🟡 Medium | N |
 | 🔵 Low | N |
 
-## Top 3 Sofortmaßnahmen
+## Top 3 Immediate Actions
 1. ...
 2. ...
 3. ...
 
-## ADR-Empfehlungen
-[Welche Entscheidungen dokumentiert werden sollten]
+## ADR Recommendations
+[Which decisions should be documented]
 
 ---
-*Erstellt mit KI-Unterstützung (Claude Code + dev-best-practices Plugin).
-Findings sind zu verifizieren — kein Ersatz für manuelle Architektur-Reviews.*
+*Created with AI assistance (Claude Code + dev-best-practices plugin).
+Findings are to be verified — not a substitute for manual architecture reviews.*
 ```
 
 ## Reference Files
