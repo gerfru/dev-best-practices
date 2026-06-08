@@ -10,7 +10,12 @@ description: >
   the database without downtime", "blue-green deployment", "strangler fig",
   "how do I break this apart safely", "migration strategy". Always use this skill
   for migration planning — these decisions have high failure risk and must be
-  approached systematically.
+  approached systematically. Also grounded in Kleppmann "Designing Data-Intensive
+  Applications" Kap. 4 (Schema Evolution, Forward/Backward Compatibility) and
+  Kap. 11 (Dual-Write Problem, Change Data Capture, Event Log).
+  Additional triggers: "Schema Migration ohne Downtime", "CDC einrichten",
+  "Dual-Write Problem", "Debezium", "Schema Registry", "Expand-Contract Pattern",
+  "Forward Compatibility", "Schema versioning".
 ---
 # Migration Plan Skill
 
@@ -141,4 +146,6 @@ Fowler patterns, MIT 6.5840, Richardson Saga: `references/curriculum-mapping.md`
 
 - `references/migration-patterns.md` — Strangler Fig, seam finding, zero-downtime DB migration,
   CAP theorem, consistency models, 2PC, Saga pattern
+- `references/schema-evolution.md` — Forward/Backward Compatibility, Dual-Write, CDC (Debezium),
+  Avro Schema Registry, Expand-Contract Pattern (Kleppmann DDIA Kap. 4 + 11)
 - `references/curriculum-mapping.md` — Concept → course/blog link mapping

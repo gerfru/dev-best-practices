@@ -26,25 +26,27 @@ Welcher Skill soll starten?
   7  design-llm              LLM-System: RAG, Fine-tune, Agent, Eval-Strategie, Guardrails
   8  design-observability    Observability: SLO/SLI, Golden Signals, Tracing, Alerting, Incident Response
   9  design-cicd             CI/CD Pipeline: Deployment-Strategien, DORA-Metriken, Trunk-Based Dev
+ 10  design-iac              Infrastructure as Code: Terraform, GitOps, State Management, Drift Detection
 
 🔍  REVIEW
- 10  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
- 11  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
- 12  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
- 13  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
- 14  review-llm        LLM-Audit: Architektur, Evals, Prompt Injection, OWASP LLM Top 10
+ 11  review-app        Vollaudit: Architektur, Security, Tests, CI/CD, Observability
+ 12  review-arch       Architektur: Coupling, Anti-Patterns, Quality Attributes, ADR
+ 13  review-secure     Security: Crypto, Injection, Memory Safety, GDPR/ISO/EU AI Act
+ 14  review-ux         UX-Audit: AI Anti-Patterns, Dark Patterns, Trust Design
+ 15  review-llm        LLM-Audit: Architektur, Evals, Prompt Injection, OWASP LLM Top 10
 
 🛠️  TOOLS
- 15  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
- 16  tool-test         Tests schreiben, verbessern oder Strategie planen
- 17  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
- 18  tool-a11y         Accessibility-Audit: WCAG 2.2, Screen Reader, EU Accessibility Act
+ 16  tool-debug        Stack-aware Root-Cause-Analyse mit Fix-Vorschlägen
+ 17  tool-test         Tests schreiben, verbessern oder Strategie planen
+ 18  tool-style        CSS / Design System + Visual Basics (Farbe, Typo, Spacing, Loading)
+ 19  tool-a11y         Accessibility-Audit: WCAG 2.2, Screen Reader, EU Accessibility Act
+ 20  tool-perf         Performance Engineering: USE Method, Flamegraph, Bottleneck, Bentley Rules
 
 📁  META
- 19  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
- 20  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
- 21  meta-sync           reference/*.md vs. claude/*.md synchron halten
- 22  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
+ 21  meta-install        Best-Practice-Regeln in Projekt-CLAUDE.md einbauen
+ 22  meta-drift          Projekt-CLAUDE.md vs. aktuelle Rule-Files vergleichen
+ 23  meta-sync           reference/*.md vs. claude/*.md synchron halten
+ 24  meta-create-skill   Neuen Skill bauen: Recherche, Struktur, alle Dateien
 
 → Zahl eingeben, oder direkt beschreiben was du brauchst.
 ```
@@ -60,4 +62,4 @@ Lade und folge exakt: `${CLAUDE_PLUGIN_ROOT}/skills/<gewählter-skill>/SKILL.md`
 ## Regeln
 - Menü sofort zeigen, kein Intro
 - Nach der Wahl direkt starten, nicht nochmals erklären oder nachfragen
-- Nie alle 22 Skills gleichzeitig laden — immer nur den gewählten
+- Nie alle 24 Skills gleichzeitig laden — immer nur den gewählten

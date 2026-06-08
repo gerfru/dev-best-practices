@@ -9,18 +9,27 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ### Added
 
+- `design-iac`: Infrastructure as Code design grounded in Kief Morris "Infrastructure as Code" (O'Reilly 2021) and NTNU IIKG3005 — IaC principles (immutable infra, idempotency, snowflake anti-pattern), module design, remote state management, drift detection and remediation, GitOps workflow, IaC testing (3 reference files)
+- `tool-perf`: Performance engineering grounded in MIT 6.172 (Leiserson/Shun, Bentley Rules) and Brendan Gregg "Systems Performance" (USE Method, flamegraphs) — USE Method resource checklist, profiling tool selection by stack, flamegraph reading guide, Bentley Rules (5 categories), before/after benchmark workflow (3 reference files)
+- `design-migration` — schema evolution: Added Kleppmann "Designing Data-Intensive Applications" Kap. 4+11 coverage — Forward/Backward Compatibility rules, Dual-Write problem and solutions, Change Data Capture (CDC/Debezium), Avro Schema Registry, Expand-Contract pattern; new `references/schema-evolution.md`
+- plugin.json: 22 → 24 skills (v1.2.0 → v1.3.0); meta-help renumbered 1–24
+
+- `design-observability`: Observability architecture skill grounded in Google SRE Books (Beyer et al.) and Observability Engineering (Majors/Fong-Jones) — SLO/SLI/Error-Budget, Golden Signals, OpenTelemetry tracing, Burn Rate alerting, Incident Response + blameless postmortem (4 reference files)
+- `design-cicd`: CI/CD pipeline design grounded in "Accelerate" (Forsgren/Humble/Kim) and "Continuous Delivery" (Humble/Farley) — pipeline architecture, Blue-Green/Canary/Feature Flags decision tree, DORA metrics with benchmarks, Trunk-Based Development (3 reference files)
+- `tool-a11y`: Accessibility audit grounded in WCAG 2.2 (W3C) and CMU HCII 05-332 — axe-core/Lighthouse, keyboard navigation, NVDA/VoiceOver screen reader testing, all 9 new WCAG 2.2 SC, EU Accessibility Act / BFSG / EN 301 549 compliance (3 reference files)
+- `design-llm` + `review-llm`: LLM system design and audit grounded in Stanford CS224N, CMU 11-667 and Berkeley CS294-196 — RAG, fine-tuning, agents, evals, OWASP LLM Top 10, prompt injection (PR #14)
+- `commands/design-ux.md` and `commands/review-ux.md`: missing command files added — slash-command discovery now works for both skills
+- Skill discovery improvements: overlap disambiguation (review-app/review-arch/review-secure), German trigger phrases for review-arch and review-secure, scope guard for meta-sync
+- `docs/gap-analysis.md`: status tracking table (✅ Erledigt / 🔲 Offen) for all planned skills
+- `docs/academic-basis.md`: verified syllabi for all planned new skills (Stanford CS224N, CMU 11-667, Berkeley CS294-196, MIT 6.5940, MIT 6.5840, CMU 18-749, CMU 17-636, W3C WAI, NTNU IIKG3005, MIT 6.172, CMU 15-721, UT Austin CS395T)
 - `meta-create-skill`: new meta skill for building skills using the established methodology (topic → academic research → SKILL.md + references/)
 - All 9 skills with inline lookup tables now follow the consistent structure: SKILL.md = workflow only, `references/` = lookup material
-  - Round 1 (new `references/` directories): `design-ux`, `review-ux`, `tool-style`
-  - Round 2 (`curriculum-mapping.md` added): `design-secure`, `review-arch`, `review-secure`, `design-api`, `design-data`, `design-migration`
-- `design-ux` and `review-ux` now have `commands/` entries (were missing, slash-command discovery now works)
-- `docs/gap-analysis.md`: inventory of content gaps with academic source candidates
-- `docs/academic-basis.md`: verified syllabi for 6 planned new skills (Stanford CS224N, CMU 11-667, Berkeley CS294-196, MIT 6.5940, MIT 6.5840, CMU 18-749, CMU 17-636, W3C WAI, NTNU IIKG3005, MIT 6.172, CMU 15-721, UT Austin CS395T)
-- Feature Flags section in `claude/app-rules.md` and `reference/app-best-practices.md` (Kill Switch, Rollout-Reihenfolge, Flag-Hygiene, Tool-Vergleich)
+- Feature Flags section in `claude/app-rules.md` and `reference/app-best-practices.md`
 - Mirror sync check in CI: `claude/` vs `plugins/dev/rules/` must be identical
 - MSW + Testing Library added to essential-rules.md testing stack
 - TLS zum DB-Server in essential-rules.md API & Datenbank section
 - Secrets rotation frequency (90 days) in `claude/app-rules.md`
+- plugin.json: 17 → 22 skills; meta-help renumbered 1–22
 
 ### Fixed
 
