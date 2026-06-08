@@ -1,6 +1,6 @@
 ---
 name: meta-sync
-description: Prüft ob die kompakten claude/*.md Rule-Files noch die Essenz der detaillierten reference/*.md widerspiegeln — findet Sections die in reference/ neu/geändert sind aber noch nicht in claude/ übertragen wurden. Use this skill for maintaining this dev-best-practices repo itself; triggert bei "Regeln synchronisieren", "reference aktualisieren", "claude/ sync", "sind die Rules noch aktuell", Repo-Wartung.
+description: Prüft ob die kompakten claude/*.md Rule-Files noch die Essenz der detaillierten reference/*.md widerspiegeln — findet Sections die in reference/ neu/geändert sind aber noch nicht in claude/ übertragen wurden. Use this skill for maintaining this dev-best-practices repo itself; triggert bei "Regeln synchronisieren", "reference aktualisieren", "claude/ sync", "sind die Rules noch aktuell", Repo-Wartung. NUR für das dev-best-practices Repo selbst — nicht für andere Projekte.
 ---
 
 # Doc Sync (Repo-intern)
