@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.17.2
+    hooks:
+      - id: markdownlint-cli2
+
+  - repo: local
+    hooks:
+      - id: validate-skills
+        name: Validate plugin skills
+        entry: bash scripts/validate-skills.sh
+        language: system
+        pass_filenames: false
+        always_run: true

@@ -27,7 +27,7 @@ HTTP-Response-Headers die den Browser anweisen, Sicherheitsfeatures zu aktiviere
 
 **Wie funktioniert es?**
 
-```
+```text
 1. Server sendet Response mit Header:
    Content-Security-Policy: script-src 'self'; style-src 'self'
 
@@ -77,7 +77,7 @@ HTTP-Response-Headers die den Browser anweisen, Sicherheitsfeatures zu aktiviere
 
 **Minimale CSP:**
 
-```
+```text
 default-src 'self';
 script-src 'self';
 style-src 'self' 'unsafe-inline';
@@ -106,7 +106,7 @@ form-action 'self';
 
 Statt `'unsafe-inline'` für Scripts einen zufälligen Nonce pro Request generieren:
 
-```
+```text
 script-src 'nonce-abc123random' 'strict-dynamic';
 ```
 
@@ -114,7 +114,7 @@ Der Server generiert pro Request einen neuen Nonce und setzt ihn sowohl im Heade
 
 **Praxis-Tipp:** CSP zuerst im Report-Only Modus testen:
 
-```
+```text
 Content-Security-Policy-Report-Only: default-src 'self'; report-uri /api/csp-report
 ```
 
@@ -146,7 +146,7 @@ Content-Security-Policy-Report-Only: default-src 'self'; report-uri /api/csp-rep
 
 ### Auth-Schichten
 
-```
+```text
 Request
   │
   ├─ Schicht 1: Middleware/Gateway (erste Prüfung)
@@ -218,7 +218,7 @@ Validiere an der **System-Grenze** (API-Eingang, Form-Submission, Webhook):
 
 **Beispiel-Pattern:**
 
-```
+```text
 Client → API Gateway → Schema-Validierung → Business Logic → Data Access
                             ↑
                     Hier validieren!
@@ -244,7 +244,7 @@ Klassisches Output-Encoding reicht für DOM-basiertes XSS nicht aus, wenn JavaSc
 
 **Schicht 1: Trusted Types (Browser-Enforcement)**
 
-```
+```text
 Content-Security-Policy: require-trusted-types-for 'script'
 ```
 
@@ -414,7 +414,7 @@ Migrationen = versionierte, wiederholbare Schema-Änderungen. **Nie manuell SQL 
 | `log_connections = on` | `postgresql.conf` | Erkennt ungewöhnliche Verbindungsversuche |
 
 **Minimal pg_hba.conf (Produktion):**
-```
+```text
 # TYPE  DATABASE  USER       ADDRESS         METHOD
 local   all       postgres                   peer
 hostssl garmin    garmin_app 172.20.0.0/16   scram-sha-256
@@ -562,7 +562,7 @@ settings = Settings()
 
 ### Caching-Schichten
 
-```
+```text
 Browser Cache → CDN/Edge Cache → App-Level Cache → DB Query Cache → DB
     ↑                ↑                  ↑                ↑
   Schnellste     Nah am User      Im Server        Letzte Schicht
@@ -588,7 +588,7 @@ Browser Cache → CDN/Edge Cache → App-Level Cache → DB Query Cache → DB
 
 **Praxis-Empfehlung:**
 
-```
+```text
 # Statische Assets (JS/CSS/Bilder mit Hash im Dateinamen)
 Cache-Control: public, max-age=31536000, immutable
 
@@ -763,7 +763,7 @@ Jede App braucht mindestens zwei Endpoints:
 
 ### Die drei Säulen
 
-```
+```text
                     Observability
                    ╱      │      ╲
               Logs     Metrics    Traces
@@ -783,7 +783,7 @@ Jede App braucht mindestens zwei Endpoints:
 
 OpenTelemetry ist der herstellerunabhängige Standard für Observability-Daten. Statt für jeden Anbieter (Datadog, Sentry, Grafana) eine eigene Integration zu bauen, instrumentiert man einmal mit OTel und schickt die Daten an ein beliebiges Backend.
 
-```
+```text
 App (OTel SDK) → OTel Collector → Backend deiner Wahl
                                     ├── Grafana Cloud
                                     ├── Datadog
@@ -818,7 +818,7 @@ App (OTel SDK) → OTel Collector → Backend deiner Wahl
 
 Relevant sobald ein Request mehrere Services durchläuft (oder auch: API → externe API → DB).
 
-```
+```text
 Trace: "POST /api/order"
 ├── Span: API Gateway (12ms)
 ├── Span: Auth Service (45ms)
@@ -892,7 +892,7 @@ Danach: Kapitel 7 (Error Handling), Kapitel 9 (Communication/TLS).
 
 ### CI/CD Pipeline Integration
 
-```
+```text
 pre-commit (Sekunden, blockiert Commit):
   gitleaks → ruff --select S → bandit → pip-audit
 
