@@ -17,7 +17,7 @@ Ausfuehrlichere Regeln: `app-rules.md`, `github-rules.md`, `architecture-rules.m
 - DOM XSS: Kein `innerHTML` mit User-Daten. Trusted Types + DOMPurify bei dynamischem HTML
 - Keine Secrets in Error-Responses. Keine Secrets loggen
 - `.env` nie committen, `.env.example` committen. Env-Validierung beim App-Start (crasht sofort wenn Variable fehlt)
-- Security Assessment: `bandit`+`semgrep` (SAST), `pip-audit` (SCA), ASVS 5.0 als Pruefrahmen
+- Security Assessment: `ruff-S`+`semgrep` (SAST), `pip-audit` (SCA), ASVS 5.0 als Pruefrahmen
 
 ## API & Datenbank
 
@@ -40,12 +40,12 @@ Ausfuehrlichere Regeln: `app-rules.md`, `github-rules.md`, `architecture-rules.m
 
 ## GitHub & CI/CD
 
-- Pre-commit Hooks Pflicht: gitleaks → bandit → Lint+Fix → Format → Type Check
+- Pre-commit Hooks Pflicht: gitleaks → Lint+Fix (ruff inkl. S/bandit-Regeln) → Format → Type Check
 - TS: ESLint Flat Config + Prettier + Husky. Python: Ruff + mypy + pre-commit
 - TS Package Manager: pnpm. Python: uv. Lockfiles immer committen
 - CI: Jeder PR durch Pipeline (Install → Lint → Type Check → Build/Test → gitleaks)
 - Branch Protection auf main: Require PR, Status Checks, No Force Push
-- Renovate (nicht Dependabot). devDeps patch Automerge, Major manuell
+- Renovate fuer Version-Update-PRs (nicht Dependabot). devDeps patch Automerge, Major manuell. GitHub Dependabot Alerts separat aktivieren (nur Security-Meldungen, kein Widerspruch)
 - PR-Groesse: < 400 LOC, darueber aufteilen
 
 ## Testing
