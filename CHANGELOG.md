@@ -7,12 +7,23 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ## [Unreleased]
 
+---
+
+## [2.0.0] — 2026-06-08
+
 ### Added
 
 - `design-iac`: Infrastructure as Code design grounded in Kief Morris "Infrastructure as Code" (O'Reilly 2021) and NTNU IIKG3005 — IaC principles (immutable infra, idempotency, snowflake anti-pattern), module design, remote state management, drift detection and remediation, GitOps workflow, IaC testing (3 reference files)
 - `tool-perf`: Performance engineering grounded in MIT 6.172 (Leiserson/Shun, Bentley Rules) and Brendan Gregg "Systems Performance" (USE Method, flamegraphs) — USE Method resource checklist, profiling tool selection by stack, flamegraph reading guide, Bentley Rules (5 categories), before/after benchmark workflow (3 reference files)
 - `design-migration` — schema evolution: Added Kleppmann "Designing Data-Intensive Applications" Kap. 4+11 coverage — Forward/Backward Compatibility rules, Dual-Write problem and solutions, Change Data Capture (CDC/Debezium), Avro Schema Registry, Expand-Contract pattern; new `references/schema-evolution.md`
-- plugin.json: 22 → 24 skills (v1.2.0 → v1.3.0); meta-help renumbered 1–24
+- plugin.json: 22 → 24 skills, v1.2.0 → v2.0.0; meta-help renumbered 1–24
+- `docs/skill-research-basis.md`: new reference document — academic & industry sources per skill (replaces work-in-progress `docs/academic-basis.md`)
+- CLAUDE.md: updated to reflect full plugin structure (24 skills, docs/ directory, plugin install command)
+
+### Removed
+
+- `docs/gap-analysis.md`: all items resolved — content lives in Git history
+- `docs/academic-basis.md`: replaced by `docs/skill-research-basis.md`
 
 - `design-observability`: Observability architecture skill grounded in Google SRE Books (Beyer et al.) and Observability Engineering (Majors/Fong-Jones) — SLO/SLI/Error-Budget, Golden Signals, OpenTelemetry tracing, Burn Rate alerting, Incident Response + blameless postmortem (4 reference files)
 - `design-cicd`: CI/CD pipeline design grounded in "Accelerate" (Forsgren/Humble/Kim) and "Continuous Delivery" (Humble/Farley) — pipeline architecture, Blue-Green/Canary/Feature Flags decision tree, DORA metrics with benchmarks, Trunk-Based Development (3 reference files)
@@ -92,7 +103,8 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ---
 
-[Unreleased]: https://github.com/gerfru/dev-best-practices/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/gerfru/dev-best-practices/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/gerfru/dev-best-practices/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/gerfru/dev-best-practices/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gerfru/dev-best-practices/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/gerfru/dev-best-practices/releases/tag/v1.0.0
