@@ -41,7 +41,7 @@ Regeln die IMMER gelten in `~/.claude/CLAUDE.md` ablegen:
 - `reference/` aktualisieren wenn sich Best Practices aendern
 - `claude/` synchron halten (nur Regeln, keine Erklaerungen)
 - `essential-rules.md` ist die Single Source of Truth fuer das Kompaktformat
-- Nach Regel-Aenderungen Mirror aktualisieren: `cp claude/*.md plugins/dev-best-practices/rules/`
+- Nach Regel-Aenderungen Mirror aktualisieren: `cp claude/*.md plugins/dev/rules/`
 
 <!-- DEV-BEST-PRACTICES:START — via /dev-best-practices:meta-install aktualisieren -->
 <!-- Version: essential-rules.md @ 2026-06-05 | Umfang: essential -->

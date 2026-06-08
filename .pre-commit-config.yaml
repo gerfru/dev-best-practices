@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: validate-skills
+        name: Validate plugin skills
+        entry: bash scripts/validate-skills.sh
+        language: system
+        pass_filenames: false
+        files: '^(plugins/dev/|\.claude-plugin/)'

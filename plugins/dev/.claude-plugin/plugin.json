@@ -1,5 +1,5 @@
 {
-  "name": "dev-best-practices",
+  "name": "dev",
   "version": "1.2.0",
   "description": "17 Skills für Design (inkl. UX/Human-AI Interaction), Security-Review (ISEC/Stanford/MIT), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test und Styling.",
   "author": { "name": "Gerald" }
