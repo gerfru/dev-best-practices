@@ -41,7 +41,7 @@ So entstehen die akademischen Grundlagen für neue Skills — analog zu den best
 **DACH + Europa:**
 - TU Graz — [TUGRAZonline](https://online.tugraz.at)
 - TU Wien — [TISS](https://tiss.tuwien.ac.at)
-- ETH Zürich — [Course Catalogue](https://www.vorlesungsverzeichnis.ethz.ch)
+- ETH Zürich — [Course Catalogue](https://www.vvz.ethz.ch)
 - EPFL Lausanne
 - NTNU Trondheim (stark in IaC/DevOps)
 - LMU München, KIT Karlsruhe, Universität Wien
@@ -53,7 +53,7 @@ So entstehen die akademischen Grundlagen für neue Skills — analog zu den best
 - University of Edinburgh
 
 **USA (Top-Tier):**
-- Stanford — [CS Courses](https://cs.stanford.edu/academics/courses)
+- Stanford — [CS Courses](https://explorecourses.stanford.edu)
 - MIT — [OCW](https://ocw.mit.edu) + [Course Catalog](https://student.mit.edu/catalog)
 - CMU — [SCS Course Listings](https://csd.cmu.edu/course-profiles)
 - UC Berkeley — [CS Courses](https://www2.eecs.berkeley.edu/Courses/CS/)
