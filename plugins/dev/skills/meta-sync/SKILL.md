@@ -51,7 +51,7 @@ Für jedes Dateipaar (parallel lesbar):
 
 ## Schritt 3 — Sync-Report
 
-```
+```text
 ## Doc Sync Report
 
 ### app-rules.md

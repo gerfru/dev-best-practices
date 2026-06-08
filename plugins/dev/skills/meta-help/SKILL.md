@@ -13,7 +13,7 @@ Zeige das Menü sofort. Kein langer Einleitungstext.
 
 ## Schritt 1 — Menü anzeigen
 
-```
+```text
 Welcher Skill soll starten?
 
 🏗️  DESIGN

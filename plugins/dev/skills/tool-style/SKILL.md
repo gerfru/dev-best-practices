@@ -122,7 +122,7 @@ components: { MuiButton: { styleOverrides: { root: { borderRadius: 8 } } } }
 
 ## Schritt 3 — Ausgabe
 
-```
+```text
 ## Styling-Analyse: [Kontext]
 
 **Stack:** [CSS-System] + [Komponenten-Library falls vorhanden]

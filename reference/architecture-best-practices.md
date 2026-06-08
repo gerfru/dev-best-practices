@@ -11,7 +11,7 @@ Sprachunabhängig wo möglich, mit konkreten Beispielen für TypeScript/Node.js 
 
 **Schlecht (technisch gruppiert):**
 
-```
+```text
 src/
   controllers/
     userController.ts
@@ -31,7 +31,7 @@ Problem: Um ein Feature zu verstehen, muss man zwischen 5+ Ordnern hin- und hers
 
 **Besser (feature-basiert / Colocation):**
 
-```
+```text
 src/
   features/
     user/
@@ -54,7 +54,7 @@ Vorteil: Alles was zu einem Feature gehört, ist beisammen. Einfacher zu versteh
 
 ### Next.js App Router Struktur
 
-```
+```text
 src/
   app/                    # Routing (App Router)
     (auth)/               # Route Groups (kein URL-Segment)
@@ -78,7 +78,7 @@ src/
 
 ### Python (FastAPI) Struktur
 
-```
+```text
 src/
   app/
     main.py               # App-Entry, ASGI Config
@@ -126,7 +126,7 @@ import { sanitizeUrl, monitorResponseSchema, saveData } from "@/lib";
 
 ### Die 4 Schichten
 
-```
+```text
 ┌─────────────────────────────────────┐
 │  Presentation Layer                 │  UI, API Routes, Controllers
 │  (was der User sieht)              │
@@ -146,7 +146,7 @@ import { sanitizeUrl, monitorResponseSchema, saveData } from "@/lib";
 
 **Abhängigkeiten zeigen nur nach innen/unten:**
 
-```
+```text
 Presentation → Application → Domain ← Infrastructure
                                 ↑
                         Domain kennt KEINE
@@ -208,7 +208,7 @@ class FileNewsRepository implements NewsRepository {
 
 Die Business-Logik (Domain) ist der Kern und hat **keine Abhängigkeit** zu Frameworks, Datenbanken oder externen Services. Alles Externe ist austauschbar.
 
-```
+```text
                     ┌─────────────────┐
                     │   Frameworks    │
                     │   (Express,     │
@@ -271,7 +271,7 @@ Vorteil: Du kannst die DB wechseln ohne Business-Logik anzufassen. Du kannst Tes
 
 ### Die richtige Wahl
 
-```
+```text
                     Starte hier
                         │
                         ▼
@@ -316,7 +316,7 @@ Monolith mit klaren Modul-Grenzen. Jedes Modul hat:
 
 Kann später zu Microservices aufgespalten werden, weil die Grenzen schon gezogen sind.
 
-```
+```text
 ┌─────────────────────────────────────────────┐
 │                  Monolith                    │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐   │
@@ -368,7 +368,7 @@ Kann später zu Microservices aufgespalten werden, weil die Grenzen schon gezoge
 
 ### Monorepo Struktur (Turborepo)
 
-```
+```text
 my-project/
   apps/
     web/              # Next.js Frontend
@@ -393,7 +393,7 @@ my-project/
 
 ### MVC (Model-View-Controller)
 
-```
+```text
 Request → Controller → Model → Database
               ↓
             View → Response
@@ -403,7 +403,7 @@ Klassisch, einfach, gut für CRUD-Apps. Wird schnell unübersichtlich bei komple
 
 ### Service Layer Pattern
 
-```
+```text
 Request → Controller → Service → Repository → Database
                           ↓
                     Business Logic
@@ -419,7 +419,7 @@ Repository: Daten-Zugriff (Queries, CRUD).
 
 Lese- und Schreib-Operationen trennen:
 
-```
+```text
 ┌──────────┐     ┌─────────────┐     ┌──────────┐
 │  Command  │────▶│ Write Model │────▶│ Write DB │
 │  (Write)  │     │ (normalized)│     │          │
@@ -437,7 +437,7 @@ Lese- und Schreib-Operationen trennen:
 
 ### Event-Driven Architecture
 
-```
+```text
 Service A ──publishes──▶ Event Bus ──subscribes──▶ Service B
                               │
                               └──subscribes──▶ Service C
@@ -452,7 +452,7 @@ Service A ──publishes──▶ Event Bus ──subscribes──▶ Service B
 
 ### Component Architecture
 
-```
+```text
 ┌─────────────────────────────────┐
 │  Pages / Routes                 │  URL → welche Seite?
 ├─────────────────────────────────┤
@@ -479,7 +479,7 @@ Service A ──publishes──▶ Event Bus ──subscribes──▶ Service B
 
 **Faustregel:** Default ist Server Component. Nur `"use client"` hinzufügen wenn Interaktivität nötig ist.
 
-```
+```text
 // Gut: Server Component holt Daten, Client Component zeigt interaktiven Teil
 // page.tsx (Server)
 async function DashboardPage() {
@@ -496,7 +496,7 @@ function Dashboard({ initialData }) {
 
 ### State Management – Entscheidungsbaum
 
-```
+```text
 Brauchst du geteilten State?
     │
     ├── Nein → useState / useReducer (lokal)
@@ -565,7 +565,7 @@ function ComponentB() {
 
 Für einfache Apps (wie der News Monitor):
 
-```
+```text
 ┌─────────────────────┐
 │    Cloudflare        │
 │    Tunnel / Nginx    │
@@ -586,7 +586,7 @@ Für einfache Apps (wie der News Monitor):
 
 Für Apps mit DB, Cache, Background Workers:
 
-```
+```text
 ┌──────────────────────────────────────────┐
 │              docker-compose              │
 │                                          │
@@ -661,7 +661,7 @@ volumes:
 
 ### Docker Networking Basics
 
-```
+```text
 ┌─────────────────────────────────────────────┐
 │          Docker Network (bridge)            │
 │                                             │
@@ -694,7 +694,7 @@ volumes:
 
 ### Warum ein Reverse Proxy?
 
-```
+```text
 Internet                   Server
    │
    │    ┌──────────────┐
@@ -720,7 +720,7 @@ Internet                   Server
 
 ### Caddy (einfachstes Setup)
 
-```
+```text
 # Caddyfile – das ist ALLES was du brauchst
 myapp.example.com {
     reverse_proxy app:3000
@@ -819,7 +819,7 @@ Staging wird sinnvoll wenn:
 
 ### Docker Compose Overrides
 
-```
+```text
 docker-compose.yml           # Base Config (Production-ready)
 docker-compose.override.yml  # Dev Overrides (auto-geladen)
 docker-compose.prod.yml      # Production Overrides
@@ -854,7 +854,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ### Wann brauche ich ein API Gateway?
 
-```
+```text
 Ohne Gateway:                    Mit Gateway:
 Client → Service A               Client → Gateway → Service A
 Client → Service B                                → Service B
@@ -910,7 +910,7 @@ Die [12 Faktoren](https://12factor.net/) – Grundprinzipien für moderne Apps:
 
 ### Die Test-Pyramide
 
-```
+```text
          ╱  E2E  ╲          Wenige, langsam, teuer
         ╱─────────╲         Testen: ganze User Flows
        ╱Integration╲        Mittelviele, mittelschnell
@@ -1076,7 +1076,7 @@ Der de-facto Standard für REST-API-Dokumentation. Maschinenlesbares JSON/YAML-S
 
 ### Architektur
 
-```
+```text
 User Request → API → Queue (Redis/DB) → Worker → Job erledigt
                  ↑                          │
                  └── Response: "Job queued"  └── Optional: Webhook/Notification

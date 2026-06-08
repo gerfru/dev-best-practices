@@ -20,7 +20,7 @@ Zeigt den Delta — ohne automatisch zu überschreiben.
    - Falls keine `CLAUDE.md`: zu `install-rules` weiterleiten
 
 3. **Version aus Marker lesen** (falls vorhanden):
-   ```
+   ```text
    <!-- Version: essential-rules.md @ 2024-01-15 -->
    ```
    → Wie alt ist die installierte Version?
@@ -47,7 +47,7 @@ Vergleiche strukturiert auf drei Ebenen:
 
 Übersicht über den Gesamtstand:
 
-```
+```text
 ## Rule Inventory — [Projektname]
 
 | File              | Installiert | Aktuell | Status     |
@@ -62,7 +62,7 @@ Projekt-Ausnahmen: 2 (werden nicht angefasst)
 
 ## Schritt 3 — Delta-Report
 
-```
+```text
 ## Rules Drift Report — [Projektname]
 
 ### Fehlende Sections (neu seit letztem Install)

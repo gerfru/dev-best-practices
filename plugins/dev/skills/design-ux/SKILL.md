@@ -128,7 +128,7 @@ aus klassischer Software mit. Onboarding muss das explizit korrigieren.
 
 **Kontroll-Hierarchie entwerfen:**
 
-```
+```text
 Globale Einstellungen (HAX G17)
   └─ Sitzungs-Level Kontrolle (HAX G8: effizientes Ablehnen)
        └─ Item-Level Feedback (HAX G15: granulares Feedback)

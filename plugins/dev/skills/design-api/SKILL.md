@@ -76,7 +76,7 @@ Load `references/versioning-breaking-changes.md` for every change to an existing
 
 ## Standard Finding Format
 
-```
+```text
 ### [SEVERITY] API Finding: [Short Title]
 **Category:** Naming | Resource Model | Contract | Versioning | Security | Usability
 **Location:** [Endpoint, type, or field]

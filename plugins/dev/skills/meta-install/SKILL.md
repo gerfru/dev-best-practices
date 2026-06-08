@@ -70,7 +70,7 @@ Bestehender Projektkontext und Projekt-Ausnahmen werden nie überschrieben.
    einfügen (vor `DEV-BEST-PRACTICES:END`), mit Kommentar `<!-- Projekt-Ausnahmen -->`
 
 4. **Version-Marker aktualisieren:**
-   ```
+   ```text
    <!-- Version: essential-rules.md @ <neues Datum> | Umfang: essential | Vorher: <altes Datum> -->
    ```
 
@@ -83,7 +83,7 @@ Bestehender Projektkontext und Projekt-Ausnahmen werden nie überschrieben.
 
 **Vor dem Schreiben zeigen:**
 
-```
+```text
 Modus: [Erstinstallation / Update]
 Datei: ./CLAUDE.md
 Umfang: essential-rules.md (78 Zeilen)

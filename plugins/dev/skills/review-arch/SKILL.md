@@ -75,7 +75,7 @@ After findings, offer ADR drafts for the most important decisions.
 
 ## Standard Finding Format
 
-```
+```text
 ### [SEVERITY] Finding: [Short Title]
 **Category:** Coupling | Cohesion | Anti-Pattern | Quality Attribute | Tech Debt
 **Location:** [Component, layer, or interface name]

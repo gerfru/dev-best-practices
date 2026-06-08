@@ -70,7 +70,7 @@ Load `references/event-sourcing-cqrs.md` when the user asks about Event Sourcing
 
 ## Standard Finding Format
 
-```
+```text
 ### [SEVERITY] Data Model Finding: [Short Title]
 **Category:** Schema | Normalization | Index | Query | Consistency | Pattern Choice
 

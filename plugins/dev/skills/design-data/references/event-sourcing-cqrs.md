@@ -14,7 +14,7 @@ Separate the model used for writes (**commands**) from the model used for reads 
 Most systems use the same model for both. CQRS splits them, allowing each to be
 optimized independently.
 
-```
+```text
 Client
   │
   ├── Command → Command Handler → Write Model (normalized, consistent, ACID)
@@ -65,7 +65,7 @@ that led to that state. The current state is derived by replaying events.
 
 **Traditional (state-based):**
 
-```
+```text
 users table:
 | id | name    | email         | subscription | updated_at |
 |----|---------|---------------|--------------|------------|
@@ -74,7 +74,7 @@ users table:
 
 **Event-sourced:**
 
-```
+```text
 events table:
 | id | aggregate_id | type                    | data                          | timestamp  |
 |----|-------------|-------------------------|-------------------------------|------------|

@@ -170,7 +170,7 @@ Applicable when the code implements or integrates an AI/ML system.
 
 When reporting a compliance finding, use this format:
 
-```
+```text
 ### ⚪ COMPLIANCE — [Regulation] [Control]
 **Regulation:** GDPR Art. XX | ISO 27001 A.X.XX | EU AI Act Art. XX
 **Finding:** What the code does that conflicts with the control

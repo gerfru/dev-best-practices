@@ -70,7 +70,7 @@ These changes will break existing clients:
 
 ### URL Path Versioning (`/v1/`, `/v2/`)
 
-```
+```text
 GET /v1/users/123
 GET /v2/users/123
 ```
@@ -81,7 +81,7 @@ GET /v2/users/123
 
 ### Date-Based Versioning (Google Cloud style)
 
-```
+```text
 GET /users/123
 API-Version: 2024-01-15
 ```
@@ -93,7 +93,7 @@ Or in URL: `/2024-01-15/users/123`
 
 ### Semantic Versioning Header
 
-```
+```text
 GET /users/123
 Accept: application/vnd.myapi.v2+json
 ```

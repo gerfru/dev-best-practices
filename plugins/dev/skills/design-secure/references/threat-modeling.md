@@ -122,7 +122,7 @@ Rate each threat using a simple matrix: **Risk = Likelihood × Impact**
 For complex threats, use an attack tree to decompose the attack goal into
 sub-goals. This reveals which controls are most effective.
 
-```
+```text
 Goal: Authenticate as a legitimate user without valid credentials
 ├── Steal valid credentials
 │   ├── Phishing attack → Mitigated by: MFA

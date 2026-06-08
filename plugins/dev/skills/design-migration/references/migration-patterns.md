@@ -82,7 +82,7 @@ Solutions:
 
 ---
 
-# Zero-Downtime Database Migration
+## Zero-Downtime Database Migration
 
 Grounded in the Expand-Contract (Parallel Change) pattern.
 
@@ -179,7 +179,7 @@ CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
 
 ---
 
-# Distributed Systems Concepts for Migration
+## Distributed Systems Concepts for Migration
 
 Grounded in MIT 6.5840 (Distributed Systems).
 

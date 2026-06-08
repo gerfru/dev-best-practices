@@ -34,7 +34,7 @@ Falls unklar was getestet werden soll: einmal konkret nachfragen.
 
 Bewerte den aktuellen Stand gegen die Testpyramide und identifiziere die größten Lücken:
 
-```
+```text
         [E2E]          wenige, langsam, hoher Wert für kritische Flows
        [Integr.]       Service-Grenzen, DB, externe APIs
       [Unit Tests]     Funktionen, Klassen, pure Logic — schnell, viele
@@ -92,7 +92,7 @@ Je nach Anfrage des Nutzers:
 
 ## Schritt 3 — Ausgabe
 
-```
+```text
 ## Test-Analyse: [Kontext]
 
 **Stack:** [erkannter Stack + Test-Framework]

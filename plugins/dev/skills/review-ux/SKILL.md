@@ -49,7 +49,7 @@ Nenne dem Nutzer kompakt was erkannt wurde: `Typ: Web-App | KI: Empfehlungs-Engi
 
 Alle sechs Dimensionen systematisch durchgehen. Befunde im Format:
 
-```
+```text
 [G-Code / P-Code] Titel · Severity (Critical/High/Medium/Low) · Befund · Fix
 ```
 

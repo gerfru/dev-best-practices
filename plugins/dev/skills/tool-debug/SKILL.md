@@ -82,7 +82,7 @@ Stack-spezifische Checks (nur wenn relevant):
 
 Strukturierter Report:
 
-```
+```text
 ## Fehler-Analyse: [kurzer Titel]
 
 **Stack:** [erkannter Stack]

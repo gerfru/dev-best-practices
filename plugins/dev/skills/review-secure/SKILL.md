@@ -71,7 +71,7 @@ If the user asks "why is X dangerous?" — explain the concept fully, not just r
 
 ## Standard Finding Format
 
-```
+```text
 ### [SEVERITY] Finding Title
 **Category:** Security | Quality | Compliance
 **Location:** file.py, line N (or "general pattern")

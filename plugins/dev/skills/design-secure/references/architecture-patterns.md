@@ -107,7 +107,7 @@ The WebAuthn credential is scoped to an origin (domain + scheme + port). A phish
 
 ### Pattern 6: Defense-in-Depth Network Architecture
 
-```
+```text
 Internet
     │
     ▼
@@ -215,7 +215,7 @@ Internet
 
 **What to log:**
 
-```
+```text
 {
   "timestamp": "2025-01-15T14:23:01.234Z",  // ISO 8601, UTC
   "event_type": "auth.login.success",
