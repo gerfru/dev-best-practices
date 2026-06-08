@@ -11,7 +11,7 @@ Jede App MUSS diese Response-Headers setzen:
 
 - `Strict-Transport-Security`: `max-age=31536000; includeSubDomains`
 - `X-Content-Type-Options`: `nosniff`
-- `X-Frame-Options`: `DENY`
+- `X-Frame-Options`: `DENY` (Defense-in-Depth fuer aeltere Browser; `frame-ancestors 'none'` in CSP hat Vorrang fuer moderne Browser)
 - `Referrer-Policy`: `strict-origin-when-cross-origin`
 - `Permissions-Policy`: `camera=(), microphone=(), geolocation=(), payment=()`
 
@@ -31,7 +31,13 @@ CSP zuerst im `Report-Only` Modus testen.
 - **Fail Closed:** Bei Fehler Zugang verweigern
 - **Passwort:** bcrypt (cost ≥ 12) / scrypt / Argon2id, nie Plaintext, Timing-safe Vergleiche, Rate Limiting auf Login
 - **Sessions:** Session Cookies mit `httpOnly=true`, `secure=true`, `sameSite=Lax` (Standard-Empfehlung)
-- **JWT:** Nur wenn Statelessness wirklich noetig. Bei JWT immer mit Refresh Token
+- **JWT:** Nur wenn Statelessness wirklich noetig. Bei JWT:
+  - Algorithm explizit pinnen (`HS256`/`RS256`), `alg:none` serverseitig ablehnen
+  - JWT Secret ≥ 256 bit (ASVS V2.6)
+  - Immer mit Refresh Token + Rotation (Invalidierung bei Logout / Token-Diebstahl)
+- **MFA:** Empfohlen ab ASVS L2. TOTP (z.B. Google Authenticator) oder WebAuthn/Passkeys
+- **Account Lockout:** Nach ≥ 5 Fehlversuchen progressive Verzoegerung oder temporaeres Lock
+- **Password-Reset:** zeitlimitierter Einmal-Token (max. 15 min), nach Nutzung sofort invalidieren
 - **Kein eigenes Crypto** -- immer etablierte Libraries
 
 ---
@@ -173,8 +179,9 @@ CSP zuerst im `Report-Only` Modus testen.
 ## Security Assessment
 
 - **Pruefrahmen:** OWASP ASVS 5.0 (Mai 2025). Level 1 fuer Solo/kleine Teams (~70 Requirements)
-- **SAST:** `bandit` (pre-commit, schnell) + `semgrep` (CI, cross-file Taint-Analyse)
+- **SAST:** `ruff-S` (pre-commit, schnell, bandit-Subset) + `semgrep` (CI, cross-file Taint-Analyse). Eigenständiger `bandit` nur wenn tiefere Analyse über Ruff-S hinaus nötig
 - **SCA:** `pip-audit` (Python). `pnpm audit` (Node). Nicht Safety (veraltet)
+- **SBOM:** `syft` (CycloneDX-Format) bei jedem Release -- Nachweis fuer ISO 27001 / EU CRA
 - **Image-Scan:** `trivy` in CI — CRITICAL+HIGH → exit 1
 - **Threat Modeling:** STRIDE-GPT fuer neue Systeme/Features (einmalig, nicht pro PR)
 - **Rhythmus:** SAST+SCA pro PR → Image-Scan pro Build → STRIDE einmalig pro System
