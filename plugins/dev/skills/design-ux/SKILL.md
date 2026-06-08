@@ -51,9 +51,28 @@ Erfasse aus der Beschreibung oder durch Lesen vorhandener Dateien:
 4. **Ist KI / ML beteiligt?** (Empfehlungen, Generierung, Klassifikation, Agenten)
 5. **Was ist der Kanal?** (Web, Mobile, Voice, Embedded, Dashboard, Chat)
 6. **Gibt es Accessibility-Anforderungen?** (gesetzlich: EU Accessibility Act / BFSG)
+7. **Welches Platform Design System?** (Material Design 3, Apple HIG, agnostisch, eigenes) — bestimmt Color Roles, Elevation, Shape, Typography-Defaults
 
 Fehlt Wesentliches: **einmal** nachfragen, nicht raten. Annahmen explizit als
 `[Annahme]` markieren.
+
+---
+
+### Phase 0.5 — Platform Design System festlegen (wenn visuelles Design Teil der Aufgabe)
+
+Einmal entscheiden, dann konsistent durchhalten:
+
+| Plattform / Kontext | System | Kernprinzip |
+|--------------------|--------|------------|
+| Android / Web (Google-Stil) | Material Design 3 | Color Roles, Tonal Elevation, Shape |
+| iOS / macOS | Apple HIG | Clarity, Deference, Depth |
+| Enterprise / B2B | IBM Carbon | Accessibility-first, Data-Dense Patterns |
+| Kein Kontext / eigenes System | Agnostisch + Design Tokens | Volle Kontrolle |
+
+Referenzen: m3.material.io · developer.apple.com/design/human-interface-guidelines · carbondesignsystem.com
+
+Diese Entscheidung unter "Entscheidungen" in `design-ux.md` dokumentieren.
+Wenn kein System gewählt: explizit als `[Annahme: agnostisch]` markieren.
 
 ---
 
