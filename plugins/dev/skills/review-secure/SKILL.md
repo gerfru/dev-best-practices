@@ -8,8 +8,10 @@ description: >
   for questions like "is this crypto correct?", "can you check my authentication?",
   "review my API", or "is this GDPR-compliant?". Covers all languages (C/C++, Python,
   Java, Go, Rust, JS/TS, and others) and evaluates Security, Code Quality, and
-  Compliance (EU AI Act, ISO 27001, DSGVO/GDPR). Always use this skill for any
-  security-relevant code review — do not rely on general knowledge alone.
+  Compliance (EU AI Act, ISO 27001, DSGVO/GDPR). Deutsche Trigger: "ist mein Code
+  sicher?", "reviewe meine Authentifizierung", "prüfe meine API auf Sicherheit",
+  "GDPR-konform?", "Schwachstellen finden", "Krypto korrekt?". Always use this
+  skill for any security-relevant code review — do not rely on general knowledge alone.
 ---
 # ISEC Code Review Skill
 

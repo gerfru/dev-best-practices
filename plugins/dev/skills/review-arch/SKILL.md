@@ -9,8 +9,11 @@ description: >
   "can you find coupling problems", "what anti-patterns do you see", "should we
   refactor this", "we need an ADR for this decision". Covers: coupling & cohesion
   analysis, architectural style identification, anti-pattern detection, quality
-  attribute assessment, tech debt mapping, and ADR recommendations. Always use
-  this skill for any architectural review — do not rely on general knowledge alone.
+  attribute assessment, tech debt mapping, and ADR recommendations. Deutsche Trigger:
+  "reviewe meine Architektur", "unser System ist schwer zu ändern", "wir haben
+  technische Schulden", "finde Kopplungsprobleme", "welche Anti-Pattern siehst du",
+  "wir brauchen einen ADR". Always use this skill for any architectural review —
+  do not rely on general knowledge alone.
 ---
 # Architecture Review Skill
 

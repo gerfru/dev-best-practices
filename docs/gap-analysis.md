@@ -1,14 +1,22 @@
 # Gap Analysis — dev-best-practices
 
-Stand: 2026-06-08
+Stand: 2026-06-08 | Zuletzt aktualisiert: 2026-06-08
 
 ## Strukturelle Bugs (Quick Fixes)
 
-| Problem | Impact |
-|---|---|
-| `commands/design-ux.md` fehlt | Slash-Command-Discovery findet `/dev:design-ux` nicht |
-| `commands/review-ux.md` fehlt | Slash-Command-Discovery findet `/dev:review-ux` nicht |
-| Skill-Count-Drift: README/plugin.json = "17", commands/ = 15 | Inkonsistente Kommunikation nach außen |
+| Problem | Impact | Status |
+|---|---|---|
+| `commands/design-ux.md` fehlt | Slash-Command-Discovery findet `/dev:design-ux` nicht | ✅ Behoben |
+| `commands/review-ux.md` fehlt | Slash-Command-Discovery findet `/dev:review-ux` nicht | ✅ Behoben |
+| Skill-Count-Drift: README/plugin.json = "17", commands/ = 15 | Inkonsistente Kommunikation nach außen | ✅ Behoben (plugin.json = 19, commands/ = 20 inkl. meta-help) |
+
+## Trigger-Qualität (Skill Discovery)
+
+| Problem | Betroffene Skills | Status |
+|---|---|---|
+| Overlap-Dreieck ohne Abgrenzung | `review-app`, `review-arch`, `review-secure` | ✅ Behoben — review-app erklärt Abgrenzung explizit |
+| Fehlende deutsche Trigger | `review-arch`, `review-secure` | ✅ Behoben — deutsche Trigger-Zeilen ergänzt |
+| Meta-Skill ohne Scope-Guard | `meta-sync` | ✅ Behoben — "nur für dev-best-practices Repo" ergänzt |
 
 ---
 
