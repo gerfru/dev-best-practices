@@ -20,7 +20,7 @@ jobs:
       - name: Link Check
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --exclude-loopback --exclude 'report-uri\.com' '**/*.md'
+          args: --no-progress --exclude-loopback --exclude 'report-uri\.com' --exclude 'github\.com/.*/compare/' --exclude 'github\.com/.*/releases/tag/' '**/*.md'
           fail: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,6 +33,13 @@ jobs:
 
       - name: Validate plugin skills
         run: bash scripts/validate-skills.sh
+
+      - name: Check rule mirror sync
+        run: |
+          diff -r claude/ plugins/dev/rules/ && echo "✅ Mirror in sync" || {
+            echo "❌ plugins/dev/rules/ is out of sync with claude/ — run: cp claude/*.md plugins/dev/rules/"
+            exit 1
+          }
 
   secrets:
     runs-on: ubuntu-latest

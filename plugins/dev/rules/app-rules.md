@@ -94,7 +94,7 @@ CSP zuerst im `Report-Only` Modus testen.
 - `.env` nie committen, `.env.example` committen
 - **Env-Validierung beim App-Start:** App crasht sofort wenn Variable fehlt (Zod / Pydantic)
 - **Secrets:** Lokal → `.env`. CI/CD → GitHub Secrets. Production → Vault / Secrets Manager
-- Secrets regelmaessig rotieren
+- Secrets regelmaessig rotieren (alle 90 Tage oder bei Verdacht auf Kompromittierung sofort)
 
 ---
 
@@ -147,6 +147,17 @@ CSP zuerst im `Report-Only` Modus testen.
 - **Health Checks:** `/health` (Liveness) + `/ready` (Readiness)
 - **Zero-Downtime:** Rolling Update (minimal), Blue-Green (besser)
 - **Rollback:** Docker Tag Rollback oder Blue-Green Switch (Sekunden)
+
+---
+
+## Feature Flags
+
+- **Zweck:** Neues Verhalten hinter Flag verstecken → ausrollen → Flag entfernen. Entkoppelt Deploy von Release
+- **Kill Switch:** Jedes neue Feature braucht einen Deaktivierungs-Pfad fuer sofortiges Rollback ohne Redeploy
+- **Rollout-Reihenfolge:** `disabled → internal → canary (1%) → partial (10%) → full (100%)`
+- **Flag-Lebenszyklus:** Max. 1 Sprint aktiv halten, dann entfernen (verhindert Flag-Schulden)
+- **Tools:** GrowthBook (Open Source, Self-hosted), Unleash (Self-hosted), LaunchDarkly (SaaS)
+- **Nie fuer:** Dauerhafte Konfiguration oder A/B-Tests ohne Cleanup-Plan
 
 ---
 

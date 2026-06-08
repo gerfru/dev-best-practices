@@ -759,6 +759,84 @@ Jede App braucht mindestens zwei Endpoints:
 
 ---
 
+## 14b. Feature Flags
+
+Feature Flags entkoppeln **Deployment** (Code in Produktion bringen) von **Release** (Feature für User aktivieren).
+
+### Warum Feature Flags
+
+| Ohne Feature Flags | Mit Feature Flags |
+|---|---|
+| Deploy = sofortiger Release | Deploy ≠ Release |
+| Rollback = Revert + Redeploy (Minuten) | Rollback = Flag deaktivieren (Sekunden) |
+| Big Bang Releases | Schrittweises Ausrollen (Canary) |
+| Alle User sehen neue Features gleichzeitig | Interne Beta → 1% → 10% → 100% |
+
+### Rollout-Reihenfolge
+
+```text
+disabled → internal (Team) → canary (1%) → partial (10%) → full (100%) → flag_removed
+```
+
+### Flag-Typen
+
+| Typ | Zweck | Lebensdauer |
+|---|---|---|
+| **Release Flag** | Neues Feature ein-/ausschalten | Kurz (≤ 1 Sprint) |
+| **Kill Switch** | Notfall-Deaktivierung ohne Redeploy | Permanent |
+| **Experiment Flag** | A/B-Test | Mittel (Test-Dauer) |
+| **Ops Flag** | Infrastruktur-Verhalten (Cache an/aus) | Permanent |
+
+### Implementierung
+
+**Einfach (selbst gebaut):**
+
+```typescript
+// TypeScript: Env-basiertes Flag (ausreichend für Solo)
+const flags = {
+  newCheckout: process.env.FLAG_NEW_CHECKOUT === 'true',
+  darkMode: process.env.FLAG_DARK_MODE === 'true',
+}
+
+if (flags.newCheckout) {
+  // neue Checkout-Logik
+}
+```
+
+```python
+# Python: Env-basiertes Flag
+import os
+
+FLAGS = {
+    "new_checkout": os.getenv("FLAG_NEW_CHECKOUT", "false") == "true",
+}
+```
+
+**Skalierbar (Open Source):**
+
+| Tool | Hosting | Stärke |
+|---|---|---|
+| **GrowthBook** | Self-hosted / SaaS | A/B-Testing, Analytics-Integration |
+| **Unleash** | Self-hosted / SaaS | Enterprise-Features, SDKs für 20+ Sprachen |
+| **Flagsmith** | Self-hosted / SaaS | Einfach, API-First |
+| LaunchDarkly | SaaS only | Feature-reich, teuer |
+
+### Flag-Hygiene (verhindert Flag-Schulden)
+
+- **Maximale Lebensdauer:** Release Flags max. 1 Sprint aktiv halten
+- **Ticket bei Erstellung:** Jeder Flag bekommt ein "Cleanup"-Ticket mit Deadline
+- **Nie für Dauerkonfiguration:** Permanente Konfiguration gehört in Env Vars, nicht in Flags
+- **Testen beider Pfade:** CI muss beide Zustände (Flag an + aus) testen
+
+### Anti-Patterns
+
+- Flag ohne Cleanup-Datum → wird nie entfernt (Flag-Schulden)
+- Geschachtelte Flags (`if (flagA && flagB && !flagC)`) → unmöglich zu verstehen
+- Flags für sicherheitskritische Entscheidungen (Auth, Zahlungen) → zu risikoreich
+- Flag-State in DB (nicht in Flag-Service) → Konsistenzprobleme bei Multi-Instance
+
+---
+
 ## 15. Observability
 
 ### Die drei Säulen
