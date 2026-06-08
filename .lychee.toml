@@ -1,0 +1,7 @@
+[params]
+# Exclude GitHub release/compare links — used in CHANGELOG footer,
+# tags don't exist until a release is cut.
+exclude = [
+  "github\\.com/.*/compare/",
+  "github\\.com/.*/releases/tag/",
+]
