@@ -6,9 +6,9 @@
     {
       "name": "dev",
       "source": "./plugins/dev",
-      "description": "17 Skills: App-Design, UX/Human-AI Interaction Design & Review (HAX/PAIR/CHI 2024), Security Code Review (ISEC/Stanford/MIT-basiert), App-Audit (6 Achsen, ASVS 5.0), Architektur-Review, Debug-Assistent, Test-Strategie, CSS-Styling.",
+      "description": "24 skills for software projects: Design (App, Secure, API, Data, Migration, UX, LLM, Observability, CI/CD, IaC), Review (App, Architecture, Security, UX, LLM), Tools (Debug, Test, Style, Accessibility, Performance), Meta. Grounded in MIT, CMU, Stanford curricula.",
       "category": "development",
-      "tags": ["audit", "architecture", "security", "ci-cd", "best-practices"]
+      "tags": ["best-practices", "security", "architecture", "llm", "accessibility", "performance", "ci-cd", "iac"]
     }
   ]
 }
