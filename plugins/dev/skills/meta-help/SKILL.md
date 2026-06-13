@@ -34,27 +34,31 @@ Which skill should start?
  13  review-secure     Security: crypto, injection, memory safety, GDPR/ISO/EU AI Act
  14  review-ux         UX audit: AI anti-patterns, dark patterns, trust design
  15  review-llm        LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10
+ 16  review-public     Repo public scan: secrets in history, PII in tests, governance files, CI/CD hardening
+
+🏗️  DESIGN (continued)
+ 17  design-public     Publication plan: secrets audit, license, governance docs, branch protection, supply chain
 
 🛠️  TOOLS
- 16  tool-debug        Stack-aware root cause analysis with fix suggestions
- 17  tool-test         Write, improve, or plan tests
- 18  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
- 19  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
- 20  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
+ 18  tool-debug        Stack-aware root cause analysis with fix suggestions
+ 19  tool-test         Write, improve, or plan tests
+ 20  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
+ 21  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
+ 22  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
 
 📁  META
- 21  meta-install        Add best-practice rules to a project CLAUDE.md
- 22  meta-drift          Compare project CLAUDE.md against current rule files
- 23  meta-sync           Keep reference/*.md and claude/*.md in sync
- 24  meta-create-skill   Build a new skill: research, structure, all files
+ 23  meta-install        Add best-practice rules to a project CLAUDE.md
+ 24  meta-drift          Compare project CLAUDE.md against current rule files
+ 25  meta-sync           Keep reference/*.md and claude/*.md in sync
+ 26  meta-create-skill   Build a new skill: research, structure, all files
 
 → Enter a number, or directly describe what you need.
 ```
 
 ## Step 2 — Start Skill
 
-**With a number:** Start skill immediately.  
-**With a description:** Choose the best matching skill, mention it briefly ("→ starting review-secure …"), then start directly.  
+**With a number:** Start skill immediately.
+**With a description:** Choose the best matching skill, mention it briefly ("→ starting review-secure …"), then start directly.
 **With arguments:** Pass to the started skill.
 
 Load and follow exactly: `${CLAUDE_PLUGIN_ROOT}/skills/<chosen-skill>/SKILL.md`
@@ -62,4 +66,4 @@ Load and follow exactly: `${CLAUDE_PLUGIN_ROOT}/skills/<chosen-skill>/SKILL.md`
 ## Rules
 - Show menu immediately, no intro
 - After the choice: start directly, do not explain or ask again
-- Never load all 24 skills at once — always only the chosen one
+- Never load all 26 skills at once — always only the chosen one

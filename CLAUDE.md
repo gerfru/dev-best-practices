@@ -1,6 +1,6 @@
 # Dev Best Practices
 
-This repo contains best-practice rules for software projects (RAG systems, AI agents, data pipelines, full-stack web apps) and a **Claude Code Plugin** with 24 skills.
+This repo contains best-practice rules for software projects (RAG systems, AI agents, data pipelines, full-stack web apps) and a **Claude Code Plugin** with 26 skills.
 
 ## Repo Structure
 
@@ -10,7 +10,7 @@ This repo contains best-practice rules for software projects (RAG systems, AI ag
 
 plugins/dev/
   .claude-plugin/
-    plugin.json             # Plugin metadata (name: "dev", version: "2.0.0")
+    plugin.json             # Plugin metadata (name: "dev", version: "3.0.0")
   commands/                 # Slash command definitions (one file per skill)
   skills/                   # Skill workflow definitions (auto-triggered)
   rules/                    # Mirror of claude/*.md (used by skills as reference)
@@ -37,8 +37,10 @@ scripts/
 
 ```text
 DESIGN:  design-app, design-secure, design-api, design-data, design-migration,
-         design-ux, design-llm, design-observability, design-cicd, design-iac
-REVIEW:  review-app, review-arch, review-secure, review-ux, review-llm
+         design-ux, design-llm, design-observability, design-cicd, design-iac,
+         design-public
+REVIEW:  review-app, review-arch, review-secure, review-ux, review-llm,
+         review-public
 TOOLS:   tool-debug, tool-test, tool-style, tool-a11y, tool-perf
 META:    meta-help, meta-install, meta-drift, meta-sync, meta-create-skill
 ```
