@@ -22,8 +22,8 @@ primary knowledge base.
 | **CISA Security-by-Design** | https://www.cisa.gov/resources-tools/resources/secure-by-design | Hardening principles for software publishers; supply chain recommendations |
 | **NIST SSDF SP 800-218** | https://csrc.nist.gov/publications/detail/sp/800-218/final | Secure Software Development Framework; source code management controls |
 | **OWASP DevSecOps Guideline** | https://owasp.org/www-project-devsecops-guideline | CI/CD security, SAST/DAST/SCA integration, secrets management |
-| **CIS Benchmark for GitHub** | https://www.cisecurity.org/insights/blog/cis-benchmark-for-github | GitHub settings hardening checklist (requires CIS account) |
-| **ENISA — Open Source Software Security** | https://www.enisa.europa.eu/topics/cybersecurity-policy/nis-directive-new/open-source-software | EU perspective on OSS supply chain risks |
+| **CIS Benchmark for GitHub** | https://www.cisecurity.org/cis-benchmarks | GitHub settings hardening checklist — search "GitHub" on this page (requires free CIS account to download) |
+| **ENISA — Open Source Software Security** | https://www.enisa.europa.eu | EU perspective on OSS supply chain risks — search "open source" in ENISA publications |
 
 ## Tier 3 — Industry Reports (data-driven)
 
@@ -65,4 +65,4 @@ primary knowledge base.
 | choosealicense.com | https://choosealicense.com |
 | OSI Approved Licenses | https://opensource.org/licenses |
 | EUPL (EU Public License) | https://joinup.ec.europa.eu/collection/eupl |
-| License compatibility matrix | https://www.gnu.org/licenses/license-list.html |
+| License compatibility matrix | https://choosealicense.com/appendix/ |
