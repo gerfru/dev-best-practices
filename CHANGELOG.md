@@ -5,6 +5,19 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ---
 
+## [4.0.0](https://github.com/gerfru/dev-best-practices/compare/v3.0.0...v4.0.0) (2026-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* plugin version bumped to v3.0.0
+
+### Features
+
+* add design-public skill ([#25](https://github.com/gerfru/dev-best-practices/issues/25)) ([8bfc30d](https://github.com/gerfru/dev-best-practices/commit/8bfc30df32a6db2ecabb6af885396da8dfcefa0f))
+* add public skill references and bump plugin to v3.0.0 ([#26](https://github.com/gerfru/dev-best-practices/issues/26)) ([013d49d](https://github.com/gerfru/dev-best-practices/commit/013d49d0a64ff6568d37a5b1e45a78ee5c5da2f1))
+* add review-public skill ([#24](https://github.com/gerfru/dev-best-practices/issues/24)) ([8babe8a](https://github.com/gerfru/dev-best-practices/commit/8babe8a3975aeac7e8f1ad212aa9826b77b4edf3))
+
 ## [Unreleased]
 
 ---
