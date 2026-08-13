@@ -1,5 +1,5 @@
 ---
-name: dev:tool-a11y
+name: dev-tool-a11y
 description: >
   Accessibility audit workflow grounded in WCAG 2.2 (W3C), CMU HCII 05-332
   (Prof. Carrington) and W3C WAI Digital Accessibility Foundations. Covers

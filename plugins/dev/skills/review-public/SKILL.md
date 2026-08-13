@@ -1,5 +1,5 @@
 ---
-name: dev:review-public
+name: dev-review-public
 description: >
   Pre-publication repository scan grounded in OpenSSF Best Practices, GitHub
   Security Hardening docs, CISA Security-by-Design (2023), OWASP DevSecOps

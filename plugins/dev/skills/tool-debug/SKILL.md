@@ -1,5 +1,5 @@
 ---
-name: dev:tool-debug
+name: dev-tool-debug
 description: Stack-aware debugging assistant. Analyzes an error or unexpected behavior, automatically detects the stack/framework, and delivers a structured root-cause plan with concrete fix suggestions. Use this skill whenever the user reports a bug, error message, unexpected behavior, or asks "why does X not work"; triggers for "error", "bug", "not working", "debug", "why does X happen", stack traces, or unexpected output.
 ---
 

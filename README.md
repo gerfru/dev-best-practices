@@ -4,11 +4,13 @@
 
 Opinionated best-practice rules for software projects — RAG systems, AI agents, data pipelines, full-stack web apps. Three detail levels: compact essential rules for `CLAUDE.md`, thematic rule files, and detailed reference docs.
 
-Also a **Claude Code plugin**: install once, get 24 skills in every project.
+Also a **Claude Code plugin**: install once, get 27 skills in every project. Also works as a **GitHub Copilot CLI plugin** — same repo, same skills.
 
 ---
 
 ## Quick Start
+
+### Claude Code
 
 ```bash
 # Add marketplace (once per machine)
@@ -22,6 +24,24 @@ claude plugin install dev@gerald-dev-best-practices
 ```
 
 **Windows (VS Code):** Claude icon → `/plugin` → Marketplaces → add `gerfru/dev-best-practices` → Plugins → Install `dev`.
+
+### GitHub Copilot CLI
+
+```bash
+# Add marketplace (once per machine)
+copilot plugin marketplace add gerfru/dev-best-practices
+
+# Install plugin
+copilot plugin install dev@gerald-dev-best-practices
+```
+
+Skills are then invocable directly, e.g. `/dev:design-api`, or auto-triggered from a
+natural-language prompt matching a skill's description — same as Claude Code.
+
+Not using Copilot's plugin/marketplace mechanism? Run `/dev:meta-install --target
+copilot-cli --standalone-skills` from a Claude Code session against your target project to
+copy the skill library into `.github/skills/`, `.claude/skills/`, or `.agents/skills/`,
+where Copilot CLI auto-discovers it.
 
 ---
 
@@ -69,7 +89,7 @@ Or just describe what you need in natural language — Claude picks the right sk
 
 | Skill | What it does |
 |---|---|
-| `/dev:meta-help` | Navigation menu — shows all 24 skills, launches chosen one |
+| `/dev:meta-help` | Navigation menu — shows all 27 skills, launches chosen one |
 | `/dev:meta-install` | Insert `essential-rules.md` into project `CLAUDE.md` (detects install vs. update) |
 | `/dev:meta-drift` | Compare installed rules block against current rule files |
 | `/dev:meta-sync` | Repo-internal: check if `claude/*.md` still reflects `reference/*.md` |
@@ -85,9 +105,9 @@ Or just describe what you need in natural language — Claude picks the right sk
 
 plugins/dev/
   .claude-plugin/
-    plugin.json             Plugin metadata (name: "dev", version: "2.0.0")
-  commands/                 Slash-command definitions (one file per skill)
-  skills/                   Skill workflow definitions (auto-triggered)
+    plugin.json             Plugin metadata (name: "dev", version: "3.0.0") — also read by Copilot CLI
+  commands/                 Slash-command definitions (one file per skill) — Claude Code only
+  skills/                   Skill workflow definitions (auto-triggered) — shared with Copilot CLI
   rules/                    Mirror of claude/*.md (used by skills as reference)
 
 claude/                     Condensed rules for Claude Code

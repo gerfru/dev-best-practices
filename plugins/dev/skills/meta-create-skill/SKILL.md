@@ -1,5 +1,5 @@
 ---
-name: dev:meta-create-skill
+name: dev-meta-create-skill
 description: >
   Creates a new skill for this plugin following the established methodology:
   topic → academic research (university curricula + canonical books) → SKILL.md +
@@ -99,6 +99,11 @@ What belongs IN SKILL.md:
 - Standard finding format (for review-* skills)
 - Output format (which file, which structure)
 - References to references/ files
+- Cross-file references as **plain relative paths** (e.g. `../../rules/essential-rules.md`,
+  `../other-skill/SKILL.md`) — **never `${CLAUDE_PLUGIN_ROOT}`**. That variable is Claude
+  Code-only template syntax; it breaks silently under GitHub Copilot CLI, which also reads
+  this plugin's `skills/` directory but does not expand it. `${CLAUDE_PLUGIN_ROOT}` is
+  permitted only inside `commands/<name>.md` (a Claude-Code-only file Copilot never parses).
 
 What does NOT belong in SKILL.md (→ references/):
 - Lookup tables (Concept → course link)
@@ -173,7 +178,7 @@ Required elements:
 
 ```markdown
 ---
-name: <skill-name>
+name: dev-<skill-name>
 description: >
   <What the skill does>. Grounded in <primary source>.
   Trigger: "<Keyword 1>", "<Keyword 2>", ...
@@ -208,6 +213,18 @@ description: >
 
 - `references/<file>.md` — <what is in it>
 ```
+
+**Note:** `name:` uses `dev-<skill-name>` (hyphen, not colon). Verified against a live
+Copilot CLI install: `:` is rejected ("Skill name must start with an ASCII letter or
+number and contain only ASCII letters, numbers, hyphens, underscores"), so `dev:<name>`
+produced a load warning on every skill under Copilot CLI (non-fatal there — it fell back
+to the folder name — but still worth avoiding). `dev-<name>` is ASCII-clean for Copilot.
+Also verified live against Claude Code after this rename: `/dev:<skill-name>`
+slash-invocation is driven entirely by `commands/<skill-name>.md` (plugin name from
+`plugin.json` + the command file's own name) — it never reads this SKILL.md frontmatter
+field at all, so the rename has zero effect on Claude Code's routing. Any cross-file
+reference in the body must be a plain relative path regardless — see the rule under
+Step 2a.
 
 ### 3c — commands/<name>.md
 

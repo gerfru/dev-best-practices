@@ -1,5 +1,5 @@
 ---
-name: dev:design-llm
+name: dev-design-llm
 description: >
   LLM system design grounded in Stanford CS224N (Yang/Choi), CMU 11-667
   (Savelka/Kim) and Chip Huyen "Designing ML Systems". Use this skill whenever

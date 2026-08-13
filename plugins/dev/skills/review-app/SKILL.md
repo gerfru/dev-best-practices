@@ -1,6 +1,16 @@
 ---
-name: dev:review-app
-description: Complete end-to-end evaluation of an app/codebase — measures the codebase against the dev-best-practices rules of this repo (essential/app/github/architecture). Axes: Architecture (12-Factor), Security (OWASP ASVS 5.0/Top 10), CI-CD-Delivery (DORA), Code Quality, Tests, Observability. Use this skill whenever the user wants to audit, evaluate, review or assess an entire app or codebase, check production/release readiness, find technical debt, or do a security/architecture review. Trigger also for "evaluate/audit/review my app", "is my app release-ready", "security review", "architecture check" — even if only a single axis is mentioned. If you want to review architecture OR security: use this skill — it covers both. review-arch and review-secure are deep-dives for the respective focus; review-app is the complete overview.
+name: dev-review-app
+description: >
+  Complete end-to-end evaluation of an app/codebase — measures the codebase against
+  the dev-best-practices rules of this repo (essential/app/github/architecture).
+  Axes: Architecture (12-Factor), Security (OWASP ASVS 5.0/Top 10), CI-CD-Delivery (DORA),
+  Code Quality, Tests, Observability. Use this skill whenever the user wants to audit,
+  evaluate, review or assess an entire app or codebase, check production/release readiness,
+  find technical debt, or do a security/architecture review. Trigger also for
+  "evaluate/audit/review my app", "is my app release-ready", "security review",
+  "architecture check" — even if only a single axis is mentioned. If you want to review
+  architecture OR security, use this skill — it covers both. review-arch and review-secure
+  are deep-dives for the respective focus; review-app is the complete overview.
 ---
 
 # App Evaluation (repo-integrated)

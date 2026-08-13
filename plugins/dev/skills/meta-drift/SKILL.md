@@ -1,5 +1,5 @@
 ---
-name: dev:meta-drift
+name: dev-meta-drift
 description: Compares the dev-best-practices block in a project CLAUDE.md with the current state of the rule files and shows what is missing, outdated, or newly added. Use this skill whenever the user wants to update their project rules, check if rules are still current, or sync a CLAUDE.md with the latest best practices; triggers for "update rules", "are my rules still current", "drift", "sync CLAUDE.md", "update rules".
 ---
 
@@ -10,7 +10,7 @@ Shows the delta — without automatically overwriting.
 
 ## Step 0 — Load Sources
 
-1. **Current state (TARGET):** Rule files from `${CLAUDE_PLUGIN_ROOT}/rules/`
+1. **Current state (TARGET):** Rule files from `../../rules/`
    - `essential-rules.md` — always
    - `app-rules.md`, `github-rules.md`, `architecture-rules.md` — only if present in the project block
 

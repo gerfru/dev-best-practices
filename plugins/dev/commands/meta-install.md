@@ -1,5 +1,8 @@
 ---
-description: Installs or updates dev best practices rules in CLAUDE.md. Automatically detects whether initial installation or update is needed. Flags: --essential (default), --full, --update, --section <name>.
+description: >
+  Installs or updates dev best practices rules in CLAUDE.md. Automatically detects
+  whether initial installation or update is needed. Flags — --essential (default),
+  --full, --update, --section <name>.
 argument-hint: "[--essential | --full | --update | --section <security|cicd|architecture>]"
 ---
 

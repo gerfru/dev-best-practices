@@ -1,12 +1,12 @@
 ---
-name: dev:design-app
+name: dev-design-app
 description: From an app idea to well-founded architecture and stack decisions based on the Dev-Best-Practices rules. Use this skill whenever the user describes a new app idea and wants help choosing architecture, stack, structure, or a scaffolding plan; triggers on "new app", "app idea", "how do I structure", "which stack", "architecture for ...".
 ---
 
 # App Design (rule-based)
 
 Turns an app idea into justified decisions. Standard: the rule files
-under `${CLAUDE_PLUGIN_ROOT}/rules/` (especially architecture-rules.md, app-rules.md,
+under `../../rules/` (especially architecture-rules.md, app-rules.md,
 github-rules.md). No generic advice — every decision references the rule.
 
 ## Step 0 - Clarify Idea & Scope

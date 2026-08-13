@@ -72,6 +72,61 @@ else
   done
 fi
 
+# --- Copilot CLI compatibility ---
+echo "=== copilot-cli compatibility ==="
+if [[ -f "$PLUGIN_JSON" ]] && json_has_field "skills" "$PLUGIN_JSON"; then
+  fail "$PLUGIN_JSON: has a 'skills' field — Claude Code rejects this; remove it (Copilot CLI auto-discovers skills/ when absent)"
+else
+  pass "plugin.json has no 'skills' field (required for Copilot CLI auto-discovery)"
+fi
+
+if [[ -d "$PLUGIN_DIR/skills" ]]; then
+  for skill_dir in "$PLUGIN_DIR/skills"/*/; do
+    [[ -d "$skill_dir" ]] || continue
+    skill_name=$(basename "$skill_dir")
+    skill_md="$skill_dir/SKILL.md"
+    [[ -f "$skill_md" ]] || continue
+
+    # meta-create-skill documents the ${CLAUDE_PLUGIN_ROOT} anti-pattern by name — exempt it
+    if [[ "$skill_name" == "meta-create-skill" ]]; then
+      pass "[$skill_name] exempt (documents \${CLAUDE_PLUGIN_ROOT} as prohibited pattern by name)"
+    elif grep -q 'CLAUDE_PLUGIN_ROOT' "$skill_md"; then
+      fail "[$skill_name] SKILL.md uses \${CLAUDE_PLUGIN_ROOT} — breaks Copilot CLI, use a relative path instead"
+    else
+      pass "[$skill_name] SKILL.md has no \${CLAUDE_PLUGIN_ROOT} usage"
+    fi
+  done
+fi
+
+# A single-line (non-block-scalar) `description:` containing ": " breaks YAML parsing
+# under Copilot CLI's stricter frontmatter parser ("mapping values are not allowed in
+# this context") even though Claude Code tolerates it. Use `description: >` (folded
+# block scalar) instead whenever the text needs an embedded colon.
+check_description_colon() {
+  local f="$1"
+  local line
+  line=$(grep -m1 '^description:' "$f" || true)
+  [[ -z "$line" || "$line" == "description: >" || "$line" == "description: |" ]] && return 0
+  local rest="${line#description: }"
+  if echo "$rest" | grep -qE ': '; then
+    fail "[$(basename "$f")] single-line description contains ': ' — breaks Copilot CLI YAML parsing, switch to 'description: >' block style"
+    return 1
+  fi
+  return 0
+}
+
+echo "=== copilot-cli yaml safety (description colon check) ==="
+for skill_md in "$PLUGIN_DIR"/skills/*/SKILL.md; do
+  [[ -f "$skill_md" ]] || continue
+  check_description_colon "$skill_md" && pass "[$(basename "$(dirname "$skill_md")")] description has no unsafe ': '"
+done
+if [[ -d "$PLUGIN_DIR/commands" ]]; then
+  for cmd_file in "$PLUGIN_DIR/commands"/*.md; do
+    [[ -f "$cmd_file" ]] || continue
+    check_description_colon "$cmd_file" && pass "[$(basename "$cmd_file" .md)] description has no unsafe ': '"
+  done
+fi
+
 # --- Commands: frontmatter + referenced skill must exist ---
 echo "=== commands ==="
 if [[ -d "$PLUGIN_DIR/commands" ]]; then

@@ -1,5 +1,5 @@
 ---
-name: dev:design-data
+name: dev-design-data
 description: >
   Data model design skill grounded in CMU 15-445 (Database Systems, Prof. Andy Pavlo)
   and Stanford CS245. Use this skill whenever the user needs to design or review a

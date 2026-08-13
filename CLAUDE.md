@@ -1,6 +1,6 @@
 # Dev Best Practices
 
-This repo contains best-practice rules for software projects (RAG systems, AI agents, data pipelines, full-stack web apps) and a **Claude Code Plugin** with 26 skills.
+This repo contains best-practice rules for software projects (RAG systems, AI agents, data pipelines, full-stack web apps) and a **Claude Code Plugin** with 27 skills that also works as a **GitHub Copilot CLI plugin** (see "Copilot CLI Support" below).
 
 ## Repo Structure
 
@@ -10,9 +10,9 @@ This repo contains best-practice rules for software projects (RAG systems, AI ag
 
 plugins/dev/
   .claude-plugin/
-    plugin.json             # Plugin metadata (name: "dev", version: "3.0.0")
-  commands/                 # Slash command definitions (one file per skill)
-  skills/                   # Skill workflow definitions (auto-triggered)
+    plugin.json             # Plugin metadata (name: "dev", version: "3.0.0") — also read by Copilot CLI (fallback lookup path)
+  commands/                 # Slash command definitions (one file per skill) — Claude Code only, Copilot CLI has no equivalent
+  skills/                   # Skill workflow definitions (auto-triggered) — shared by Claude Code and Copilot CLI
   rules/                    # Mirror of claude/*.md (used by skills as reference)
 
 claude/                     # Condensed rules for Claude Code
@@ -33,7 +33,7 @@ scripts/
   validate-skills.sh        # Plugin structure validator (CI + pre-commit)
 ```
 
-## Plugin Skills (24)
+## Plugin Skills (27)
 
 ```text
 DESIGN:  design-app, design-secure, design-api, design-data, design-migration,
@@ -49,11 +49,39 @@ Navigation menu: `/dev:meta-help`
 
 ## Usage in Projects
 
-**Install plugin:** `claude plugin install dev@gerald-dev-best-practices`
+**Install plugin (Claude Code):** `claude plugin install dev@gerald-dev-best-practices`
+
+**Install plugin (GitHub Copilot CLI):** `copilot plugin marketplace add gerfru/dev-best-practices` then `copilot plugin install dev@gerald-dev-best-practices` — see "Copilot CLI Support" below.
 
 **Rules only (without plugin):** Copy `claude/essential-rules.md` into project CLAUDE.md, or use `/dev:meta-install`.
 
 **More detail:** Selectively add sections from `claude/app-rules.md`, `claude/github-rules.md`, `claude/architecture-rules.md`.
+
+## Copilot CLI Support
+
+This plugin is dual-compatible with Claude Code and GitHub Copilot CLI, since both tools
+converged on a near-identical plugin architecture:
+
+- **Manifests are reused as-is.** `plugins/dev/.claude-plugin/plugin.json` sits at one of
+  Copilot CLI's fallback lookup paths and has no `skills` field — the exact condition both
+  tools need (Claude Code rejects a `skills` field; Copilot CLI auto-discovers `skills/`
+  only when it's absent). `.claude-plugin/marketplace.json` is also a valid Copilot CLI
+  lookup path. No second manifest or generated duplicate tree exists in this repo.
+- **`SKILL.md` files use plain relative paths** (`../../rules/...`, `../other-skill/SKILL.md`)
+  for all cross-file references, never `${CLAUDE_PLUGIN_ROOT}` — that template variable is
+  Claude Code-only and Copilot CLI does not expand it. `${CLAUDE_PLUGIN_ROOT}` remains fine
+  inside `plugins/dev/commands/*.md`, which is Claude Code-only (Copilot CLI has no
+  slash-command-router concept — skills are natively slash-invocable there via discovery).
+- **`meta-install` supports `--target claude|copilot-cli`** — for Copilot CLI it writes into
+  the same `CLAUDE.md` by default (Copilot CLI reads it directly as an instructions file),
+  or `.github/copilot-instructions.md` with `--copilot-native`. A `--standalone-skills` mode
+  copies the skill library into a project's `.github/skills/`, `.claude/skills/`, or
+  `.agents/skills/` for Copilot CLI users not using the plugin/marketplace mechanism.
+- **Skill `name:` fields use `dev-<skill>` (hyphen, not colon).** Verified live: Copilot CLI
+  rejects `:` in skill names ("must contain only ASCII letters, numbers, hyphens,
+  underscores"); Claude Code's own `/dev:<skill>` slash-invocation is unaffected since it's
+  driven by `commands/<skill>.md` (plugin name + command filename), never by this
+  frontmatter field.
 
 ## Maintenance
 

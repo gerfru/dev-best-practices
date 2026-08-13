@@ -1,5 +1,5 @@
 ---
-name: dev:review-ux
+name: dev-review-ux
 description: >
   Systematic UX audit of an existing product, feature, or design against
   the four canonical Human-AI Interaction frameworks: Microsoft HAX 18 Guidelines

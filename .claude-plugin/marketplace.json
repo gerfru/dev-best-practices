@@ -6,9 +6,9 @@
     {
       "name": "dev",
       "source": "./plugins/dev",
-      "description": "24 skills for software projects: Design (App, Secure, API, Data, Migration, UX, LLM, Observability, CI/CD, IaC), Review (App, Architecture, Security, UX, LLM), Tools (Debug, Test, Style, Accessibility, Performance), Meta. Grounded in MIT, CMU, Stanford curricula.",
+      "description": "27 skills for software projects: Design (App, Secure, API, Data, Migration, UX, LLM, Observability, CI/CD, IaC, Public), Review (App, Architecture, Security, UX, LLM, Public), Tools (Debug, Test, Style, Accessibility, Performance), Meta. Grounded in MIT, CMU, Stanford curricula. Works with Claude Code and GitHub Copilot CLI.",
       "category": "development",
-      "tags": ["best-practices", "security", "architecture", "llm", "accessibility", "performance", "ci-cd", "iac"]
+      "tags": ["best-practices", "security", "architecture", "llm", "accessibility", "performance", "ci-cd", "iac", "copilot-cli"]
     }
   ]
 }

@@ -1,5 +1,5 @@
 ---
-name: dev:review-arch
+name: dev-review-arch
 description: >
   Architecture review skill grounded in CMU 17-633 (Architectures for Software
   Systems, Prof. David Garlan) and Martin Fowler's architectural patterns.

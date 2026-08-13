@@ -1,5 +1,5 @@
 ---
-name: dev:meta-sync
+name: dev-meta-sync
 description: Checks whether the compact claude/*.md rule files still reflect the essence of the detailed reference/*.md — finds sections that are new/changed in reference/ but not yet transferred to claude/. Use this skill for maintaining this dev-best-practices repo itself; triggers for "synchronize rules", "update reference", "claude/ sync", "are the rules still current", repo maintenance. ONLY for the dev-best-practices repo itself — not for other projects.
 ---
 
