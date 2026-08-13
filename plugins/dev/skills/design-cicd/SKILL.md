@@ -1,5 +1,5 @@
 ---
-name: dev:design-cicd
+name: dev-design-cicd
 description: >
   CI/CD Pipeline Design grounded in "Accelerate" (Forsgren/Humble/Kim, IT Revolution 2018)
   and "Continuous Delivery" (Humble/Farley, Addison-Wesley 2010). Covers pipeline architecture,

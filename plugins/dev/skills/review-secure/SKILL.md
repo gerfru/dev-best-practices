@@ -1,5 +1,5 @@
 ---
-name: dev:review-secure
+name: dev-review-secure
 description: >
   Security-focused code review skill grounded in TU Graz ISEC Major curriculum
   and top-university references (Stanford CS255/CS355, MIT 6.566/6.5610, CMU 15-414).

@@ -1,5 +1,5 @@
 ---
-name: dev:tool-style
+name: dev-tool-style
 description: Stack-aware frontend styling assistant. Automatically detects the CSS framework, design system, and component library, then delivers consistent, maintainable styling decisions and fixes. Includes visual design fundamentals (color, typography, spacing, loading states) for developers without a design background. Use this skill whenever the user has a frontend styling question, wants to fix visual inconsistencies, improve CSS architecture, work with a component library, or needs practical design guidance (colors, typography, dark mode, skeleton screens); triggers for "styling", "CSS", "design system", "component looks wrong", "theme", "responsive", "Tailwind", "SCSS", "colors", "color system", "skeleton", "loading state", UI questions.
 ---
 

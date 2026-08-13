@@ -1,5 +1,5 @@
 ---
-name: dev:design-public
+name: dev-design-public
 description: >
   Publication-readiness design skill grounded in OpenSSF Best Practices,
   GitHub Security Hardening docs, CISA Security-by-Design, OWASP DevSecOps

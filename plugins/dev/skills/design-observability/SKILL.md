@@ -1,5 +1,5 @@
 ---
-name: dev:design-observability
+name: dev-design-observability
 description: >
   Observability architecture grounded in the Google SRE Books (Beyer et al.) and
   Observability Engineering (Majors/Fong-Jones, O'Reilly 2022). Covers

@@ -1,5 +1,5 @@
 ---
-name: dev:design-api
+name: dev-design-api
 description: >
   API contract design skill grounded in CMU 17-625 (API Design, Swarnalatha Ashok /
   Bradley Schmerl) and Google API Design Guide. Use this skill whenever the user

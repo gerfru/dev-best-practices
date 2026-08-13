@@ -1,5 +1,5 @@
 ---
-name: dev:design-migration
+name: dev-design-migration
 description: >
   Migration planning skill grounded in MIT 6.5840 (Distributed Systems, Morris/
   Kaashoek/Zeldovich) and Martin Fowler's migration patterns. Use this skill

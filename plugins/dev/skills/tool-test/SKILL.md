@@ -1,5 +1,5 @@
 ---
-name: dev:tool-test
+name: dev-tool-test
 description: Stack-aware test assistant. Automatically detects language, framework, and existing test setup, then designs or generates appropriate tests (unit, integration, E2E) according to the test pyramid. Use this skill whenever the user wants to write, improve, or review tests; triggers for "write tests", "test strategy", "increase coverage", "how do I test X", "missing tests", "flaky tests".
 ---
 

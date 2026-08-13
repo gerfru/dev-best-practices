@@ -1,5 +1,5 @@
 ---
-name: dev:design-iac
+name: dev-design-iac
 description: >
   Infrastructure as Code Design grounded in "Infrastructure as Code" (Kief Morris,
   O'Reilly 2021) and NTNU IIKG3005 (the only dedicated academic IaC course worldwide).

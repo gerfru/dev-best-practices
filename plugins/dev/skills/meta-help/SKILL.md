@@ -1,5 +1,5 @@
 ---
-name: dev:meta-help
+name: dev-meta-help
 description: >
   Navigation menu for all Dev Best Practices skills. Shows all available skills
   grouped and starts the chosen one directly. Trigger for "which skill should I use",
@@ -61,9 +61,9 @@ Which skill should start?
 **With a description:** Choose the best matching skill, mention it briefly ("→ starting review-secure …"), then start directly.
 **With arguments:** Pass to the started skill.
 
-Load and follow exactly: `${CLAUDE_PLUGIN_ROOT}/skills/<chosen-skill>/SKILL.md`
+Load and follow exactly: `../<chosen-skill>/SKILL.md`
 
 ## Rules
 - Show menu immediately, no intro
 - After the choice: start directly, do not explain or ask again
-- Never load all 26 skills at once — always only the chosen one
+- Never load all 27 skills at once — always only the chosen one

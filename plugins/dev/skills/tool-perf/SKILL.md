@@ -1,5 +1,5 @@
 ---
-name: dev:tool-perf
+name: dev-tool-perf
 description: >
   Performance engineering workflow grounded in MIT 6.172 (Leiserson/Shun,
   fully available on MIT OCW) and "Systems Performance" (Brendan Gregg,

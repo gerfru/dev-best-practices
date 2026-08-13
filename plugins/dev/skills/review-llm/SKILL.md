@@ -1,5 +1,5 @@
 ---
-name: dev:review-llm
+name: dev-review-llm
 description: >
   LLM system review grounded in CMU 11-667 (Harms + Attacking LLMs),
   Berkeley CS294-196 (Safety/Guardrails), and OWASP LLM Top 10. Use this skill

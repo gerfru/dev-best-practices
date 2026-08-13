@@ -7,6 +7,19 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ## [Unreleased]
 
+### Added
+
+- GitHub Copilot CLI support: this plugin now works as a Copilot CLI plugin/marketplace as well as a Claude Code plugin, without a second manifest or generated duplicate tree
+- `meta-install --target claude|copilot-cli`, plus `--copilot-native` and `--standalone-skills` modes, for installing rules/skills into Copilot CLI projects
+- `validate-skills.sh`: new Copilot CLI compatibility checks (`${CLAUDE_PLUGIN_ROOT}` usage, `plugin.json` `skills` field, unsafe single-line `description:` colons)
+
+### Fixed
+
+- Skill `name:` frontmatter changed from `dev:<skill>` to `dev-<skill>` — Copilot CLI rejects `:` in skill names; verified this has no effect on Claude Code, whose `/dev:<skill>` invocation is driven by `commands/<skill>.md`, not this field
+- Three files (`review-app/SKILL.md`, `commands/meta-install.md`, `commands/meta-create-skill.md`) had unquoted single-line `description:` values containing a colon followed by a space, which breaks YAML parsing under Copilot CLI's stricter parser
+- Four `SKILL.md` files used `${CLAUDE_PLUGIN_ROOT}` (Claude Code-only template variable) for cross-file references — replaced with plain relative paths
+- Stale "24 skills" / "26 skills" counts corrected to 27 across `marketplace.json`, `plugin.json`, `CLAUDE.md`, `README.md`
+
 ---
 
 ## [2.0.0] — 2026-06-08

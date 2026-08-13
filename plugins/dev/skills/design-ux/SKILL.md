@@ -1,5 +1,5 @@
 ---
-name: dev:design-ux
+name: dev-design-ux
 description: >
   Human-Centered UX Design skill grounded in the leading academic HCI curricula
   (CMU HCII, Stanford CS 247A/347, ETH, TU Wien, TU Graz) and the four canonical
