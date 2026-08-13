@@ -5,6 +5,26 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ---
 
+## [4.0.0](https://github.com/gerfru/dev-best-practices/compare/v3.0.0...v4.0.0) (2026-08-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* plugin version bumped to v3.0.0
+
+### Features
+
+* add design-public skill ([#25](https://github.com/gerfru/dev-best-practices/issues/25)) ([8bfc30d](https://github.com/gerfru/dev-best-practices/commit/8bfc30df32a6db2ecabb6af885396da8dfcefa0f))
+* add GitHub Copilot CLI support ([#28](https://github.com/gerfru/dev-best-practices/issues/28)) ([67f44cb](https://github.com/gerfru/dev-best-practices/commit/67f44cbe02a90f9c6c3e2bd15cf9a7cf67f84edc))
+* add public skill references and bump plugin to v3.0.0 ([#26](https://github.com/gerfru/dev-best-practices/issues/26)) ([013d49d](https://github.com/gerfru/dev-best-practices/commit/013d49d0a64ff6568d37a5b1e45a78ee5c5da2f1))
+* add review-public skill ([#24](https://github.com/gerfru/dev-best-practices/issues/24)) ([8babe8a](https://github.com/gerfru/dev-best-practices/commit/8babe8a3975aeac7e8f1ad212aa9826b77b4edf3))
+
+
+### Bug Fixes
+
+* disable MD004 (list-style consistency) in markdownlint config ([#30](https://github.com/gerfru/dev-best-practices/issues/30)) ([5d7c1af](https://github.com/gerfru/dev-best-practices/commit/5d7c1af6a8190ee561285619a5993e227ec0faa0))
+* disable MD012 (multiple blank lines) in markdownlint config ([#31](https://github.com/gerfru/dev-best-practices/issues/31)) ([e820b42](https://github.com/gerfru/dev-best-practices/commit/e820b42f361badf05be112a3b55373b428f8a1c9))
+
 ## [Unreleased]
 
 ### Added
