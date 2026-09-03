@@ -5,6 +5,15 @@ Format: [Semantic Versioning](https://semver.org). Dates: YYYY-MM-DD.
 
 ---
 
+## [4.1.0](https://github.com/gerfru/dev-best-practices/compare/v4.0.0...v4.1.0) (2026-09-03)
+
+
+### Features
+
+* add design-ux-artifacts reference templates (part 2/2) ([#35](https://github.com/gerfru/dev-best-practices/issues/35)) ([9f80148](https://github.com/gerfru/dev-best-practices/commit/9f80148e8701ae0fa8042d5fdbd7cd4dee672d44))
+* add design-ux-artifacts skill (29 total, part 1/2) ([#34](https://github.com/gerfru/dev-best-practices/issues/34)) ([08818cc](https://github.com/gerfru/dev-best-practices/commit/08818cc2fd6792c41d55057040b9480b4040be34))
+* add review-ux-artifacts skill (28 total) ([#32](https://github.com/gerfru/dev-best-practices/issues/32)) ([4d8afe7](https://github.com/gerfru/dev-best-practices/commit/4d8afe7f0cabe6e30b3d4434d9cbb32293e10f0e))
+
 ## [4.0.0](https://github.com/gerfru/dev-best-practices/compare/v3.0.0...v4.0.0) (2026-08-13)
 
 
