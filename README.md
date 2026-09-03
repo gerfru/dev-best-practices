@@ -4,7 +4,7 @@
 
 Opinionated best-practice rules for software projects — RAG systems, AI agents, data pipelines, full-stack web apps. Three detail levels: compact essential rules for `CLAUDE.md`, thematic rule files, and detailed reference docs.
 
-Also a **Claude Code plugin**: install once, get 28 skills in every project. Also works as a **GitHub Copilot CLI plugin** — same repo, same skills.
+Also a **Claude Code plugin**: install once, get 29 skills in every project. Also works as a **GitHub Copilot CLI plugin** — same repo, same skills.
 
 ---
 
@@ -60,6 +60,7 @@ Or just describe what you need in natural language — Claude picks the right sk
 | `/dev:design-data` | Schema, normalization, indexes, CQRS / Event Sourcing |
 | `/dev:design-migration` | Zero-downtime strategy: Expand-Contract, Strangler Fig, Saga |
 | `/dev:design-ux` | UX/UI design: interaction model, trust, AI features, anti-patterns |
+| `/dev:design-ux-artifacts` | Structural UX design: problem brief, task/domain model, IA, wireframe, anti-generic-AI visual design |
 | `/dev:design-llm` | LLM system: RAG, fine-tune vs. prompt, agents, evals, guardrails |
 | `/dev:design-observability` | SLO/SLI, Golden Signals, tracing, alerting, incident response |
 | `/dev:design-cicd` | CI/CD pipeline, deployment strategies (Blue-Green, Canary), DORA |
@@ -90,7 +91,7 @@ Or just describe what you need in natural language — Claude picks the right sk
 
 | Skill | What it does |
 |---|---|
-| `/dev:meta-help` | Navigation menu — shows all 28 skills, launches chosen one |
+| `/dev:meta-help` | Navigation menu — shows all 29 skills, launches chosen one |
 | `/dev:meta-install` | Insert `essential-rules.md` into project `CLAUDE.md` (detects install vs. update) |
 | `/dev:meta-drift` | Compare installed rules block against current rule files |
 | `/dev:meta-sync` | Repo-internal: check if `claude/*.md` still reflects `reference/*.md` |
