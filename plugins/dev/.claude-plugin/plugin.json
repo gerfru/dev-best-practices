@@ -1,6 +1,6 @@
 {
   "name": "dev",
-  "version": "3.0.0",
-  "description": "27 Skills für Design (inkl. LLM-Engineering/RAG/Agents, Observability/SRE, CI/CD, IaC/GitOps, UX/Human-AI Interaction, Repo-Publication), Security-Review (ISEC/Stanford/MIT, OWASP LLM Top 10), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test, Styling, Accessibility (WCAG 2.2), Performance Engineering (MIT 6.172, USE Method) und Skill-Erstellung. Funktioniert mit Claude Code und GitHub Copilot CLI.",
+  "version": "3.1.0",
+  "description": "28 Skills für Design (inkl. LLM-Engineering/RAG/Agents, Observability/SRE, CI/CD, IaC/GitOps, UX/Human-AI Interaction, Repo-Publication), Security-Review (ISEC/Stanford/MIT, OWASP LLM Top 10), App-Audit (OWASP ASVS 5.0, DORA), Architektur-Review, Debug, Test, Styling, Accessibility (WCAG 2.2), Performance Engineering (MIT 6.172, USE Method) und Skill-Erstellung. Funktioniert mit Claude Code und GitHub Copilot CLI.",
   "author": { "name": "Gerald" }
 }
