@@ -33,24 +33,25 @@ Which skill should start?
  12  review-arch       Architecture: coupling, anti-patterns, quality attributes, ADR
  13  review-secure     Security: crypto, injection, memory safety, GDPR/ISO/EU AI Act
  14  review-ux         UX audit: AI anti-patterns, dark patterns, trust design
- 15  review-llm        LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10
- 16  review-public     Repo public scan: secrets in history, PII in tests, governance files, CI/CD hardening
+ 15  review-ux-artifacts  Structural UX audit: information architecture, requirement-to-UI traceability, generic-AI template detection
+ 16  review-llm        LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10
+ 17  review-public     Repo public scan: secrets in history, PII in tests, governance files, CI/CD hardening
 
 🏗️  DESIGN (continued)
- 17  design-public     Publication plan: secrets audit, license, governance docs, branch protection, supply chain
+ 18  design-public     Publication plan: secrets audit, license, governance docs, branch protection, supply chain
 
 🛠️  TOOLS
- 18  tool-debug        Stack-aware root cause analysis with fix suggestions
- 19  tool-test         Write, improve, or plan tests
- 20  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
- 21  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
- 22  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
+ 19  tool-debug        Stack-aware root cause analysis with fix suggestions
+ 20  tool-test         Write, improve, or plan tests
+ 21  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
+ 22  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
+ 23  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
 
 📁  META
- 23  meta-install        Add best-practice rules to a project CLAUDE.md
- 24  meta-drift          Compare project CLAUDE.md against current rule files
- 25  meta-sync           Keep reference/*.md and claude/*.md in sync
- 26  meta-create-skill   Build a new skill: research, structure, all files
+ 24  meta-install        Add best-practice rules to a project CLAUDE.md
+ 25  meta-drift          Compare project CLAUDE.md against current rule files
+ 26  meta-sync           Keep reference/*.md and claude/*.md in sync
+ 27  meta-create-skill   Build a new skill: research, structure, all files
 
 → Enter a number, or directly describe what you need.
 ```

@@ -4,7 +4,7 @@
 
 Opinionated best-practice rules for software projects — RAG systems, AI agents, data pipelines, full-stack web apps. Three detail levels: compact essential rules for `CLAUDE.md`, thematic rule files, and detailed reference docs.
 
-Also a **Claude Code plugin**: install once, get 27 skills in every project. Also works as a **GitHub Copilot CLI plugin** — same repo, same skills.
+Also a **Claude Code plugin**: install once, get 28 skills in every project. Also works as a **GitHub Copilot CLI plugin** — same repo, same skills.
 
 ---
 
@@ -73,6 +73,7 @@ Or just describe what you need in natural language — Claude picks the right sk
 | `/dev:review-arch` | Coupling, anti-patterns, quality attributes, ADR recommendations |
 | `/dev:review-secure` | Crypto, injection, memory safety, GDPR / ISO 27001 / EU AI Act |
 | `/dev:review-ux` | UX audit based on HAX, PAIR, CHI 2024 and Nielsen Norman |
+| `/dev:review-ux-artifacts` | Structural UX audit: information architecture, requirement-to-UI traceability, generic-AI template detection |
 | `/dev:review-llm` | LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10 |
 
 ### Tools
@@ -89,7 +90,7 @@ Or just describe what you need in natural language — Claude picks the right sk
 
 | Skill | What it does |
 |---|---|
-| `/dev:meta-help` | Navigation menu — shows all 27 skills, launches chosen one |
+| `/dev:meta-help` | Navigation menu — shows all 28 skills, launches chosen one |
 | `/dev:meta-install` | Insert `essential-rules.md` into project `CLAUDE.md` (detects install vs. update) |
 | `/dev:meta-drift` | Compare installed rules block against current rule files |
 | `/dev:meta-sync` | Repo-internal: check if `claude/*.md` still reflects `reference/*.md` |
