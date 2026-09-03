@@ -23,35 +23,36 @@ Which skill should start?
   4  design-data             Schema, normalization, indexes, CQRS / Event Sourcing
   5  design-migration        Migration strategy: zero-downtime, Strangler Fig, Saga
   6  design-ux               UX/UI design: interaction, trust, AI features, anti-patterns
-  7  design-llm              LLM system: RAG, fine-tune, agent, eval strategy, guardrails
-  8  design-observability    Observability: SLO/SLI, golden signals, tracing, alerting, incident response
-  9  design-cicd             CI/CD pipeline: deployment strategies, DORA metrics, trunk-based dev
- 10  design-iac              Infrastructure as Code: Terraform, GitOps, state management, drift detection
+  7  design-ux-artifacts     Structural UX design: problem brief, task/domain model, IA, wireframe, anti-generic-AI visual design
+  8  design-llm              LLM system: RAG, fine-tune, agent, eval strategy, guardrails
+  9  design-observability    Observability: SLO/SLI, golden signals, tracing, alerting, incident response
+ 10  design-cicd             CI/CD pipeline: deployment strategies, DORA metrics, trunk-based dev
+ 11  design-iac              Infrastructure as Code: Terraform, GitOps, state management, drift detection
 
 🔍  REVIEW
- 11  review-app        Full audit: architecture, security, tests, CI/CD, observability
- 12  review-arch       Architecture: coupling, anti-patterns, quality attributes, ADR
- 13  review-secure     Security: crypto, injection, memory safety, GDPR/ISO/EU AI Act
- 14  review-ux         UX audit: AI anti-patterns, dark patterns, trust design
- 15  review-ux-artifacts  Structural UX audit: information architecture, requirement-to-UI traceability, generic-AI template detection
- 16  review-llm        LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10
- 17  review-public     Repo public scan: secrets in history, PII in tests, governance files, CI/CD hardening
+ 12  review-app        Full audit: architecture, security, tests, CI/CD, observability
+ 13  review-arch       Architecture: coupling, anti-patterns, quality attributes, ADR
+ 14  review-secure     Security: crypto, injection, memory safety, GDPR/ISO/EU AI Act
+ 15  review-ux         UX audit: AI anti-patterns, dark patterns, trust design
+ 16  review-ux-artifacts  Structural UX audit: information architecture, requirement-to-UI traceability, generic-AI template detection
+ 17  review-llm        LLM audit: architecture, evals, prompt injection, OWASP LLM Top 10
+ 18  review-public     Repo public scan: secrets in history, PII in tests, governance files, CI/CD hardening
 
 🏗️  DESIGN (continued)
- 18  design-public     Publication plan: secrets audit, license, governance docs, branch protection, supply chain
+ 19  design-public     Publication plan: secrets audit, license, governance docs, branch protection, supply chain
 
 🛠️  TOOLS
- 19  tool-debug        Stack-aware root cause analysis with fix suggestions
- 20  tool-test         Write, improve, or plan tests
- 21  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
- 22  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
- 23  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
+ 20  tool-debug        Stack-aware root cause analysis with fix suggestions
+ 21  tool-test         Write, improve, or plan tests
+ 22  tool-style        CSS / design system + visual basics (color, typography, spacing, loading)
+ 23  tool-a11y         Accessibility audit: WCAG 2.2, screen reader, EU Accessibility Act
+ 24  tool-perf         Performance engineering: USE Method, flamegraph, bottleneck, Bentley Rules
 
 📁  META
- 24  meta-install        Add best-practice rules to a project CLAUDE.md
- 25  meta-drift          Compare project CLAUDE.md against current rule files
- 26  meta-sync           Keep reference/*.md and claude/*.md in sync
- 27  meta-create-skill   Build a new skill: research, structure, all files
+ 25  meta-install        Add best-practice rules to a project CLAUDE.md
+ 26  meta-drift          Compare project CLAUDE.md against current rule files
+ 27  meta-sync           Keep reference/*.md and claude/*.md in sync
+ 28  meta-create-skill   Build a new skill: research, structure, all files
 
 → Enter a number, or directly describe what you need.
 ```
@@ -67,4 +68,4 @@ Load and follow exactly: `../<chosen-skill>/SKILL.md`
 ## Rules
 - Show menu immediately, no intro
 - After the choice: start directly, do not explain or ask again
-- Never load all 27 skills at once — always only the chosen one
+- Never load all 29 skills at once — always only the chosen one
